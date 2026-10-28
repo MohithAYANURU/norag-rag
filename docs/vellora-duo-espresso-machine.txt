@@ -1,0 +1,289 @@
+VELLORA DUO - ESPRESSO MACHINE
+USER MANUAL
+(Fictional product. Document written for the BM25 challenge of the RAG course.)
+
+
+1. BEFORE YOU START
+
+Thank you for choosing the Vellora Duo, a bean-to-cup espresso machine with an integrated conical grinder, a thermoblock heater and an automatic milk system. Please read this manual carefully before using the machine for the first time, and keep it for future reference. Most problems can be solved in a few minutes by following the instructions in the troubleshooting and error code sections.
+
+Safety first. Always place the machine on a stable, flat and dry surface, away from the edge of the worktop and out of reach of children. Never immerse the machine, the power cord or the plug in water or any other liquid. Unplug the machine before cleaning it, before removing the brewing unit and when it is not used for a long period. Do not touch the steam wand or the coffee outlets during or just after use: they get very hot. Only use the machine indoors, at a room temperature between 10 and 32 degrees Celsius.
+
+The machine must be connected to a properly earthed socket. If the power cord is damaged, it must be replaced by an authorised service centre in order to avoid any hazard. Do not use an extension cord or a multiple socket adapter. Children must not play with the machine, and cleaning must not be done by children without supervision.
+
+
+2. PARTS OF THE MACHINE
+
+The Vellora Duo is made of the following main parts: the bean hopper with its aroma-preserving lid, the grind adjuster, the pre-ground coffee chute, the water tank (1.8 litres) with its filter holder, the brewing unit behind the side door, the drip tray with its float indicator, the coffee grounds container, the height-adjustable coffee outlets, the milk system with its suction tube and frothing head, the hot water and steam wand, and the control panel with its colour display.
+
+The control panel has six buttons: power, espresso, lungo, cappuccino, hot water and menu. The menu button gives access to the settings: coffee strength, coffee temperature, water hardness, automatic switch-off, display language and the maintenance programmes (rinsing, cleaning, descaling and filter replacement). When something goes wrong, the display shows a message and, for most problems, an error code made of the letter E followed by two digits.
+
+
+3. FIRST USE
+
+Remove all packaging, stickers and protective films. Rinse the water tank and fill it with fresh, cold drinking water up to the MAX mark. Fill the bean hopper with coffee beans. Do not use caramelised, flavoured or oily beans: they stick to the burrs and may damage the grinder. Plug in the machine and press the power button. Choose the display language, then set the water hardness: dip the test strip supplied with the machine into a glass of tap water for one second, count the red squares, and enter that number in the menu.
+
+At first use, and every time the machine has not been used for more than two weeks, the circuit must be filled with water. The display shows "Fill circuit": place a container under the steam wand and press the hot water button. When water flows steadily, the machine heats up and performs an automatic rinse through the coffee outlets. The first two or three coffees may taste weak: this is normal, the grinder needs a few cycles to adjust.
+
+
+4. MAKING COFFEE
+
+Place a cup under the coffee outlets and lower the outlets as close to the cup as possible to keep the crema. Press espresso for a short coffee (40 ml) or lungo for a long coffee (110 ml). Press the button twice within two seconds to make two cups at once. You can stop the flow at any time by pressing the same button again.
+
+The coffee strength can be set from 1 (mild) to 5 (very strong) in the menu. Strength changes the quantity of ground coffee used for each cup, between 7 and 14 grams. The grind adjuster on top of the bean hopper sets the fineness of the grind from 1 (finest) to 9 (coarsest). Turn the adjuster only while the grinder is running, one step at a time. A finer grind gives a stronger, more intense coffee and a slower flow; a coarser grind gives a lighter coffee and a faster flow. If the coffee comes out drop by drop, the grind is too fine; if it comes out too fast and pale, the grind is too coarse.
+
+To use pre-ground coffee, open the chute lid, add one level measuring spoon of ground coffee, close the lid and press espresso or lungo within one minute. Never put more than one spoon, and never put coffee beans or instant coffee in the chute.
+
+
+5. MILK DRINKS
+
+Connect the suction tube to the frothing head and dip the other end into a carton or a jug of cold milk. Place a cup under the frothing head and press cappuccino: the machine first froths the milk, then brews the coffee on top of it. The quantity of milk foam can be set in the menu. For the best foam, use cold milk (around 5 degrees Celsius) straight from the refrigerator. Whole milk gives a creamier foam, skimmed milk a lighter and more abundant one. Plant-based drinks also work, but the result depends on the brand.
+
+After each milk drink, the display offers to rinse the milk system. Always accept: put a cup under the frothing head and press the button that flashes. Milk residues dry very quickly and block the frothing head, which leads to a poor foam or to milk spitting out of the head.
+
+
+6. DAILY AND WEEKLY CLEANING
+
+Every day, empty and rinse the drip tray and the coffee grounds container. Do this while the machine is switched on: the machine counts the grounds and resets its counter only when it detects that the container has been removed for at least five seconds. Empty the water tank, rinse it and fill it with fresh water. Wipe the coffee outlets and the frothing head with a damp cloth.
+
+Every week, remove the brewing unit and rinse it under lukewarm running water. Switch off the machine, open the side door, press the red button on the brewing unit and pull it out by its handle. Do not use washing-up liquid or the dishwasher: it would remove the grease that keeps the unit moving smoothly. Let the unit dry in the open air, then slide it back in until it clicks. Clean the inside of the machine with a soft brush to remove the coffee powder that falls around the unit. If you notice a strong smell of old coffee when you open the side door, the brewing unit has not been rinsed often enough: rinse it twice in a row and leave the side door open for an hour.
+
+Every month, or when the display asks for it, run the cleaning programme with a cleaning tablet. Open the pre-ground coffee chute, drop one tablet into it, close the lid and start the programme from the maintenance menu. The programme takes about ten minutes. Do not interrupt it, and do not remove the drip tray while it is running.
+
+
+7. DESCALING
+
+Limescale builds up in the heater and the pipes over time, even with soft water. When the display shows "Descaling needed", descale the machine as soon as possible. A machine that is not descaled regularly heats less efficiently, makes coffee at a lower temperature, and may eventually be blocked by limescale. Damage caused by limescale is not covered by the warranty.
+
+Remove the water filter from the tank if one is installed. Pour the content of one bottle of descaling liquid into the empty water tank and fill it with water up to the descaling mark. Place a large container (at least 1.5 litres) under the coffee outlets and another one under the steam wand. Start the descaling programme from the maintenance menu and follow the instructions on the display. The programme takes about 30 minutes and has two phases: the descaling phase, then a rinsing phase for which you must fill the tank with fresh water. Never use vinegar or any other product than the recommended descaling liquid.
+
+
+8. WATER FILTER
+
+The optional water filter reduces limescale and improves the taste of the coffee. To install it, soak the filter in cold water for one minute, screw it into the holder at the bottom of the water tank, set "Filter installed" in the menu and run the filter programme, which rinses the filter with half a tank of water. A filter lasts two months, or 50 litres of water. The machine counts the water used and asks for a replacement when the filter is exhausted. When a filter is installed and activated, the machine does not ask for descaling. Only use original Vellora filters: other filters may not fit the holder correctly, may let unfiltered water into the circuit, and are not covered by the warranty. Store spare filters in a cool, dry place, in their sealed bag.
+
+
+9. ERROR CODES
+
+When the machine detects a problem, it stops the current preparation and shows an error code on the display. The code is made of the letter E and two digits. Each code identifies one precise problem. Find the code in the list below: it tells you what the code means and what to do. If the code is still displayed after you have followed the instructions, switch the machine off, wait one minute and switch it on again. If the problem persists, write down the code and contact the Vellora customer service: the code helps the technician to diagnose the problem quickly, and often to solve it over the phone without sending the machine for repair.
+
+E01 - Water tank missing. Cause: The machine does not detect the water tank, or the tank is not pushed in all the way. What to do: Push the water tank firmly into its housing until it clicks. Check that nothing is stuck under the tank.
+
+E02 - Water tank empty. Cause: The water level in the tank is below the minimum mark. What to do: Fill the water tank with fresh, cold water and put it back in place.
+
+E03 - Drip tray missing. Cause: The drip tray is not inserted, or its contacts are dirty. What to do: Insert the drip tray fully. Clean and dry the two metal contacts at the back of the tray.
+
+E04 - Water tank seal leaking. Cause: Water collects under the tank because its valve seal is dirty or worn. What to do: Remove the tank, clean the valve at its bottom under running water, and replace the seal if it is cracked.
+
+E05 - Grounds container full. Cause: The coffee grounds container has reached its maximum number of portions. What to do: Empty the grounds container while the machine is switched on, and wait five seconds before putting it back.
+
+E06 - Grounds container missing. Cause: The grounds container was not put back after emptying. What to do: Put the grounds container back in place, inside the drip tray.
+
+E07 - Drip tray float stuck. Cause: The float of the drip tray is stuck in the up position by coffee residue. What to do: Remove the drip tray, rinse the float under warm water and check that it moves freely.
+
+E08 - Side door open. Cause: The side door giving access to the brewing unit is open or badly closed. What to do: Close the side door firmly. If it does not close, check that the brewing unit is inserted correctly.
+
+E09 - Brewing unit missing. Cause: The brewing unit is not in the machine, or it is not locked in place. What to do: Insert the brewing unit and push it until it clicks. Close the side door.
+
+E10 - Brewing unit position unknown. Cause: The machine cannot tell where the brewing unit is, usually after it was moved by hand. What to do: Switch the machine off and on again: it moves the brewing unit back to its starting position.
+
+E11 - Brewing unit stuck. Cause: The brewing unit cannot move to its starting position, often because of dried coffee residue. What to do: Remove the brewing unit, rinse it under lukewarm water, let it dry and insert it again.
+
+E12 - Brewing unit overload. Cause: Too much ground coffee was used, so the unit cannot compress the coffee. What to do: Remove the brewing unit and clean it. Reduce the coffee strength by one level, or put only one spoon of pre-ground coffee.
+
+E13 - Brewing unit grease missing. Cause: The brewing unit moves with difficulty because its guides are dry. What to do: Remove the brewing unit and apply a thin layer of the grease supplied with the machine on its two side guides.
+
+E14 - Pre-ground chute blocked. Cause: Pre-ground coffee is stuck in the chute, often because the coffee is too fine or humid. What to do: Switch off the machine, remove the brewing unit and clean the chute with the handle of the measuring spoon.
+
+E15 - Heater temperature too low. Cause: The thermoblock does not reach its working temperature in the expected time. What to do: Switch the machine off and on again. Check that the room temperature is above 10 degrees Celsius.
+
+E16 - Heater temperature too high. Cause: The thermoblock is overheating, usually after many hot water or steam preparations in a row. What to do: Switch off the machine and let it cool down for 30 minutes before using it again.
+
+E17 - Heater warming up too slowly. Cause: The thermoblock heats up more slowly than usual, often because of limescale. What to do: Run the descaling programme. If the code comes back after descaling, contact customer service.
+
+E18 - Temperature sensor fault. Cause: The temperature sensor of the heater sends values that make no sense. What to do: Switch the machine off and on again. If the code comes back, contact customer service: the sensor must be replaced.
+
+E19 - Steam temperature not reached. Cause: The steam circuit does not reach its temperature, often because of limescale. What to do: Run the descaling programme, then try again.
+
+E20 - Water temperature unstable. Cause: The water temperature changes too much during the extraction. What to do: Check that the machine is not placed near a window or an air conditioner, then run a rinse.
+
+E21 - Pump not priming. Cause: The pump runs but does not draw water, usually because of an air bubble in the circuit. What to do: Refill the water tank, place a cup under the steam wand and press hot water until water flows steadily.
+
+E22 - Pump overload. Cause: The pump works against too much pressure, because the grind is too fine or the circuit is partly blocked. What to do: Set the grind adjuster two steps coarser. If the code persists, run the descaling programme.
+
+E23 - Flow meter fault. Cause: The flow meter does not count the water going through the circuit. What to do: Check that the water tank is full and properly inserted, then switch the machine off and on again.
+
+E24 - Pump noise abnormal. Cause: The pump makes an unusual noise because it runs without enough water. What to do: Fill the water tank and check that the tank valve is not blocked.
+
+E25 - Water circuit blocked. Cause: Water cannot go through the circuit, usually because of limescale in the pipes. What to do: Run the descaling programme. If the machine refuses to start it, contact customer service.
+
+E26 - Pressure too low. Cause: The brewing pressure stays below 6 bar, so the coffee is under-extracted. What to do: Set the grind adjuster one step finer and increase the coffee strength.
+
+E27 - Pressure too high. Cause: The brewing pressure goes above 15 bar, usually because the grind is far too fine. What to do: Set the grind adjuster three steps coarser while the grinder is running.
+
+E28 - Pressure valve fault. Cause: The safety valve opened to protect the circuit from too much pressure. What to do: Switch off the machine, wait ten minutes, then run a rinse. If the code comes back, contact customer service.
+
+E29 - Air in the circuit. Cause: Air entered the circuit after the water tank was removed during a preparation. What to do: Fill the circuit again: place a cup under the steam wand and press hot water until water flows steadily.
+
+E30 - Rinse not completed. Cause: The automatic rinse at switch-on did not complete. What to do: Empty the drip tray, fill the water tank and switch the machine off and on again.
+
+E31 - Steam wand blocked. Cause: The steam wand is blocked by dried milk or limescale. What to do: Unscrew the tip of the steam wand, soak it in warm water and clear the hole with a needle.
+
+E32 - Hot water valve fault. Cause: The valve that sends water to the steam wand does not open. What to do: Switch the machine off and on again. If the code persists, contact customer service.
+
+E33 - Steam pressure too low. Cause: The steam wand does not deliver enough steam to froth the milk. What to do: Clean the tip of the steam wand and run the descaling programme.
+
+E34 - Milk system not connected. Cause: The suction tube is not connected to the frothing head. What to do: Connect the suction tube to the frothing head and dip it into the milk.
+
+E35 - Milk not detected. Cause: The milk system draws air instead of milk, because the milk carton is empty or the tube is out of the milk. What to do: Dip the suction tube into the milk, or replace the empty carton.
+
+E36 - Frothing head blocked. Cause: Dried milk blocks the frothing head, usually because the milk system was not rinsed after use. What to do: Remove the frothing head, take it apart and wash all its parts in warm soapy water.
+
+E37 - Milk rinse not done. Cause: The milk system was not rinsed after the last milk drink. What to do: Place a cup under the frothing head and press the flashing button to start the milk rinse.
+
+E38 - Milk temperature too high. Cause: The milk drawn by the milk system is warmer than 20 degrees Celsius. What to do: Use milk straight from the refrigerator. Do not leave the milk next to the machine.
+
+E39 - Milk system leak. Cause: Milk or water drips from the frothing head because a seal is missing or damaged. What to do: Check that all parts of the frothing head are assembled with their seals. Replace the seals if they are worn.
+
+E40 - Milk tube too long. Cause: The suction tube was replaced with a tube that is too long for the pump. What to do: Use only the original suction tube supplied with the machine, cut to the length of your milk container.
+
+E41 - Grinder not detected. Cause: The machine does not detect the grinder motor, usually after a transport. What to do: Switch the machine off and on again. If the code persists, contact customer service.
+
+E42 - Bean hopper empty. Cause: The grinder runs but no beans reach the burrs. What to do: Fill the bean hopper with coffee beans. If the hopper is full, stir the beans with a spoon: oily beans can stick together.
+
+E43 - Grind adjuster out of range. Cause: The grind adjuster was turned while the grinder was not running. What to do: Start a coffee and turn the grind adjuster back to position 5 while the grinder is running.
+
+E44 - Grinder too slow. Cause: The grinder takes too long to grind a portion, because the burrs are worn or clogged with oily coffee. What to do: Use dry beans, and set the grind adjuster one step coarser. If the code persists, contact customer service.
+
+E45 - Grinder overheating. Cause: The grinder motor overheated after many coffees in a row. What to do: Switch off the machine and let it cool down for 30 minutes.
+
+E46 - Grinder speed sensor fault. Cause: The sensor that measures the speed of the grinder motor does not send any signal. What to do: Switch the machine off and on again. If the code persists, contact customer service.
+
+E47 - Grinder blocked by a foreign object. Cause: A foreign object, often a small stone found among the coffee beans, is jammed between the burrs and stops the grinder. What to do: Unplug the machine, empty the bean hopper with a vacuum cleaner, and use the hexagonal key supplied with the machine to turn the upper burr anticlockwise until the object falls out. Never use a knife or a screwdriver.
+
+E48 - Portion not ground. Cause: The grinder stopped before the end of the portion. What to do: Make sure the bean hopper lid is closed properly, then try again.
+
+E49 - Grind quantity too small. Cause: The portion of ground coffee is lighter than expected. What to do: Increase the coffee strength by one level, or set the grind adjuster one step finer.
+
+E50 - Bean hopper lid open. Cause: The aroma-preserving lid of the bean hopper is not closed. What to do: Close the lid of the bean hopper. The grinder only starts when the lid is closed.
+
+E51 - Display communication fault. Cause: The control panel does not communicate with the main board. What to do: Switch the machine off and on again. If the code persists, contact customer service.
+
+E52 - Button stuck. Cause: A button of the control panel has been pressed for more than 30 seconds. What to do: Check that nothing is pressing on the control panel, and clean the buttons with a dry cloth.
+
+E53 - Clock reset. Cause: The internal clock was reset after a power cut. What to do: Set the time again in the menu. The automatic switch-on will not work until the time is set.
+
+E54 - Language not set. Cause: The display language was lost after a software update. What to do: Choose the display language again in the menu.
+
+E55 - Software update failed. Cause: The last software update was interrupted. What to do: Switch the machine off and on again: the update starts again automatically.
+
+E56 - Settings reset. Cause: The user settings were reset to their factory values. What to do: Set the water hardness, the coffee strength and the time again in the menu.
+
+E57 - Main board fault. Cause: The main electronic board detected an internal fault. What to do: Unplug the machine for one minute, then plug it in again. If the code persists, contact customer service.
+
+E58 - Memory full. Cause: The memory for personal recipes is full. What to do: Delete one of the saved personal recipes from the menu or from the app.
+
+E59 - Display too dark. Cause: The display brightness was set to its minimum. What to do: Press and hold the menu button for two seconds to restore the default brightness.
+
+E60 - Counter reset needed. Cause: The maintenance counters were not reset after a service. What to do: Contact customer service to reset the maintenance counters.
+
+E61 - Descaling needed. Cause: The machine has detected a high level of limescale. What to do: Run the descaling programme as soon as possible.
+
+E62 - Descaling interrupted. Cause: The descaling programme was interrupted before the end. What to do: Start the descaling programme again from the beginning. Do not switch off the machine during the programme.
+
+E63 - Cleaning needed. Cause: The machine has made the number of coffees after which the cleaning programme is needed. What to do: Run the cleaning programme with a cleaning tablet.
+
+E64 - Cleaning interrupted. Cause: The cleaning programme was interrupted, for example because the drip tray was removed. What to do: Put the drip tray back and start the cleaning programme again.
+
+E65 - Cleaning tablet not detected. Cause: The cleaning programme did not detect the cleaning tablet in the brewing unit. What to do: Drop one cleaning tablet into the pre-ground coffee chute and start the cleaning programme again.
+
+E66 - Filter exhausted. Cause: The water filter has reached the end of its life. What to do: Replace the water filter and run the filter programme, or deactivate the filter in the menu.
+
+E67 - Filter not rinsed. Cause: A new filter was installed but the filter programme was not run. What to do: Run the filter programme from the maintenance menu.
+
+E68 - Filter not recognised. Cause: The installed water filter is not recognised by the machine. What to do: Use only original Vellora filters, and check that the filter is screwed in completely.
+
+E69 - Water hardness not set. Cause: The water hardness was not set at first use. What to do: Measure the water hardness with the test strip and enter the value in the menu.
+
+E70 - Descaling liquid not rinsed. Cause: Traces of descaling liquid were detected in the circuit after descaling. What to do: Fill the water tank with fresh water and run the rinsing programme twice.
+
+E71 - Power supply too low. Cause: The mains voltage is too low for the heater to work correctly. What to do: Connect the machine directly to a wall socket, without an extension cord.
+
+E72 - Power cut during preparation. Cause: The power was cut while a preparation was running. What to do: Empty the drip tray, then switch the machine on: it runs an automatic rinse.
+
+E73 - Standby fault. Cause: The machine did not enter standby mode correctly. What to do: Switch the machine off with the power button, then on again.
+
+E74 - Drip tray full. Cause: The float indicator of the drip tray is up: the tray is full. What to do: Empty and rinse the drip tray.
+
+E75 - Coffee outlets blocked. Cause: Coffee residue blocks the coffee outlets. What to do: Remove the coffee outlets and clean them with the brush supplied with the machine.
+
+E76 - Cup sensor fault. Cause: The cup sensor under the coffee outlets is dirty. What to do: Clean the cup sensor with a damp cloth.
+
+E77 - Light sensor fault. Cause: The ambient light sensor that adjusts the display brightness does not respond. What to do: Switch the machine off and on again. The machine can still be used normally.
+
+E78 - Fan fault. Cause: The cooling fan of the electronic board does not turn. What to do: Check that the ventilation slots at the back of the machine are not blocked.
+
+E79 - Ventilation slots blocked. Cause: The machine is too close to the wall and cannot cool down. What to do: Leave at least 10 centimetres between the back of the machine and the wall.
+
+E80 - Wi-Fi module not found. Cause: The Wi-Fi module does not respond to the main board. What to do: Switch the machine off and on again. The machine can still be used without the app.
+
+E81 - Wi-Fi connection lost. Cause: The machine lost its connection to the home network. What to do: Check your router, then connect the machine again from the Vellora app.
+
+E82 - App pairing failed. Cause: The machine could not be paired with the Vellora app. What to do: Move your phone closer to the machine and start the pairing again from the app.
+
+E83 - App version too old. Cause: The Vellora app on your phone is too old for this machine. What to do: Update the Vellora app from your app store.
+
+E84 - Recipe not supported. Cause: A recipe sent from the app is not supported by this machine. What to do: Update the software of the machine from the menu, then try again.
+
+E85 - Scheduled switch-on failed. Cause: The machine could not switch on at the scheduled time. What to do: Check the time and the schedule in the menu.
+
+E86 - Child lock active. Cause: The child lock is active, so the buttons do not respond. What to do: Press and hold the menu button for five seconds to unlock the control panel.
+
+E87 - Energy saving mode active. Cause: The energy saving mode lowered the temperature of the heater. What to do: Wait two minutes for the machine to heat up, or deactivate the energy saving mode in the menu.
+
+E88 - Service interval reached. Cause: The machine has made 15,000 coffees and needs a preventive service. What to do: Contact customer service to book a service. The machine can still be used in the meantime.
+
+E89 - Water used counter full. Cause: The water counter reached its maximum value. What to do: Run the descaling programme: the counter is reset at the end of the programme.
+
+E90 - Accessory not recognised. Cause: The milk container accessory is not recognised. What to do: Clean the contacts of the milk container and connect it again.
+
+E91 - Unknown accessory. Cause: An accessory that is not compatible with the machine has been connected. What to do: Remove the accessory and use only original Vellora accessories.
+
+E92 - Milk container lid open. Cause: The lid of the milk container accessory is not closed. What to do: Close the lid of the milk container until it clicks.
+
+E93 - Milk container too warm. Cause: The milk container accessory has been out of the refrigerator for too long. What to do: Put the milk container back in the refrigerator for at least one hour.
+
+E94 - Factory test mode. Cause: The machine started in factory test mode. What to do: Switch the machine off, then switch it on again without pressing any other button.
+
+E95 - Calibration lost. Cause: The calibration of the flow meter was lost. What to do: Contact customer service to calibrate the flow meter again.
+
+E96 - Unknown water source. Cause: The machine is set for a direct water connection but none is installed. What to do: Set the water source to 'Water tank' in the menu.
+
+E97 - Direct connection pressure too low. Cause: The pressure of the direct water connection is too low. What to do: Check that the water tap of the direct connection is fully open.
+
+E98 - Direct connection leak. Cause: The machine detected a leak on the direct water connection. What to do: Close the water tap of the direct connection and contact customer service.
+
+E99 - Unknown error. Cause: The machine detected a problem that has no specific code. What to do: Switch the machine off and on again. If the code comes back, contact customer service.
+
+10. PROBLEMS WITHOUT AN ERROR CODE
+
+The coffee is not hot enough. Preheat the cup with hot water, increase the coffee temperature in the menu, and descale the machine if it has not been done for a long time.
+
+The coffee comes out too slowly or drop by drop. The grind is too fine or the brewing unit is dirty. Set the grind adjuster one or two steps coarser, while the grinder is running, and rinse the brewing unit.
+
+The coffee has no crema. The beans are not fresh enough, or the grind is too coarse. Use fresh beans, stored in an airtight container, and set the grind adjuster one step finer.
+
+The milk is not frothed. The milk is not cold enough, or the frothing head is dirty. Use milk straight from the refrigerator and clean the frothing head.
+
+The machine makes a lot of noise while grinding. This is normal for the first few coffees, and when the bean hopper is almost empty. If the noise is very loud, or if it sounds like grinding gravel, stop the machine immediately and check the error code on the display.
+
+Water leaks under the machine. The drip tray is full or badly inserted, or the water tank is not inserted correctly. Empty the drip tray and check the seal of the water tank.
+
+
+11. WARRANTY AND CUSTOMER SERVICE
+
+The Vellora Duo is covered by a two-year warranty from the date of purchase, on presentation of the receipt. The warranty does not cover damage caused by limescale, by the use of unsuitable coffee beans, by foreign objects in the grinder, by dropping the machine, or by repairs carried out by unauthorised persons. Wear parts such as seals, the water filter and the brewing unit grease are not covered.
+
+Before contacting customer service, please write down the model number and the serial number printed on the label behind the water tank, and the error code shown on the display, if any. Our customer service is available from Monday to Friday, from 9 am to 6 pm. Most problems can be solved over the phone in a few minutes. If the machine must be repaired, we will send you a box to return it to our service centre free of charge. Repairs under warranty usually take ten working days.
+
+Dispose of the machine at the end of its life at a collection point for electrical and electronic equipment. Do not throw it away with household waste. The packaging is made of recyclable cardboard and paper.
