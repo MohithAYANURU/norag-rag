@@ -25,8 +25,8 @@ client = OpenAI(api_key=api_key, base_url="https://generativelanguage.googleapis
 # (or returned by list_available_models() below) should work. Models get retired over time.
 # Validated as working on 2026-10-19: gemini-2.5-flash-lite, gemini-2.5-flash, gemini-3-flash-preview, gemini-3.5-flash-lite.
 # Free tier quotas are per model: if you get a 429 error, switching to another model is a quick workaround.
-MODEL = "gemini-3.5-flash-lite"
-STREAM_ON = True
+MODEL = os.getenv("RAG_MODEL", "gemini-3.5-flash-lite")
+STREAM_ON = os.getenv("RAG_STREAM", "true").lower() == "true"
 
 # Use this function to list available models and their details
 def list_available_models():
@@ -42,17 +42,17 @@ def list_available_models():
 local_ef = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 
 # The document to index and search
-DOCUMENT_FILE = "docs/CrimeAndPunishment.txt"
+DOCUMENT_FILE = os.getenv("RAG_DOCUMENT", "docs/CrimeAndPunishment.txt")
 
 # Chunking settings
 # CHUNK_SIZE is in characters. 800 characters are about 190 tokens, which stays under the
 # 256-token limit of the embedding model (text beyond that limit is silently ignored when embedding).
-CHUNK_SIZE = 800
+CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "800"))
 # Each chunk starts with the last OVERLAP_PERCENT % of the previous chunk,
 # so that a sentence cut at the end of a chunk can still be found complete in the next one.
-OVERLAP_PERCENT = 10
+OVERLAP_PERCENT = int(os.getenv("RAG_OVERLAP_PERCENT", "10"))
 # Paragraphs shorter than this (in characters) are ignored: chapter headings, "He scowled.", ...
-MIN_PARAGRAPH_LENGTH = 20
+MIN_PARAGRAPH_LENGTH = int(os.getenv("RAG_MIN_PARAGRAPH_LENGTH", "20"))
 
 # We'll use a persistent client so you don't have to re-index every time you run the script
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
@@ -162,10 +162,11 @@ def main():
     else:
         print(f"Using existing index '{COLLECTION_NAME}' ({collection.count()} chunks).")
 
-    question = "What does this say about Denis?"
+    question = os.getenv("RAG_QUESTION", "What does this say about Denis?")
+    n_results = int(os.getenv("RAG_RESULTS", "5"))
     
     print(f"\n--- RAG RETRIEVAL START ---")
-    context = get_rag_context(question, n_results=5)
+    context = get_rag_context(question, n_results=n_results)
 
     # Debug - print the retrieved context to verify it's working
     print(f"Retrieved context:\n{context}")

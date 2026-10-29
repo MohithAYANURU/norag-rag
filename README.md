@@ -77,6 +77,36 @@ python ask_rag_google.py
 - RAG app prints retrieved context for verification.
 - Streaming output is enabled by default in both applications (controlled by `STREAM_ON` variable).
 
+### First-version RAG app
+
+The repository now also includes `rag_first_version.py`, a cleaner first pass at a
+real RAG application. It reads a text file, chunks it, indexes the chunks in a
+persistent local ChromaDB collection, retrieves the most relevant passages, and
+then asks Gemini to answer the user’s question using only those passages.
+
+```powershell
+.venv\Scripts\python.exe rag_first_version.py --document docs/CrimeAndPunishment.txt --question "What does this say about Denis Amselemovitch?"
+```
+
+This is the simplest working version of RAG for the course: retrieval + context
+injection + generation.
+
+The RAG script also accepts environment overrides for experiments without
+editing the source:
+
+```powershell
+$env:RAG_DOCUMENT="docs/vellora-duo-espresso-machine.txt"
+$env:RAG_QUESTION="How do I clean and descale the machine?"
+$env:RAG_CHUNK_SIZE="400"
+$env:RAG_OVERLAP_PERCENT="20"
+$env:RAG_RESULTS="5"
+$env:RAG_STREAM="false"
+python ask_rag_google.py
+```
+
+The persistent collection name includes the document and chunking settings,
+so changing these values creates an independent index.
+
 - Using the shortened version of the text (`docs/CrimeAndPunishment-shorter.txt`)
 	- Go online at https://gemini.google.com/app
 	- At the prompt, start writing "Here is a story: ",
