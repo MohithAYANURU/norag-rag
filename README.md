@@ -1,5 +1,35 @@
 # norag-rag project
 
+## RAG V2 web application
+
+The V2 application is implemented in `v2_app.py`. It exposes document management,
+retrieval and grounded answering through a FastAPI API, with a browser UI at `/`.
+The Words tab is available in the UI and `/about` is intentionally unlinked, as
+required by the assignment.
+
+From this directory:
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m uvicorn v2_app:app --reload
+```
+
+The Kestrel corpus is discovered from `..\kestrel-kb\docs`. The own corpus uses
+the files in `docs`. The starter Kestrel questions are in
+`..\kestrel-kb\eval\questions.starter.jsonl`; the own question set is
+`eval\questions.own.jsonl`.
+
+Run retrieval evaluation while the API is running:
+
+```powershell
+.venv\Scripts\python.exe evaluate.py --questions ..\kestrel-kb\eval\questions.starter.jsonl --document-id kestrel:product-guide.md --document-id kestrel:billing-policy-2025.md --document-id kestrel:billing-policy-2026.md --document-id kestrel:service-catalog.md --document-id kestrel:support-runbook-errors.md --output eval\kestrel-results.json
+.venv\Scripts\python.exe evaluate.py --questions eval\questions.own.jsonl --document-id own:vellora-duo-espresso-machine.txt --output eval\own-results.json
+```
+
+The evaluator reports HitRate@1, @3, @5 and @10 overall and per question type.
+Use `--no-context` for the required baseline and `--answers` to request and save
+LLM answers. Keep result files and hand grades with the submission.
+
 This workspace contains 2 Python applications to compare **NoRAG** (full-context prompting) versus **RAG** (retrieval-augmented generation) using **Google Gemini** via the **OpenAI SDK**.
 
 ## Applications

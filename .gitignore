@@ -19,6 +19,7 @@ __pycache__/
 
 # ChromaDB persistent storage
 chroma_db/
+chroma_db_v2/
 
 # OS/editor files
 .DS_Store

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAG V2</title>
+  <style>
+    body { font: 16px system-ui; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    textarea, input, select, button { font: inherit; margin: .25rem 0; padding: .5rem; }
+    textarea { width: 100%; min-height: 7rem; } .row { display:flex; gap:1rem; flex-wrap:wrap; }
+    .card { border:1px solid #ddd; border-radius:8px; padding:1rem; margin:1rem 0; }
+    pre { white-space: pre-wrap; background:#f6f6f6; padding:1rem; }
+  </style>
+</head>
+<body>
+  <h1>RAG V2</h1>
+  <section class="card">
+    <h2>Ask</h2>
+    <textarea id="question" placeholder="Ask a question about the selected documents"></textarea>
+    <div id="documents"></div>
+    <div class="row">
+      <label>Chunk size <input id="chunk" type="number" value="800" min="100"></label>
+      <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
+      <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
+    </div>
+    <button onclick="ask()">Ask</button>
+    <pre id="answer"></pre><div id="citations"></div>
+  </section>
+  <section class="card">
+    <h2>Documents</h2>
+    <input id="newName" placeholder="filename.txt">
+    <textarea id="newContent" placeholder="Document content"></textarea>
+    <button onclick="addDocument()">Add document</button>
+    <button onclick="runEvaluation('kestrel')">Evaluate Kestrel</button>
+    <button onclick="runEvaluation('own')">Evaluate own corpus</button>
+    <pre id="evaluation"></pre>
+  </section>
+  <section class="card">
+    <h2>Words</h2>
+    <input id="word" placeholder="word (optional)">
+    <input id="wordQuestion" placeholder="or type a question">
+    <button onclick="words()">Explore</button><pre id="wordResult"></pre>
+  </section>
+  <script>
+    let docs = [];
+    async function loadDocs() {
+      docs = await (await fetch('/api/documents')).json();
+      document.getElementById('documents').innerHTML = docs.map(d =>
+        `<label><input type="checkbox" value="${d.id}" checked> ${d.corpus}/${d.name}</label>` +
+        (d.managed ? ` <button onclick="deleteDocument('${d.id}')">Delete</button>` : '') + '<br>').join('');
+    }
+    function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
+    async function ask() {
+      const body = {question: question.value, document_ids: selected(), chunk_size:+chunk.value,
+        overlap_percent:+overlap.value, top_k:+topk.value};
+      const response = await fetch('/api/search', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+      const data = await response.json(); answer.textContent = data.answer || data.detail || '';
+      citations.innerHTML = (data.citations || []).map(c => `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`).join('');
+    }
+    async function words() {
+      const body = {document_ids:selected(), word:word.value || null, question:wordQuestion.value || null};
+      const response = await fetch('/api/words', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+      wordResult.textContent = JSON.stringify(await response.json(), null, 2);
+    }
+    async function addDocument() {
+      const response = await fetch('/api/documents', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:newName.value, content:newContent.value})});
+      if (!response.ok) { answer.textContent = (await response.json()).detail; return; }
+      newName.value = ''; newContent.value = ''; await loadDocs();
+    }
+    async function deleteDocument(id) {
+      const response = await fetch('/api/documents/' + encodeURIComponent(id), {method:'DELETE'});
+      if (!response.ok) { answer.textContent = (await response.json()).detail; return; }
+      await loadDocs();
+    }
+    async function runEvaluation(corpus) {
+      const corpusIds = docs.filter(d => d.corpus === corpus).map(d => d.id);
+      const response = await fetch('/api/evaluate', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value, overlap_percent:+overlap.value, top_k:10})});
+      evaluation.textContent = JSON.stringify(await response.json(), null, 2);
+    }
+    loadDocs();
+  </script>
+</body>
+</html>
