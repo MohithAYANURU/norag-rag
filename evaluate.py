@@ -84,19 +84,25 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def no_context(question: str) -> str:
+def no_context(question: str) -> dict[str, str]:
     key = os.getenv("GOOGLE_API_KEY")
     if not key:
-        return "SKIPPED: GOOGLE_API_KEY is not configured"
+        return {"status": "skipped", "answer": "SKIPPED: GOOGLE_API_KEY is not configured"}
     client = OpenAI(
         api_key=key,
         base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
     )
-    response = client.chat.completions.create(
-        model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
-        messages=[{"role": "user", "content": question}],
-    )
-    return response.choices[0].message.content or ""
+    try:
+        response = client.chat.completions.create(
+            model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
+            messages=[{"role": "user", "content": question}],
+        )
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}
+    return {
+        "status": "ok",
+        "answer": response.choices[0].message.content or "",
+    }
 
 
 def main():
@@ -108,6 +114,11 @@ def main():
     parser.add_argument("--top-k", type=int, default=10)
     parser.add_argument("--document-id", action="append", dest="document_ids")
     parser.add_argument("--no-context", action="store_true")
+    parser.add_argument(
+        "--no-retrieval",
+        action="store_true",
+        help="Skip the API retrieval pass and write only the no-context results",
+    )
     parser.add_argument("--answers", action="store_true")
     args = parser.parse_args()
     questions = load_questions(args.questions)
@@ -118,7 +129,7 @@ def main():
     }
     if args.document_ids:
         config["document_ids"] = args.document_ids
-    rows = evaluate_retrieval(questions, config)
+    rows = [] if args.no_retrieval else evaluate_retrieval(questions, config)
     output = {
         "questions_file": str(args.questions),
         "configuration": config,
@@ -127,7 +138,7 @@ def main():
     }
     if args.no_context:
         output["no_context"] = [
-            {"id": question["id"], "answer": no_context(question["question"])}
+            {"id": question["id"], **no_context(question["question"])}
             for question in questions
         ]
     if args.answers:

@@ -1,0 +1,32 @@
+{
+  "grader": "manual",
+  "rubric": {
+    "correct": "The response matches the expected answer and does not add unsupported claims.",
+    "partial": "The response contains a material part of the expected answer but omits or weakens required details.",
+    "wrong": "The response contradicts the expected answer or fails to answer the question.",
+    "unsupported": "The response asserts information not present in the corpus, especially for an unanswerable question.",
+    "not_graded": "No answer was returned, so a hand grade would be invented."
+  },
+  "grades": [
+    {"corpus":"own","configuration":"no-context","id":"own01","grade":"wrong","reason":"The response asks for the product type instead of giving the documented first-use setup."},
+    {"corpus":"own","configuration":"no-context","id":"own02","grade":"wrong","reason":"The response does not give the documented daily drip-tray instruction."},
+    {"corpus":"own","configuration":"no-context","id":"own03","grade":"wrong","reason":"The response does not provide the documented tablet cleaning steps."},
+    {"corpus":"own","configuration":"no-context","id":"own04","grade":"partial","reason":"It gives generic descaling consequences but does not reliably reproduce the documented machine-specific consequences."},
+    {"corpus":"own","configuration":"no-context","id":"own05","grade":"wrong","reason":"It recommends vinegar, contradicting the manual's prohibition."},
+    {"corpus":"own","configuration":"no-context","id":"own06","grade":"wrong","reason":"The response asks for appliance details instead of the documented duration and phases."},
+    {"corpus":"own","configuration":"no-context","id":"own07","grade":"wrong","reason":"The response does not identify E61 as descaling needed or prescribe the documented action."},
+    {"corpus":"own","configuration":"no-context","id":"own08","grade":"wrong","reason":"The response asks for the model instead of giving the documented 10–32 °C range."},
+    {"corpus":"own","configuration":"no-context","id":"own09","grade":"unsupported","reason":"It asserts that no iPhone app exists; the correct response is that this is not in the documents."},
+    {"corpus":"own","configuration":"no-context","id":"own10","grade":"unsupported","reason":"It gives a real-world availability claim rather than stating that the price is not in the documents."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q01","grade":"wrong","reason":"The response asks for the product instead of explaining KST-2044 or its allowlist fix."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q02","grade":"wrong","reason":"It invents an expired or revoked invitation explanation instead of the documented seat-limit remedy."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q03","grade":"wrong","reason":"It gives a generic payment-processing explanation rather than the documented retry, grace-period, read-only, and suspension sequence."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q04","grade":"wrong","reason":"It asks for product clarification instead of identifying Business and Enterprise and the setup procedure."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q05","grade":"partial","reason":"It recognizes a lost-phone 2FA scenario and discusses recovery, but does not reliably provide Kestrel's backup-code and admin-reset procedure."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q06","grade":"wrong","reason":"It refuses to answer and gives generic billing caveats instead of the 60-day 2026 policy."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q07","grade":"wrong","reason":"It asks for prices rather than answering the documented 20% annual discount."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q08","grade":"wrong","reason":"It refuses to identify the Messaging team and #oncall-messaging channel."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q09","grade":"unsupported","reason":"It asserts that a Kestrel iPhone app exists, but the corpus does not support that claim."},
+    {"corpus":"kestrel","configuration":"no-context","id":"q10","grade":"unsupported","reason":"It provides generic real-world pricing uncertainty rather than stating that the price is not in the documents."}
+  ]
+}

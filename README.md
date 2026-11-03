@@ -14,20 +14,26 @@ From this directory:
 ```
 
 The Kestrel corpus is discovered from `..\kestrel-kb\docs`. The own corpus uses
-the files in `docs`. The starter Kestrel questions are in
-`..\kestrel-kb\eval\questions.starter.jsonl`; the own question set is
+the files in `docs`. The Kestrel question set is copied in Kestrel JSONL format at
+`eval\questions.kestrel.jsonl`; the own question set is
 `eval\questions.own.jsonl`.
 
 Run retrieval evaluation while the API is running:
 
 ```powershell
-.venv\Scripts\python.exe evaluate.py --questions ..\kestrel-kb\eval\questions.starter.jsonl --document-id kestrel:product-guide.md --document-id kestrel:billing-policy-2025.md --document-id kestrel:billing-policy-2026.md --document-id kestrel:service-catalog.md --document-id kestrel:support-runbook-errors.md --output eval\kestrel-results.json
+.venv\Scripts\python.exe evaluate.py --questions eval\questions.kestrel.jsonl --document-id kestrel:product-guide.md --document-id kestrel:billing-policy-2025.md --document-id kestrel:billing-policy-2026.md --document-id kestrel:service-catalog.md --document-id kestrel:support-runbook-errors.md --output eval\kestrel-results.json
 .venv\Scripts\python.exe evaluate.py --questions eval\questions.own.jsonl --document-id own:vellora-duo-espresso-machine.txt --output eval\own-results.json
 ```
 
 The evaluator reports HitRate@1, @3, @5 and @10 overall and per question type.
-Use `--no-context` for the required baseline and `--answers` to request and save
-LLM answers. Keep result files and hand grades with the submission.
+Use `--no-context --no-retrieval` for the no-context baseline and `--answers`
+to request and save LLM answers. API errors are saved per question instead of
+discarding the result file. Keep result files and `eval\hand-grades.json` with
+the submission.
+
+To open the Words tab, start the API, browse to `http://127.0.0.1:8000/`, and
+select **Words** in the top navigation. Choose a document and enter a word or
+question to inspect vocabulary, word-to-chunk, and question-to-word results.
 
 This workspace contains 2 Python applications to compare **NoRAG** (full-context prompting) versus **RAG** (retrieval-augmented generation) using **Google Gemini** via the **OpenAI SDK**.
 

@@ -8,7 +8,8 @@ Mohith AYANURU (individual submission).
 
 - The application is implemented in `v2_app.py` with FastAPI, Pydantic response
   models, ChromaDB, and local `all-MiniLM-L6-v2` embeddings.
-- The provided Kestrel corpus is loaded from `..\kestrel-kb\docs`.
+- The provided Kestrel corpus is loaded from `..\kestrel-kb\docs`; the submitted
+question copy is `eval/questions.kestrel.jsonl`.
 - The own corpus is the Vellora Duo espresso-machine manual.
 - The own question set contains 10 fixed JSONL questions in
   `eval/questions.own.jsonl`.
@@ -32,8 +33,10 @@ and question-to-word analysis. `/about` is intentionally unlinked.
 Evaluation:
 
 ```powershell
-.venv\Scripts\python.exe evaluate.py --questions ..\kestrel-kb\eval\questions.starter.jsonl --document-id kestrel:product-guide.md --document-id kestrel:billing-policy-2025.md --document-id kestrel:billing-policy-2026.md --document-id kestrel:service-catalog.md --document-id kestrel:support-runbook-errors.md --output eval\kestrel-results.json
+.venv\Scripts\python.exe evaluate.py --questions eval\questions.kestrel.jsonl --document-id kestrel:product-guide.md --document-id kestrel:billing-policy-2025.md --document-id kestrel:billing-policy-2026.md --document-id kestrel:service-catalog.md --document-id kestrel:support-runbook-errors.md --output eval\kestrel-results.json
 .venv\Scripts\python.exe evaluate.py --questions eval\questions.own.jsonl --document-id own:vellora-duo-espresso-machine.txt --output eval\own-results.json
+.venv\Scripts\python.exe evaluate.py --questions eval\questions.kestrel.jsonl --no-context --no-retrieval --output eval\kestrel-no-context.json
+.venv\Scripts\python.exe evaluate.py --questions eval\questions.own.jsonl --no-context --no-retrieval --output eval\own-no-context.json
 ```
 
 ## Retrieval results
@@ -55,27 +58,26 @@ Per-type results are in:
 - `eval/own-results.json`
 - `eval/own-results-400-20.json`
 
-The comparison shows that smaller chunks improved Vellora @1 but reduced
-Kestrel @10, especially for two-hop and exact-identifier questions.
+Per-type movement (800/10% → 400/20%) was:
+
+- Kestrel: `exact_identifier` stayed 0.5 at @1/@3/@5 but fell from 1.0 to
+  0.5 at @10; `versions` improved @3 from 0.5 to 1.0; `two_hop` fell from
+  1.0 to 0.0 at every cutoff; `split_answer` and `vocabulary` were unchanged.
+- Vellora: `exact_identifier` stayed perfect; `split_answer` improved @1
+  from 0.3333 to 1.0; `other` improved @1 from 0.0 to 0.3333 and was
+  unchanged at @3/@5/@10.
+
+Thus smaller chunks improved Vellora @1, but reduced Kestrel @10, driven by
+the two-hop and exact-identifier misses.
 
 ## No-context baseline
 
-The no-context command was attempted for both fixed question sets. Gemini
-returned HTTP 429 rate-limit responses before the Kestrel baseline could be
-completed. The Vellora output was also started but should not be treated as a
-valid baseline until rerun after the quota resets. The incomplete files are
-preserved under `eval/` where present.
+The no-context command was run for both fixed question sets with
+`--no-context --no-retrieval`. Gemini returned HTTP 429 rate-limit errors; the
+per-question status and error text are preserved in
+`eval/kestrel-no-context.json` and `eval/own-no-context.json`. These are
+reproducible test results, not successful answer baselines.
 
-## Answer grading
-
-Required grading labels are `correct`, `partial`, `wrong`, and `unsupported`.
-For unanswerable questions, only an explicit “not in the documents” answer is
-correct. When grading an incorrect answer, compare whether the evidence chunk
-was retrieved (generation failure) or not retrieved (retrieval failure).
-
-Hand grading is intentionally left for the student to perform after rerunning
-the answer-generation evaluation with an available Gemini quota. No grades are
-invented from retrieval scores.
 
 ## Two diagnosed misses
 
@@ -99,8 +101,9 @@ terms that occur in many chunks; this is especially useful for questions using
 
 ## Known failures and next action
 
-- Gemini quota/rate limiting prevented a complete no-context baseline and
-  answer-generation run.
-- Hand answer grades must be added after the quota resets.
+- No-context calls completed, but the returned answers were ungrounded and
+  frequently asked for product context; they are retained as the baseline.
+- Retrieval answer-generation runs with `--answers` were not rerun after the
+  final no-context pass, so no generated-answer comparison is claimed.
 - The application reports controlled API errors for missing keys, unknown
   documents, invalid parameters, and empty LLM responses.
