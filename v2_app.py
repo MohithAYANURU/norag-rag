@@ -287,15 +287,6 @@ def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
 
 
-@app.get("/about", response_class=HTMLResponse)
-def about() -> str:
-    return (
-        "<main style='font-size:3rem;padding:3rem'>"
-        "Denis Amselemovitch is an intriguing character who likes to make "
-        "impromptu appearances in incongruous places.</main>"
-    )
-
-
 @app.get("/api/documents")
 def list_documents():
     return [

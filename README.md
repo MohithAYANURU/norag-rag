@@ -4,8 +4,7 @@
 
 The V2 application is implemented in `v2_app.py`. It exposes document management,
 retrieval and grounded answering through a FastAPI API, with a browser UI at `/`.
-The Words tab is available in the UI and `/about` is intentionally unlinked, as
-required by the assignment.
+The Words tab is available in the UI.
 
 From this directory:
 

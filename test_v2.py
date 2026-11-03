@@ -1,6 +1,4 @@
-from pathlib import Path
-
-from v2_app import split_text, word_analysis
+from v2_app import app, split_text, word_analysis
 
 
 def test_split_text_respects_overlap():
@@ -16,6 +14,5 @@ def test_word_analysis_returns_question_words():
     assert values["vinegar"]["exists"]
 
 
-def test_about_text_is_not_in_main_navigation():
-    html = (Path(__file__).parent / "web" / "index.html").read_text(encoding="utf-8")
-    assert "/about" not in html
+def test_about_route_is_not_registered():
+    assert all(route.path != "/about" for route in app.routes)
