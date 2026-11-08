@@ -50,11 +50,20 @@ This workspace contains 2 Python applications to compare **NoRAG** (full-context
 - Uses local embeddings (`all-MiniLM-L6-v2`) + local ChromaDB (`chroma_db/`) to retrieve relevant chunks before asking the model.
 - Default retrieval uses `n_results=5` for the question: `What does this say about Denis?`
 
+3. `bm25/ask_bm25_rag_google.py`
+- RAG with Google Gemini using in-memory BM25 lexical retrieval.
+- See [`bm25/README.md`](bm25/README.md) for the comparison with dense retrieval and the BM25 challenge.
+
+The two-hop retrieval exercise is documented in
+[`concepts/concept_graph_challenge_part1.md`](concepts/concept_graph_challenge_part1.md).
+
 ## Project Structure
 
 - `docs/CrimeAndPunishment.txt`: main source text used by the scripts.
 - `docs/CrimeAndPunishment-shorter.txt`: shortened version of the main source text for quicker testing and rapid experimentation in Gemini online at https://gemini.google.com/app (See note below)
 - `chroma_db/`: persistent local vector database (used by RAG scripts).
+- `bm25/`: BM25 retrieval example and challenges.
+- `concepts/`: multi-hop retrieval challenge.
 - `requirements.txt`: Python dependencies.
 
 ## Prerequisites
