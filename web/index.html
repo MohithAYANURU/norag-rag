@@ -22,6 +22,9 @@
       <label>Chunk size <input id="chunk" type="number" value="800" min="100"></label>
       <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
       <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
+      <label><input id="dense" type="checkbox" checked> Dense</label>
+      <label><input id="bm25" type="checkbox" checked> BM25</label>
+      <label><input id="graph" type="checkbox"> Concept graph</label>
     </div>
     <button onclick="ask()">Ask</button>
     <pre id="answer"></pre><div id="citations"></div>
@@ -52,10 +55,12 @@
     function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
     async function ask() {
       const body = {question: question.value, document_ids: selected(), chunk_size:+chunk.value,
-        overlap_percent:+overlap.value, top_k:+topk.value};
+        overlap_percent:+overlap.value, top_k:+topk.value, dense:dense.checked,
+        bm25:bm25.checked, graph:graph.checked};
       const response = await fetch('/api/search', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
       const data = await response.json(); answer.textContent = data.answer || data.detail || '';
       citations.innerHTML = (data.citations || []).map(c => `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`).join('');
+      if (data.graph_path) citations.innerHTML += `<pre>${JSON.stringify(data.graph_path, null, 2)}</pre>`;
     }
     async function words() {
       const body = {document_ids:selected(), word:word.value || null, question:wordQuestion.value || null};
@@ -76,7 +81,9 @@
     async function runEvaluation(corpus) {
       const corpusIds = docs.filter(d => d.corpus === corpus).map(d => d.id);
       const response = await fetch('/api/evaluate', {method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value, overlap_percent:+overlap.value, top_k:10})});
+        body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value,
+          overlap_percent:+overlap.value, top_k:10, dense:dense.checked,
+          bm25:bm25.checked, graph:graph.checked})});
       evaluation.textContent = JSON.stringify(await response.json(), null, 2);
     }
     loadDocs();

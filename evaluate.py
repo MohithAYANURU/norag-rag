@@ -112,6 +112,9 @@ def main():
     parser.add_argument("--chunk-size", type=int, default=800)
     parser.add_argument("--overlap", type=int, default=10)
     parser.add_argument("--top-k", type=int, default=10)
+    parser.add_argument("--no-dense", action="store_true")
+    parser.add_argument("--no-bm25", action="store_true")
+    parser.add_argument("--graph", action="store_true")
     parser.add_argument("--document-id", action="append", dest="document_ids")
     parser.add_argument("--no-context", action="store_true")
     parser.add_argument(
@@ -126,6 +129,9 @@ def main():
         "chunk_size": args.chunk_size,
         "overlap_percent": args.overlap,
         "top_k": args.top_k,
+        "dense": not args.no_dense,
+        "bm25": not args.no_bm25,
+        "graph": args.graph,
     }
     if args.document_ids:
         config["document_ids"] = args.document_ids

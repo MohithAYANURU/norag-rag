@@ -21,6 +21,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from openai import OpenAI
 from pydantic import BaseModel, Field
+from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
 
 load_dotenv()
 
@@ -29,6 +30,8 @@ CORPUS_ROOT = ROOT.parent / "kestrel-kb" / "docs"
 OWN_ROOT = ROOT / "docs"
 USER_ROOT = ROOT / "user_docs"
 DB_ROOT = ROOT / "chroma_db_v2"
+BM25_ROOT = DB_ROOT / "bm25"
+GRAPH_FILE = ROOT / "graph_kestrel.json"
 WEB_ROOT = ROOT / "web"
 DEFAULT_CHUNK_SIZE = 800
 DEFAULT_OVERLAP = 10
@@ -53,6 +56,9 @@ class SearchRequest(BaseModel):
     overlap_percent: int = Field(DEFAULT_OVERLAP, ge=0, le=80)
     top_k: int = Field(DEFAULT_TOP_K, ge=1, le=20)
     generate: bool = True
+    dense: bool = True
+    bm25: bool = True
+    graph: bool = False
 
 
 class Citation(BaseModel):
@@ -68,6 +74,7 @@ class SearchResponse(BaseModel):
     citations: list[Citation]
     question: str
     configuration: dict[str, Any]
+    graph_path: dict[str, Any] | None = None
 
 
 class WordsRequest(BaseModel):
@@ -82,6 +89,9 @@ class EvaluationRequest(BaseModel):
     chunk_size: int = Field(DEFAULT_CHUNK_SIZE, ge=100, le=5000)
     overlap_percent: int = Field(DEFAULT_OVERLAP, ge=0, le=80)
     top_k: int = Field(10, ge=1, le=20)
+    dense: bool = True
+    bm25: bool = True
+    graph: bool = False
 
 
 def _safe_id(value: str) -> str:
@@ -169,32 +179,92 @@ def _collection(document_ids: list[str], chunk_size: int, overlap: int):
     return collection
 
 
+def _chunks(document_ids: list[str], chunk_size: int, overlap: int) -> list[dict[str, Any]]:
+    docs = document_map()
+    chunks = []
+    for document_id in document_ids:
+        document = docs.get(document_id)
+        if not document:
+            raise HTTPException(404, f"Unknown document: {document_id}")
+        for index, text in enumerate(
+            split_text(document["path"].read_text(encoding="utf-8"), chunk_size, overlap)
+        ):
+            chunks.append(
+                {
+                    "document_id": document_id,
+                    "source": document["name"],
+                    "chunk_id": f"{document['name']}:{index}",
+                    "text": text,
+                }
+            )
+    if not chunks:
+        raise HTTPException(422, "Selected documents are empty")
+    return chunks
+
+
+def _to_citations(results: list[tuple[dict[str, Any], float]]) -> list[Citation]:
+    return [
+        Citation(
+            document_id=item["document_id"],
+            source=item["source"],
+            chunk_id=item["chunk_id"],
+            text=item["text"],
+            distance=score,
+        )
+        for item, score in results
+    ]
+
+
 def retrieve(
     question: str,
     document_ids: list[str] | None,
     chunk_size: int,
     overlap: int,
     top_k: int,
+    dense: bool = True,
+    bm25: bool = True,
+    graph: bool = False,
 ) -> list[Citation]:
     docs = document_map()
     selected = document_ids or list(docs)
     if not selected:
         raise HTTPException(422, "No documents are available")
-    collection = _collection(selected, chunk_size, overlap)
-    result = collection.query(query_texts=[question], n_results=min(top_k, collection.count()))
-    texts = result.get("documents", [[]])[0]
-    metadata = result.get("metadatas", [[]])[0]
-    distances = result.get("distances", [[]])[0]
-    return [
-        Citation(
-            document_id=item["document_id"],
-            source=item["source"],
-            chunk_id=f"{item['source']}:{item['chunk_index']}",
-            text=text,
-            distance=distances[index] if index < len(distances) else None,
+    chunks = _chunks(selected, chunk_size, overlap)
+    ranked_lists = []
+    if dense:
+        collection = _collection(selected, chunk_size, overlap)
+        result = collection.query(query_texts=[question], n_results=min(top_k, collection.count()))
+        ranked_lists.append(
+            [
+                (
+                    {
+                        "document_id": item["document_id"],
+                        "source": item["source"],
+                        "chunk_id": f"{item['source']}:{item['chunk_index']}",
+                        "text": text,
+                    },
+                    distances[index] if index < len(distances) else 0.0,
+                )
+                for index, (text, item) in enumerate(
+                    zip(
+                        result.get("documents", [[]])[0],
+                        result.get("metadatas", [[]])[0],
+                    )
+                )
+                for distances in [result.get("distances", [[]])[0]]
+            ]
         )
-        for index, (text, item) in enumerate(zip(texts, metadata))
-    ]
+    if bm25:
+        index = BM25Index(chunks)
+        ranked_lists.append(index.search(question, top_k))
+    if graph:
+        graph_data = ConceptGraph.load(GRAPH_FILE)
+        chunk_map = {item["chunk_id"]: item for item in chunks}
+        graph_results, _path = graph_data.retrieve(question, chunk_map, top_k)
+        ranked_lists.append(graph_results)
+    if not ranked_lists:
+        raise HTTPException(422, "Enable at least one retriever")
+    return _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
 
 
 def generate_answer(question: str, citations: list[Citation]) -> str:
@@ -287,6 +357,12 @@ def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
 
 
+@app.get("/bm25", response_class=HTMLResponse)
+def bm25_page() -> str:
+    return """<!doctype html><html><head><title>BM25</title></head>
+    <body><p style="font-size:4rem">Watch your sources!</p></body></html>"""
+
+
 @app.get("/api/documents")
 def list_documents():
     return [
@@ -327,8 +403,20 @@ def search(payload: SearchRequest):
         payload.chunk_size,
         payload.overlap_percent,
         payload.top_k,
+        payload.dense,
+        payload.bm25,
+        payload.graph,
     )
     answer = generate_answer(payload.question, citations) if payload.generate else ""
+    graph_path = None
+    if payload.graph:
+        selected = payload.document_ids or list(document_map())
+        graph = ConceptGraph.load(GRAPH_FILE)
+        chunk_map = {
+            item["chunk_id"]: item
+            for item in _chunks(selected, payload.chunk_size, payload.overlap_percent)
+        }
+        _graph_results, graph_path = graph.retrieve(payload.question, chunk_map, payload.top_k)
     return SearchResponse(
         answer=answer,
         citations=citations,
@@ -338,7 +426,12 @@ def search(payload: SearchRequest):
             "overlap_percent": payload.overlap_percent,
             "top_k": payload.top_k,
             "embedding_model": EMBEDDING_MODEL,
+            "dense": payload.dense,
+            "bm25": payload.bm25,
+            "graph": payload.graph,
+            "fusion": "reciprocal_rank_fusion",
         },
+        graph_path=graph_path,
     )
 
 
@@ -374,6 +467,9 @@ def evaluate(payload: EvaluationRequest):
             payload.chunk_size,
             payload.overlap_percent,
             payload.top_k,
+            payload.dense,
+            payload.bm25,
+            payload.graph,
         )
         hit_rates = {}
         if question["answerable"]:

@@ -71,6 +71,8 @@ The two-hop retrieval exercise is documented in
 - Python 3.10+ (recommended)
 - API key:
    - `GOOGLE_API_KEY` from [Google AI Studio](https://aistudio.google.com/app/apikey)
+- V3 supports dense retrieval, BM25, reciprocal-rank fusion, and an optional
+  Kestrel concept graph.
 
 
 ## Setup
@@ -111,6 +113,24 @@ python ask_norag_google.py
 ```bash
 python ask_rag_google.py
 ```
+
+## V3 hybrid retrieval
+
+The V3 API enables Dense and BM25 by default and fuses enabled ranked lists with
+reciprocal-rank fusion. The UI checkboxes switch each retriever on or off; the
+same flags can be sent to `/api/search` or `/api/evaluate` as `dense`, `bm25`,
+and `graph`.
+
+Build the Kestrel concept graph once. This makes one Gemini call per chunk and
+stores validated entity/relation provenance in `graph_kestrel.json`:
+
+```powershell
+.venv\Scripts\python.exe build_graph.py
+```
+
+The graph retriever is disabled by default until that artifact exists. The
+unlinked `/bm25` route is intentionally available for the assignment's
+source-warning requirement and displays "Watch your sources!".
 
 ## Notes
 
