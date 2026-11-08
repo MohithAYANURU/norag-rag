@@ -12,12 +12,14 @@ from pathlib import Path
 
 from openai import OpenAI
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
 
 from retrieval_v3 import ConceptGraph, Entity, Relation
 
 ROOT = Path(__file__).resolve().parent
 CORPUS = ROOT.parent / "kestrel-kb" / "docs"
 OUTPUT = ROOT / "graph_kestrel.json"
+load_dotenv(ROOT / ".env")
 
 
 class Extraction(BaseModel):
