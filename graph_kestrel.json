@@ -1,0 +1,3798 @@
+{
+  "entities": [
+    {
+      "id": "kestrel-analytics",
+      "name": "Kestrel Analytics",
+      "type": "organization",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "type": "department",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "starter",
+      "name": "Starter",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "team",
+      "name": "Team",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "id": "annual-billing",
+      "name": "annual billing",
+      "type": "billing_frequency",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "monthly-billing",
+      "name": "monthly billing",
+      "type": "billing_frequency",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "business-customers",
+      "name": "Business customers",
+      "type": "customer_type",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "enterprise-customers",
+      "name": "Enterprise customers",
+      "type": "customer_type",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "credit-and-debit-cards",
+      "name": "credit and debit cards",
+      "type": "payment_method",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "visa",
+      "name": "Visa",
+      "type": "card_brand",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "mastercard",
+      "name": "Mastercard",
+      "type": "card_brand",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "american-express",
+      "name": "American Express",
+      "type": "card_brand",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "bank-transfer",
+      "name": "bank transfer",
+      "type": "payment_method",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "workspace-owner",
+      "name": "workspace Owner",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "payment-processor",
+      "name": "payment processor",
+      "type": "entity",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "id": "invoice",
+      "name": "Invoice",
+      "type": "document",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "billing_contact",
+      "name": "billing contact",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "workspace",
+      "name": "workspace",
+      "type": "organization",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "owner",
+      "name": "Owner",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "support",
+      "name": "support",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "seats",
+      "name": "seats",
+      "type": "resource",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "id": "monthly-plans",
+      "name": "Monthly plans",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "id": "annual-plans",
+      "name": "Annual plans",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "id": "billing-email",
+      "name": "billing@kestrel.example",
+      "type": "email",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "id": "workspace_owner",
+      "name": "workspace Owner",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "id": "grace_period",
+      "name": "grace period",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "id": "free_plan",
+      "name": "Free plan",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "id": "vat",
+      "name": "VAT",
+      "type": "tax",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "id": "sales_tax",
+      "name": "sales tax",
+      "type": "tax",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "id": "business_customers_in_the_european_union",
+      "name": "Business customers in the European Union",
+      "type": "customer",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "id": "billing_email",
+      "name": "billing@kestrel.example",
+      "type": "email",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "id": "billing-and-refund-policy",
+      "name": "Billing and Refund Policy",
+      "type": "document",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "id": "monthly plans",
+      "name": "Monthly plans",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "annual plans",
+      "name": "Annual plans",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "credit and debit cards",
+      "name": "credit and debit cards",
+      "type": "payment method",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "american express",
+      "name": "American Express",
+      "type": "card brand",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "sepa direct debit",
+      "name": "SEPA direct debit",
+      "type": "payment method",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "bank transfer",
+      "name": "bank transfer",
+      "type": "payment method",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "id": "bank_transfer",
+      "name": "bank transfer",
+      "type": "payment_method",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "id": "settings_plan_payment_method",
+      "name": "Settings → Plan → Payment method",
+      "type": "location",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "id": "payment_processor",
+      "name": "payment processor",
+      "type": "organization",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "id": "settings_plan_invoices",
+      "name": "Settings → Plan → Invoices",
+      "type": "location",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "id": "billing-kestrel-example",
+      "name": "billing@kestrel.example",
+      "type": "email",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "id": "billing-contact",
+      "name": "billing contact",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "id": "grace-period",
+      "name": "grace period",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "banner",
+      "name": "banner",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "admins",
+      "name": "Admins",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "members",
+      "name": "members",
+      "type": "role",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "scheduled-reports",
+      "name": "scheduled reports",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "datasets",
+      "name": "datasets",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "paid-plan",
+      "name": "paid plan",
+      "type": "concept",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "id": "settings-plan-cancel-plan",
+      "name": "Settings → Plan → Cancel plan",
+      "type": "path",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "id": "free-plan",
+      "name": "Free plan",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "id": "annual-plan",
+      "name": "annual plan",
+      "type": "plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "id": "organisation",
+      "name": "organisation",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "plan",
+      "name": "plan",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "data",
+      "name": "data",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "administration_features",
+      "name": "administration features",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "starter_plan",
+      "name": "Starter",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "team_plan",
+      "name": "Team",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "business_plan",
+      "name": "Business",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "enterprise_plan",
+      "name": "Enterprise",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "id": "settings-plan",
+      "name": "Settings → Plan",
+      "type": "setting",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "id": "admin",
+      "name": "Admin",
+      "type": "workspace role",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "id": "editor",
+      "name": "Editor",
+      "type": "workspace role",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "id": "viewer",
+      "name": "Viewer",
+      "type": "role",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "id": "settings-members",
+      "name": "Settings → Members",
+      "type": "menu",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "id": "settings-members-invite",
+      "name": "Settings → Members → Invite",
+      "type": "menu",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "id": "seat",
+      "name": "seat",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "id": "person",
+      "name": "person",
+      "type": "role",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "id": "dashboards",
+      "name": "dashboards",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "id": "kestrel",
+      "name": "Kestrel",
+      "type": "software",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "id": "authenticator_apps",
+      "name": "authenticator apps",
+      "type": "technology",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "id": "backup code",
+      "name": "backup code",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "authenticator device",
+      "name": "authenticator device",
+      "type": "device",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "two-factor authentication",
+      "name": "two-factor authentication",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "settings security",
+      "name": "Settings → Security",
+      "type": "setting",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "business and enterprise plans",
+      "name": "Business and Enterprise plans",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "single sign-on",
+      "name": "single sign-on",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "saml 2.0 identity provider",
+      "name": "SAML 2.0 identity provider",
+      "type": "service",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "settings security single sign-on",
+      "name": "Settings → Security → Single sign-on",
+      "type": "setting",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "kestrel service provider metadata",
+      "name": "Kestrel service provider metadata",
+      "type": "file",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "passwords",
+      "name": "passwords",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "id": "identity provider",
+      "name": "identity provider",
+      "type": "entity",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "id": "backup codes",
+      "name": "backup codes",
+      "type": "authentication",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "id": "profile security",
+      "name": "Profile → Security",
+      "type": "location",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "id": "settings members",
+      "name": "Settings → Members",
+      "type": "location",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "id": "workspace owner",
+      "name": "workspace Owner",
+      "type": "role",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "google-bigquery",
+      "name": "Google BigQuery",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "google-sheets",
+      "name": "Google Sheets",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "csv-upload",
+      "name": "CSV upload",
+      "type": "data source",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "connector",
+      "name": "connector",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "id": "query",
+      "name": "query",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "id": "tiles",
+      "name": "tiles",
+      "type": "component",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "id": "dataset",
+      "name": "dataset",
+      "type": "data",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "id": "clock_icon",
+      "name": "clock icon",
+      "type": "ui_element",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "id": "scheduled_reports",
+      "name": "Scheduled reports",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "id": "public_links",
+      "name": "Public links",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "name": "dashboard",
+      "type": "concept",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "embedding",
+      "name": "Embedding",
+      "type": "feature",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "web_application",
+      "name": "web application",
+      "type": "system",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "server",
+      "name": "server",
+      "type": "system",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "embed_token",
+      "name": "embed token",
+      "type": "token",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "kestrel_api",
+      "name": "Kestrel API",
+      "type": "api",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "id": "business_and_enterprise_plans",
+      "name": "Business and Enterprise plans",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "id": "privacy_email",
+      "name": "privacy@kestrel.example",
+      "type": "email",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "id": "privacy-email",
+      "name": "privacy@kestrel.example",
+      "type": "email",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "id": "starter-plan",
+      "name": "Starter",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "id": "team-plan",
+      "name": "Team",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "id": "business-plan",
+      "name": "Business",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "id": "enterprise-plan",
+      "name": "Enterprise",
+      "type": "plan",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "id": "platform-team",
+      "name": "Platform team",
+      "type": "team",
+      "chunk_ids": [
+        "service-catalog.md:0"
+      ]
+    },
+    {
+      "id": "platform",
+      "name": "Platform",
+      "type": "team",
+      "chunk_ids": [
+        "service-catalog.md:0"
+      ]
+    },
+    {
+      "id": "identity",
+      "name": "Identity",
+      "type": "team",
+      "chunk_ids": [
+        "service-catalog.md:0"
+      ]
+    },
+    {
+      "id": "session-tokens",
+      "name": "session tokens",
+      "type": "concept",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "connector-credentials",
+      "name": "connector credentials",
+      "type": "data",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "per-workspace-keys",
+      "name": "per-workspace keys",
+      "type": "concept",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "data-integrations",
+      "name": "Data Integrations",
+      "type": "owner",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "fixed-addresses",
+      "name": "203.0.113.10 and 203.0.113.11",
+      "type": "address",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "analytics-engine",
+      "name": "Analytics Engine",
+      "type": "owner",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "dataset-queries",
+      "name": "dataset queries",
+      "type": "concept",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "query-time-limit",
+      "name": "120-second query time limit",
+      "type": "limit",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "dashboard-results",
+      "name": "results for dashboards",
+      "type": "data",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "dataset-refreshes",
+      "name": "dataset refreshes",
+      "type": "concept",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "report-pdfs",
+      "name": "report PDFs",
+      "type": "document",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "emails",
+      "name": "e-mail",
+      "type": "communication",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "id": "messaging",
+      "name": "Messaging",
+      "type": "owner",
+      "chunk_ids": [
+        "service-catalog.md:2"
+      ]
+    },
+    {
+      "id": "postroom",
+      "name": "postroom",
+      "type": "service",
+      "chunk_ids": [
+        "service-catalog.md:2"
+      ]
+    },
+    {
+      "id": "mailman",
+      "name": "mailman",
+      "type": "service",
+      "chunk_ids": [
+        "service-catalog.md:2"
+      ]
+    },
+    {
+      "id": "payments-core",
+      "name": "Payments Core",
+      "type": "owner",
+      "chunk_ids": [
+        "service-catalog.md:2"
+      ]
+    },
+    {
+      "id": "samuel-okafor",
+      "name": "Samuel Okafor",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-platform",
+      "name": "#oncall-platform",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "priya-raman",
+      "name": "Priya Raman",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-identity",
+      "name": "#oncall-identity",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "tomasz-w-jcik",
+      "name": "Tomasz Wójcik",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-data-integrations",
+      "name": "#oncall-data-integrations",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "l-a-fontaine",
+      "name": "Léa Fontaine",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-analytics",
+      "name": "#oncall-analytics",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "in-s-moreau",
+      "name": "Inès Moreau",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-messaging",
+      "name": "#oncall-messaging",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "jonas-berg",
+      "name": "Jonas Berg",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "oncall-payments",
+      "name": "#oncall-payments",
+      "type": "channel",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "id": "platform on-call",
+      "name": "Platform on-call",
+      "type": "role",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "team lead",
+      "name": "team lead",
+      "type": "role",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "support runbook",
+      "name": "Support Runbook",
+      "type": "document",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "on-call engineer",
+      "name": "on-call engineer",
+      "type": "role",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "paging tool",
+      "name": "paging tool",
+      "type": "tool",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "owning team",
+      "name": "owning team",
+      "type": "team",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "catalog",
+      "name": "catalog",
+      "type": "document",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "id": "previous_owner",
+      "name": "previous owner",
+      "type": "person",
+      "chunk_ids": [
+        "service-catalog.md:5"
+      ]
+    },
+    {
+      "id": "customer-support",
+      "name": "Customer Support",
+      "type": "team",
+      "chunk_ids": [
+        "support-runbook-errors.md:0"
+      ]
+    },
+    {
+      "id": "service-catalog",
+      "name": "Service Catalog",
+      "type": "documentation",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "sev-1",
+      "name": "SEV-1",
+      "type": "severity_level",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "sev-2",
+      "name": "SEV-2",
+      "type": "severity_level",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "sev-3",
+      "name": "SEV-3",
+      "type": "severity_level",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "sev-4",
+      "name": "SEV-4",
+      "type": "severity_level",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "kst-1001",
+      "name": "KST-1001 — Invalid credentials",
+      "type": "error_code",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "id": "sign_in_with_sso",
+      "name": "Sign in with SSO",
+      "type": "action",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "id": "forgot_password",
+      "name": "Forgot password",
+      "type": "action",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "id": "password",
+      "name": "password",
+      "type": "concept",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "id": "kst_1007",
+      "name": "KST-1007 — Two-factor code rejected",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "id": "authenticator_app",
+      "name": "authenticator app",
+      "type": "software",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "id": "kst-1012",
+      "name": "KST-1012",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "id": "sso_response_rejected",
+      "name": "SSO response rejected",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "id": "kst-2040",
+      "name": "KST-2040",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "id": "connection_timed_out",
+      "name": "Connection timed out",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "id": "support-action-1",
+      "name": "ask the customer to confirm the database is reachable from outside their network, on the host and port configured in the connector",
+      "type": "support_action",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "escalate-1",
+      "name": "to Data Integrations if several customers report it for the same source type at the same time",
+      "type": "escalation_rule",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "kst-2044",
+      "name": "KST-2044 — Source refused the connection",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "user-message-kst-2044",
+      "name": "Your data source refused the connection from Kestrel.",
+      "type": "user_message",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "cause-kst-2044",
+      "name": "the database only accepts connections from an allowlist of IP addresses, and the Kestrel addresses are missing from it",
+      "type": "cause",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "support-action-kst-2044",
+      "name": "ask the customer to add both 203.0.113.10 and 203.0.113.11 to the allowlist of their database or firewall",
+      "type": "support_action",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "escalate-kst-2044",
+      "name": "no",
+      "type": "escalation_rule",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "kst-2051",
+      "name": "KST-2051 — Credentials rejected",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "id": "credentials-rejected",
+      "name": "Credentials rejected",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "id": "kst-3012",
+      "name": "KST-3012",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "id": "query-time-limit-exceeded",
+      "name": "Query time limit exceeded",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "id": "analytics engine",
+      "name": "Analytics Engine",
+      "type": "system",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "id": "kst-3020",
+      "name": "KST-3020",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "id": "kst-2xxx",
+      "name": "KST-2xxx",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "id": "kst-4xxx",
+      "name": "KST-4xxx",
+      "type": "error_category",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "id": "kst-4012",
+      "name": "KST-4012",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "id": "member",
+      "name": "member",
+      "type": "role",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "id": "invitation-link",
+      "name": "invitation link",
+      "type": "resource",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "id": "kst-4019",
+      "name": "KST-4019",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "id": "ownership-transfer",
+      "name": "Ownership transfer pending",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "id": "kst-5031",
+      "name": "KST-5031",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "id": "5031",
+      "name": "5031",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "id": "scheduled-report-not-delivered",
+      "name": "Scheduled report not delivered",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "id": "kestrel-emails",
+      "name": "Kestrel e-mails",
+      "type": "system",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "id": "kst-5038",
+      "name": "KST-5038",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "id": "embed-token-expired",
+      "name": "Embed token expired",
+      "type": "issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "id": "embedded dashboard",
+      "name": "embedded dashboard",
+      "type": "component",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "embed token",
+      "name": "embed token",
+      "type": "token",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "customer's server",
+      "name": "customer's server",
+      "type": "server",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "business and enterprise",
+      "name": "Business and Enterprise",
+      "type": "plan",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "kst-6002",
+      "name": "KST-6002 — Payment declined",
+      "type": "error",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "card",
+      "name": "card",
+      "type": "payment_method",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "id": "kst-6010",
+      "name": "KST-6010",
+      "type": "error_code",
+      "chunk_ids": [
+        "support-runbook-errors.md:10"
+      ]
+    },
+    {
+      "id": "admin-console",
+      "name": "admin console",
+      "type": "system",
+      "chunk_ids": [
+        "support-runbook-errors.md:10"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "subject": "finance",
+      "predicate": "policy owner of",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "subject": "starter",
+      "predicate": "is paid plan of",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "subject": "team",
+      "predicate": "is paid plan of",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "subject": "business",
+      "predicate": "is paid plan of",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "subject": "enterprise",
+      "predicate": "is paid plan of",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "billing-policy-2025.md:0"
+      ]
+    },
+    {
+      "subject": "annual-billing",
+      "predicate": "receives",
+      "object": "15% discount",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "subject": "business-customers",
+      "predicate": "can_pay_by",
+      "object": "bank-transfer",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise-customers",
+      "predicate": "can_pay_by",
+      "object": "bank-transfer",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "subject": "workspace-owner",
+      "predicate": "can_update",
+      "object": "card on file",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "subject": "payment-processor",
+      "predicate": "holds",
+      "object": "full card numbers",
+      "chunk_ids": [
+        "billing-policy-2025.md:1"
+      ]
+    },
+    {
+      "subject": "invoice",
+      "predicate": "is issued for",
+      "object": "every charge",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "invoice",
+      "predicate": "sent by email to",
+      "object": "billing_contact",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "billing_contact",
+      "predicate": "belongs to",
+      "object": "workspace",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can change",
+      "object": "billing_contact",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can change",
+      "object": "company details printed on invoices",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "can provide",
+      "object": "corrected copy of a past invoice",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "seats",
+      "predicate": "can be added at",
+      "object": "any time",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "seats",
+      "predicate": "can be removed at",
+      "object": "any time",
+      "chunk_ids": [
+        "billing-policy-2025.md:2"
+      ]
+    },
+    {
+      "subject": "monthly-plans",
+      "predicate": "are not",
+      "object": "refundable",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "subject": "annual-plans",
+      "predicate": "can be refunded in",
+      "object": "full",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "subject": "refund-requests",
+      "predicate": "must be sent by",
+      "object": "workspace-owner",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "subject": "refund-requests",
+      "predicate": "must be sent to",
+      "object": "billing-email",
+      "chunk_ids": [
+        "billing-policy-2025.md:3"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "has retry schedule",
+      "object": "3 days and 7 days",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "subject": "workspace_owner",
+      "predicate": "receives",
+      "object": "e-mail",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "has grace period",
+      "object": "14 days",
+      "chunk_ids": [
+        "billing-policy-2025.md:4"
+      ]
+    },
+    {
+      "subject": "vat_or_sales_tax",
+      "predicate": "is added according to",
+      "object": "billing_address",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "subject": "business_customers_in_the_european_union",
+      "predicate": "are invoiced without",
+      "object": "vat",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "subject": "business_customers_in_the_european_union",
+      "predicate": "can provide",
+      "object": "valid_vat_number",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "subject": "billing_questions",
+      "predicate": "go to",
+      "object": "billing_email",
+      "chunk_ids": [
+        "billing-policy-2025.md:5"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "has_effective_date",
+      "object": "1 March 2026",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "has_policy_owner",
+      "object": "finance",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "replaces",
+      "object": "Billing and Refund Policy effective 1 January 2025",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "applies_to_plan",
+      "object": "starter",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "applies_to_plan",
+      "object": "team",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "applies_to_plan",
+      "object": "business",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "billing-and-refund-policy",
+      "predicate": "applies_to_plan",
+      "object": "enterprise",
+      "chunk_ids": [
+        "billing-policy-2026.md:0"
+      ]
+    },
+    {
+      "subject": "annual plans",
+      "predicate": "receive discount",
+      "object": "20%",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "credit and debit cards",
+      "predicate": "includes",
+      "object": "visa",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "credit and debit cards",
+      "predicate": "includes",
+      "object": "mastercard",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "credit and debit cards",
+      "predicate": "includes",
+      "object": "american express",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "team",
+      "predicate": "can pay by",
+      "object": "bank transfer",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "business",
+      "predicate": "can pay by",
+      "object": "bank transfer",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise",
+      "predicate": "can pay by",
+      "object": "bank transfer",
+      "chunk_ids": [
+        "billing-policy-2026.md:1"
+      ]
+    },
+    {
+      "subject": "workspace_owner",
+      "predicate": "can_update",
+      "object": "settings_plan_payment_method",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "payment_processor",
+      "predicate": "holds",
+      "object": "card_or_account_numbers",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "invoice",
+      "predicate": "sent_to",
+      "object": "billing_contact",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "invoice",
+      "predicate": "downloadable_from",
+      "object": "settings_plan_invoices",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "workspace_owner",
+      "predicate": "can_change",
+      "object": "billing_contact",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "workspace_owner",
+      "predicate": "can_change",
+      "object": "company_details",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "can_provide",
+      "object": "corrected_invoice_copy",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "seats",
+      "predicate": "can_be_added_at",
+      "object": "any_time",
+      "chunk_ids": [
+        "billing-policy-2026.md:2"
+      ]
+    },
+    {
+      "subject": "added seats",
+      "predicate": "are charged",
+      "object": "immediately",
+      "chunk_ids": [
+        "billing-policy-2026.md:3"
+      ]
+    },
+    {
+      "subject": "monthly plans",
+      "predicate": "are not",
+      "object": "refundable",
+      "chunk_ids": [
+        "billing-policy-2026.md:3"
+      ]
+    },
+    {
+      "subject": "annual plans",
+      "predicate": "can be refunded if request is made within",
+      "object": "60 days of the purchase or renewal date",
+      "chunk_ids": [
+        "billing-policy-2026.md:3"
+      ]
+    },
+    {
+      "subject": "annual plans",
+      "predicate": "are not refundable after",
+      "object": "60 days",
+      "chunk_ids": [
+        "billing-policy-2026.md:3"
+      ]
+    },
+    {
+      "subject": "annual-plans",
+      "predicate": "are",
+      "object": "not refundable",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "subject": "workspace-owner",
+      "predicate": "must send",
+      "object": "refund requests",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "subject": "workspace-owner",
+      "predicate": "receive",
+      "object": "an e-mail when a payment fails",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "subject": "billing-contact",
+      "predicate": "receive",
+      "object": "an e-mail when a payment fails",
+      "chunk_ids": [
+        "billing-policy-2026.md:4"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "enters",
+      "object": "grace-period",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "banner",
+      "predicate": "reminds",
+      "object": "admins",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "becomes",
+      "object": "read-only",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "members",
+      "predicate": "can view",
+      "object": "dashboards",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "members",
+      "predicate": "cannot edit",
+      "object": "dashboards",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "scheduled-reports",
+      "predicate": "are",
+      "object": "paused",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "datasets",
+      "predicate": "stop",
+      "object": "refreshing",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "is",
+      "object": "suspended",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can cancel",
+      "object": "paid-plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:5"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "can cancel",
+      "object": "paid-plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "stays on",
+      "object": "paid-plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "moves to",
+      "object": "free-plan",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "subject": "cancelling",
+      "predicate": "does not trigger",
+      "object": "refund",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "subject": "billing-questions",
+      "predicate": "contact",
+      "object": "billing-kestrel-example",
+      "chunk_ids": [
+        "billing-policy-2026.md:6"
+      ]
+    },
+    {
+      "subject": "kestrel-analytics",
+      "predicate": "is a",
+      "object": "dashboard and business intelligence service for teams",
+      "chunk_ids": [
+        "product-guide.md:0"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "has",
+      "object": "members, connectors, datasets and dashboards",
+      "chunk_ids": [
+        "product-guide.md:0"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "can_not_see_content_of",
+      "object": "workspace",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "workspace",
+      "predicate": "is_on",
+      "object": "plan",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "plan",
+      "predicate": "sets",
+      "object": "seats",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "plan",
+      "predicate": "sets",
+      "object": "data",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "plan",
+      "predicate": "sets",
+      "object": "administration_features",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "free_plan",
+      "predicate": "includes_seats",
+      "object": "2",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "free_plan",
+      "predicate": "includes_dashboards",
+      "object": "3",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "free_plan",
+      "predicate": "includes_data_connectors",
+      "object": "1",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "free_plan",
+      "predicate": "has_fastest_refresh",
+      "object": "Daily",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "free_plan",
+      "predicate": "keeps_history",
+      "object": "30 days",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "starter_plan",
+      "predicate": "includes_seats",
+      "object": "5",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "starter_plan",
+      "predicate": "includes_dashboards",
+      "object": "25",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "starter_plan",
+      "predicate": "includes_data_connectors",
+      "object": "3",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "starter_plan",
+      "predicate": "has_fastest_refresh",
+      "object": "Hourly",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "starter_plan",
+      "predicate": "keeps_history",
+      "object": "1 year",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "team_plan",
+      "predicate": "includes_seats",
+      "object": "20",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "team_plan",
+      "predicate": "includes_dashboards",
+      "object": "Unlimited",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "team_plan",
+      "predicate": "includes_data_connectors",
+      "object": "10",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "team_plan",
+      "predicate": "has_fastest_refresh",
+      "object": "Every 15 minutes",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "team_plan",
+      "predicate": "keeps_history",
+      "object": "2 years",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "includes_seats",
+      "object": "100",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "includes_dashboards",
+      "object": "Unlimited",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "includes_data_connectors",
+      "object": "Unlimited",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "has_fastest_refresh",
+      "object": "Every 5 minutes",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "keeps_history",
+      "object": "5 years",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "includes_single_sign_on",
+      "object": "Yes",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "business_plan",
+      "predicate": "includes_audit_log",
+      "object": "90 days",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "includes_seats",
+      "object": "Custom",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "includes_dashboards",
+      "object": "Unlimited",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "includes_data_connectors",
+      "object": "Unlimited",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "has_fastest_refresh",
+      "object": "Every minute",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "keeps_history",
+      "object": "Custom",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "includes_single_sign_on",
+      "object": "Yes",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "enterprise_plan",
+      "predicate": "includes_scim_user_provisioning",
+      "object": "Yes",
+      "chunk_ids": [
+        "product-guide.md:1"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can do everything",
+      "object": "admin",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "is the only person who can",
+      "object": "change the plan",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "is the only person who can",
+      "object": "delete the workspace",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "is the only person who can",
+      "object": "transfer ownership",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "manages",
+      "object": "members",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "manages",
+      "object": "connectors",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "manages",
+      "object": "security settings",
+      "chunk_ids": [
+        "product-guide.md:2"
+      ]
+    },
+    {
+      "subject": "editor",
+      "predicate": "creates",
+      "object": "datasets and dashboards",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "editor",
+      "predicate": "edits",
+      "object": "datasets and dashboards",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "viewer",
+      "predicate": "opens",
+      "object": "dashboards and reports",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "opens",
+      "object": "settings-members",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "new owner",
+      "predicate": "must be",
+      "object": "admin",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "admins",
+      "predicate": "invite",
+      "object": "people from settings-members-invite",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "invitation",
+      "predicate": "is valid for",
+      "object": "7 days",
+      "chunk_ids": [
+        "product-guide.md:3"
+      ]
+    },
+    {
+      "subject": "seat",
+      "predicate": "used only when",
+      "object": "person accepts the invitation",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "subject": "dashboards",
+      "predicate": "transferred to",
+      "object": "admin",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "authenticator_apps",
+      "chunk_ids": [
+        "product-guide.md:4"
+      ]
+    },
+    {
+      "subject": "backup code",
+      "predicate": "works",
+      "object": "once",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "admins",
+      "predicate": "can make",
+      "object": "two-factor authentication",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "workspaces",
+      "predicate": "can use",
+      "object": "single sign-on",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "workspaces",
+      "predicate": "are on",
+      "object": "business and enterprise plans",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "single sign-on",
+      "predicate": "uses",
+      "object": "saml 2.0 identity provider",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "opens",
+      "object": "settings security single sign-on",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "downloads",
+      "object": "kestrel service provider metadata",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "registers",
+      "object": "kestrel",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "single sign-on",
+      "predicate": "when enforced",
+      "object": "passwords",
+      "chunk_ids": [
+        "product-guide.md:5"
+      ]
+    },
+    {
+      "subject": "single sign-on",
+      "predicate": "disables",
+      "object": "passwords",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "subject": "identity provider",
+      "predicate": "handles",
+      "object": "two-factor authentication",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "subject": "two-factor authentication",
+      "predicate": "set up from",
+      "object": "profile security",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "resets second factor from",
+      "object": "settings members",
+      "chunk_ids": [
+        "product-guide.md:6"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "postgresql",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "mysql",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "google-bigquery",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "snowflake",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "google-sheets",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "supports",
+      "object": "csv-upload",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "connector",
+      "predicate": "stores",
+      "object": "connection details",
+      "chunk_ids": [
+        "product-guide.md:7"
+      ]
+    },
+    {
+      "subject": "query",
+      "predicate": "has_time_limit",
+      "object": "120 seconds",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "dashboards",
+      "predicate": "are_built_from",
+      "object": "tiles",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "tile",
+      "predicate": "reads",
+      "object": "one dataset",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "dataset",
+      "predicate": "refreshes_and_updates",
+      "object": "every tile that uses it",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "clock_icon",
+      "predicate": "located_in",
+      "object": "corner of any tile",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "red clock",
+      "predicate": "means",
+      "object": "the last refresh failed",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "tooltip",
+      "predicate": "shows",
+      "object": "the error code",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "dashboard",
+      "predicate": "can_be_sent_as",
+      "object": "a PDF on a schedule",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "schedule",
+      "predicate": "can_have_up_to",
+      "object": "50 recipients",
+      "chunk_ids": [
+        "product-guide.md:8"
+      ]
+    },
+    {
+      "subject": "public_links",
+      "predicate": "let",
+      "object": "anyone view a dashboard without signing in",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "can turn off",
+      "object": "public_links",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "subject": "embedding",
+      "predicate": "places",
+      "object": "dashboard inside your own web application",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "subject": "server",
+      "predicate": "requests",
+      "object": "embed token from the kestrel_api",
+      "chunk_ids": [
+        "product-guide.md:9"
+      ]
+    },
+    {
+      "subject": "embed_token",
+      "predicate": "expires_after",
+      "object": "24 hours",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "business_and_enterprise_plans",
+      "predicate": "allows_lifetime_raised_up_to",
+      "object": "30 days",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can_export",
+      "object": "workspace",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "stores",
+      "object": "cached results",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can_delete",
+      "object": "workspace",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "requests_about_personal_data",
+      "predicate": "can_be_sent_to",
+      "object": "privacy_email",
+      "chunk_ids": [
+        "product-guide.md:10"
+      ]
+    },
+    {
+      "subject": "free-plan",
+      "predicate": "has_channels",
+      "object": "Help centre, community forum",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "free-plan",
+      "predicate": "has_first_response_target",
+      "object": "Best effort",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "starter-plan",
+      "predicate": "has_channels",
+      "object": "E-mail",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "starter-plan",
+      "predicate": "has_first_response_target",
+      "object": "2 business days",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "team-plan",
+      "predicate": "has_channels",
+      "object": "E-mail, chat",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "team-plan",
+      "predicate": "has_first_response_target",
+      "object": "1 business day",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "business-plan",
+      "predicate": "has_channels",
+      "object": "E-mail, chat",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "business-plan",
+      "predicate": "has_first_response_target",
+      "object": "8 business hours",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "enterprise-plan",
+      "predicate": "has_channels",
+      "object": "E-mail, chat, named contact",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "enterprise-plan",
+      "predicate": "has_first_response_target",
+      "object": "4 hours, 24/7 for critical incidents",
+      "chunk_ids": [
+        "product-guide.md:11"
+      ]
+    },
+    {
+      "subject": "kestrel-analytics",
+      "predicate": "owner",
+      "object": "platform-team",
+      "chunk_ids": [
+        "service-catalog.md:0"
+      ]
+    },
+    {
+      "subject": "identity",
+      "predicate": "issues",
+      "object": "session-tokens",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "data-integrations",
+      "predicate": "owns",
+      "object": "connector-credentials",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "connector-credentials",
+      "predicate": "encrypted_with",
+      "object": "per-workspace-keys",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "data-integrations",
+      "predicate": "opens",
+      "object": "connections",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "connections",
+      "predicate": "leave_through",
+      "object": "fixed-addresses",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "runs",
+      "object": "dataset-queries",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "enforces",
+      "object": "query-time-limit",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "caches",
+      "object": "dashboard-results",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "triggers",
+      "object": "dataset-refreshes",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "triggers",
+      "object": "scheduled-reports",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "generates",
+      "object": "report-pdfs",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "kestrel",
+      "predicate": "sends",
+      "object": "emails",
+      "chunk_ids": [
+        "service-catalog.md:1"
+      ]
+    },
+    {
+      "subject": "postroom",
+      "predicate": "replaced",
+      "object": "mailman",
+      "chunk_ids": [
+        "service-catalog.md:2"
+      ]
+    },
+    {
+      "subject": "platform",
+      "predicate": "has_engineering_lead",
+      "object": "samuel-okafor",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "platform",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-platform",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "platform",
+      "predicate": "has_working_hours",
+      "object": "24/7 rotation",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "identity",
+      "predicate": "has_engineering_lead",
+      "object": "priya-raman",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "identity",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-identity",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "identity",
+      "predicate": "has_working_hours",
+      "object": "24/7 rotation",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "data-integrations",
+      "predicate": "has_engineering_lead",
+      "object": "tomasz-w-jcik",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "data-integrations",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-data-integrations",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "data-integrations",
+      "predicate": "has_working_hours",
+      "object": "08:00–20:00, weekdays",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "has_engineering_lead",
+      "object": "l-a-fontaine",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-analytics",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "analytics-engine",
+      "predicate": "has_working_hours",
+      "object": "24/7 rotation",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "messaging",
+      "predicate": "has_engineering_lead",
+      "object": "in-s-moreau",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "messaging",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-messaging",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "messaging",
+      "predicate": "has_working_hours",
+      "object": "08:00–20:00, weekdays",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "payments-core",
+      "predicate": "has_engineering_lead",
+      "object": "jonas-berg",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "payments-core",
+      "predicate": "has_oncall_channel",
+      "object": "oncall-payments",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "payments-core",
+      "predicate": "has_working_hours",
+      "object": "24/7 rotation",
+      "chunk_ids": [
+        "service-catalog.md:3"
+      ]
+    },
+    {
+      "subject": "platform on-call",
+      "predicate": "can page",
+      "object": "team lead",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "identifies",
+      "object": "service involved",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "uses",
+      "object": "support runbook",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "pages",
+      "object": "on-call engineer",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "on-call engineer",
+      "predicate": "reached through",
+      "object": "paging tool",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "owning team",
+      "predicate": "acknowledges in",
+      "object": "thread",
+      "chunk_ids": [
+        "service-catalog.md:4"
+      ]
+    },
+    {
+      "subject": "previous_owner",
+      "predicate": "stays on call until",
+      "object": "catalog",
+      "chunk_ids": [
+        "service-catalog.md:5"
+      ]
+    },
+    {
+      "subject": "customer-support",
+      "predicate": "owner",
+      "object": "kestrel-analytics",
+      "chunk_ids": [
+        "support-runbook-errors.md:0"
+      ]
+    },
+    {
+      "subject": "service-catalog",
+      "predicate": "lists",
+      "object": "owning team of each service and its on-call channel",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-1",
+      "predicate": "has_meaning",
+      "object": "Many customers cannot use Kestrel, or data is exposed",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-1",
+      "predicate": "has_target_first_response",
+      "object": "15 minutes, page on-call",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-2",
+      "predicate": "has_meaning",
+      "object": "One customer is blocked in production, no workaround",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-2",
+      "predicate": "has_target_first_response",
+      "object": "1 hour",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-3",
+      "predicate": "has_meaning",
+      "object": "Degraded behaviour with a workaround",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-3",
+      "predicate": "has_target_first_response",
+      "object": "Next business day",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-4",
+      "predicate": "has_meaning",
+      "object": "Question, cosmetic issue",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "sev-4",
+      "predicate": "has_target_first_response",
+      "object": "Normal queue",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "kst-1001",
+      "predicate": "causes_user_message",
+      "object": "The e-mail or password is incorrect.",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "kst-1001",
+      "predicate": "has_cause",
+      "object": "wrong password, or the user is signing in to a workspace that enforces single sign-on",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "kst-1001",
+      "predicate": "has_support_action",
+      "object": "check whether the workspace enforces single sign-on",
+      "chunk_ids": [
+        "support-runbook-errors.md:1"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "never sets",
+      "object": "password",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "subject": "kst_1007",
+      "predicate": "has cause",
+      "object": "in most cases the clock of the device running the authenticator app is wrong; time-based codes depend on the time being correct within about 30 seconds.",
+      "chunk_ids": [
+        "support-runbook-errors.md:2"
+      ]
+    },
+    {
+      "subject": "kst-1012",
+      "predicate": "has_title",
+      "object": "SSO response rejected",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "subject": "kst-2040",
+      "predicate": "has_title",
+      "object": "Connection timed out",
+      "chunk_ids": [
+        "support-runbook-errors.md:3"
+      ]
+    },
+    {
+      "subject": "kst-2044",
+      "predicate": "user_sees",
+      "object": "user-message-kst-2044",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "subject": "kst-2044",
+      "predicate": "has_cause",
+      "object": "cause-kst-2044",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "subject": "kst-2044",
+      "predicate": "has_support_action",
+      "object": "support-action-kst-2044",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "subject": "kst-2044",
+      "predicate": "has_escalation",
+      "object": "escalate-kst-2044",
+      "chunk_ids": [
+        "support-runbook-errors.md:4"
+      ]
+    },
+    {
+      "subject": "kst-2051",
+      "predicate": "has_title",
+      "object": "credentials-rejected",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-2051",
+      "predicate": "user_sees",
+      "object": "The username or password for this data source is incorrect.",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-2051",
+      "predicate": "has_cause",
+      "object": "the database password was changed, or the database user was removed.",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "support_action",
+      "object": "edit the connector and enter the new credentials",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "cannot_see",
+      "object": "stored credentials",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-2051",
+      "predicate": "escalate",
+      "object": "no",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-3012",
+      "predicate": "has_title",
+      "object": "query-time-limit-exceeded",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-3012",
+      "predicate": "user_sees",
+      "object": "This query took too long and was stopped.",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-3012",
+      "predicate": "has_cause",
+      "object": "a dataset query ran for more than 120 seconds.",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "support_action",
+      "object": "suggest adding a filter, pre-aggregating in the source database, or refreshing less often.",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-3012",
+      "predicate": "escalate",
+      "object": "analytics-engine",
+      "chunk_ids": [
+        "support-runbook-errors.md:5"
+      ]
+    },
+    {
+      "subject": "kst-3020",
+      "predicate": "has_cause",
+      "object": "kst-2xxx",
+      "chunk_ids": [
+        "support-runbook-errors.md:6"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "must remove",
+      "object": "member",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "admin",
+      "predicate": "remove from",
+      "object": "workspace",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "must add",
+      "object": "seat",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can move to",
+      "object": "larger plan",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "invitation-link",
+      "predicate": "works if age is less than",
+      "object": "7 days",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "kst-4019",
+      "predicate": "refers to",
+      "object": "ownership-transfer",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "started",
+      "object": "ownership-transfer",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "can cancel transfer from",
+      "object": "settings-members",
+      "chunk_ids": [
+        "support-runbook-errors.md:7"
+      ]
+    },
+    {
+      "subject": "5031",
+      "predicate": "corresponds_to",
+      "object": "scheduled-report-not-delivered",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "subject": "postroom",
+      "predicate": "sends",
+      "object": "kestrel-emails",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "subject": "kst-5038",
+      "predicate": "corresponds_to",
+      "object": "embed-token-expired",
+      "chunk_ids": [
+        "support-runbook-errors.md:8"
+      ]
+    },
+    {
+      "subject": "embedded dashboard",
+      "predicate": "shows",
+      "object": "This link has expired",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "embed token",
+      "predicate": "has_default_lifetime",
+      "object": "24 hours",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "customer's server",
+      "predicate": "must_request",
+      "object": "new token",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "business and enterprise",
+      "predicate": "can_raise_lifetime_up_to",
+      "object": "30 days",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "kst-6002",
+      "predicate": "shows_message",
+      "object": "Your payment was declined.",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "card",
+      "predicate": "refused_by",
+      "object": "bank",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "owner",
+      "predicate": "update",
+      "object": "payment method",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "cannot_take",
+      "object": "card details over e",
+      "chunk_ids": [
+        "support-runbook-errors.md:9"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "cannot take",
+      "object": "card details over e-mail or chat",
+      "chunk_ids": [
+        "support-runbook-errors.md:10"
+      ]
+    },
+    {
+      "subject": "support",
+      "predicate": "escalate to",
+      "object": "payments-core",
+      "chunk_ids": [
+        "support-runbook-errors.md:10"
+      ]
+    },
+    {
+      "subject": "kst-6010",
+      "predicate": "causes",
+      "object": "a retry and a manual payment went through for the same invoice",
+      "chunk_ids": [
+        "support-runbook-errors.md:10"
+      ]
+    }
+  ]
+}
