@@ -27,3 +27,6 @@ chroma_db_v2/
 
 # Files located in the future/ directory must be ignored
 future/
+
+
+traces.jsonl
