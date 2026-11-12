@@ -22,6 +22,7 @@ from fastapi.responses import HTMLResponse
 from openai import OpenAI
 from pydantic import BaseModel, Field
 from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
+from tracer import Trace
 
 load_dotenv()
 
@@ -152,7 +153,7 @@ def _collection(document_ids: list[str], chunk_size: int, overlap: int):
     key = "|".join(sorted(document_ids)) + f"|{chunk_size}|{overlap}"
     name = f"v2_{_safe_id(key)}"
     collection = chroma_client.get_or_create_collection(
-        name=name, embedding_function=embedding_function
+        name=name, embedding_function=embedding_function # type: ignore
     )
     if collection.count() == 0:
         docs = document_map()
@@ -234,6 +235,9 @@ def retrieve(
     if dense:
         collection = _collection(selected, chunk_size, overlap)
         result = collection.query(query_texts=[question], n_results=min(top_k, collection.count()))
+        documents = (result.get("documents") or [[]])[0]
+        metadatas = (result.get("metadatas") or [[]])[0]
+        distances = (result.get("distances") or [[]])[0]
         ranked_lists.append(
             [
                 (
@@ -245,15 +249,10 @@ def retrieve(
                     },
                     distances[index] if index < len(distances) else 0.0,
                 )
-                for index, (text, item) in enumerate(
-                    zip(
-                        result.get("documents", [[]])[0],
-                        result.get("metadatas", [[]])[0],
-                    )
-                )
-                for distances in [result.get("distances", [[]])[0]]
+                for index, (text, item) in enumerate(zip(documents, metadatas))
             ]
         )
+
     if bm25:
         index = BM25Index(chunks)
         ranked_lists.append(index.search(question, top_k))
@@ -378,10 +377,53 @@ def list_documents():
 
 @app.post("/api/documents", status_code=201)
 def add_document(payload: DocumentCreate):
-    USER_ROOT.mkdir(exist_ok=True)
-    path = USER_ROOT / payload.name
-    path.write_text(payload.content, encoding="utf-8")
-    return {"id": f"user:{path.name}", "name": path.name, "corpus": "user", "managed": True}
+    trace = Trace("indexing_run")
+    document_id = f"user:{payload.name}"
+
+    try:
+        with trace.add_span("save_document", {
+            "document_id": document_id,
+            "filename": payload.name,
+        }) as span:
+            USER_ROOT.mkdir(exist_ok=True)
+            path = USER_ROOT / payload.name
+            path.write_text(payload.content, encoding="utf-8")
+            span.metadata["char_count"] = len(payload.content)
+
+
+        with trace.add_span("chunk_document", {
+            "chunk_size": DEFAULT_CHUNK_SIZE,
+            "overlap_percent": DEFAULT_OVERLAP,
+        }) as span:
+            chunks = split_text(payload.content, DEFAULT_CHUNK_SIZE, DEFAULT_OVERLAP)
+            if not chunks:
+                raise HTTPException(422, f"Document is empty or paragraphs are under 20 chars: {payload.name}")
+            chunk_ids = [f"{payload.name}:{index}" for index in range(len(chunks))]
+            span.metadata["chunk_count"] = len(chunks)
+            span.metadata["chunk_ids"] = chunk_ids  
+
+        with trace.add_span("embed_and_index", {
+            "embedding_model": EMBEDDING_MODEL,
+            "vectors_indexed": len(chunks),
+        }) as span:
+            stale_key = f"{document_id}|{DEFAULT_CHUNK_SIZE}|{DEFAULT_OVERLAP}"
+            try:
+                chroma_client.delete_collection(f"v2_{_safe_id(stale_key)}")
+            except Exception:
+                pass
+
+            collection = _collection([document_id], DEFAULT_CHUNK_SIZE, DEFAULT_OVERLAP)
+            span.metadata["collection_name"] = collection.name
+
+        return {
+            "id": document_id,
+            "name": payload.name,
+            "corpus": "user",
+            "managed": True,
+            "trace_id": trace.trace_id,
+        }
+    finally:
+        trace.finalize()
 
 
 @app.delete("/api/documents/{document_id:path}")
