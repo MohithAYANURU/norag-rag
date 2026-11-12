@@ -10,82 +10,266 @@
     textarea { width: 100%; min-height: 7rem; } .row { display:flex; gap:1rem; flex-wrap:wrap; }
     .card { border:1px solid #ddd; border-radius:8px; padding:1rem; margin:1rem 0; }
     pre { white-space: pre-wrap; background:#f6f6f6; padding:1rem; }
+    .error { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef5350; padding: 1rem; border-radius: 4px; display: none; }
+    .trace-btn { background-color: #e0e0e0; color: #333; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin-top: 1rem; display: none; }
+    .trace-btn:hover { background-color: #bdbdbd; }
   </style>
 </head>
 <body>
   <h1>RAG V2</h1>
+  
+  <div id="errorBox" class="error"></div>
+
   <section class="card">
     <h2>Ask</h2>
     <textarea id="question" placeholder="Ask a question about the selected documents"></textarea>
     <div id="documents"></div>
-    <div class="row">
-      <label>Chunk size <input id="chunk" type="number" value="800" min="100"></label>
-      <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
-      <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
-      <label><input id="dense" type="checkbox" checked> Dense</label>
-      <label><input id="bm25" type="checkbox" checked> BM25</label>
-      <label><input id="graph" type="checkbox"> Concept graph</label>
-    </div>
-    <button onclick="ask()">Ask</button>
-    <pre id="answer"></pre><div id="citations"></div>
+
+    <details>
+      <summary>Advanced Retrieval Settings</summary>
+      <div class="row" style="margin-top: 1rem;">
+        <label>Chunk size <input id="chunk" type="number" value="800" min="100"></label>
+        <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
+        <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
+        <label><input id="dense" type="checkbox" checked> Dense</label>
+        <label><input id="bm25" type="checkbox" checked> BM25</label>
+        <label><input id="graph" type="checkbox"> Concept graph</label>
+      </div>
+    </details>
+
+    <button onclick="ask()" style="background: #2196f3; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Ask Question</button>
+    
+    <pre id="answer" style="display: none;"></pre>
+    <button id="traceBtn" class="trace-btn" onclick="showTrace()">🔍 Trace Details</button>
+    <div id="citations"></div>
   </section>
-  <section class="card">
-    <h2>Documents</h2>
+
+  <details class="card">
+    <summary><h2>Document Management & Evaluation</h2></summary>
     <input id="newName" placeholder="filename.txt">
     <textarea id="newContent" placeholder="Document content"></textarea>
-    <button onclick="addDocument()">Add document</button>
+    <button type="button" onclick="addDocument()">Add document</button>
+    <button id="indexTraceBtn" class="trace-btn" style="display: none;" onclick="showIndexTrace()">🔍 Indexing Trace</button>
     <button onclick="runEvaluation('kestrel')">Evaluate Kestrel</button>
     <button onclick="runEvaluation('own')">Evaluate own corpus</button>
     <pre id="evaluation"></pre>
-  </section>
-  <section class="card">
-    <h2>Words</h2>
+  </details>
+
+  <details class="card">
+    <summary><h2>Words Explorer</h2></summary>
     <input id="word" placeholder="word (optional)">
     <input id="wordQuestion" placeholder="or type a question">
     <button onclick="words()">Explore</button><pre id="wordResult"></pre>
-  </section>
+  </details>
+
   <script>
     let docs = [];
+    let currentTraceId = null;
+    let lastIndexTraceId = null;
+
+    function showError(msg) {
+      const box = document.getElementById('errorBox');
+      box.textContent = typeof msg === 'string' ? msg : JSON.stringify(msg, null, 2);
+      box.style.display = 'block';
+    }
+    function hideError() { document.getElementById('errorBox').style.display = 'none'; }
+
     async function loadDocs() {
-      docs = await (await fetch('/api/documents')).json();
-      document.getElementById('documents').innerHTML = docs.map(d =>
-        `<label><input type="checkbox" value="${d.id}" checked> ${d.corpus}/${d.name}</label>` +
-        (d.managed ? ` <button onclick="deleteDocument('${d.id}')">Delete</button>` : '') + '<br>').join('');
+      try {
+        const res = await fetch('/api/documents');
+        if (!res.ok) throw await res.json();
+        docs = await res.json();
+        document.getElementById('documents').innerHTML = docs.map(d =>
+          `<label><input type="checkbox" value="${d.id}" checked> ${d.corpus}/${d.name}</label>` +
+          (d.managed ? ` <button onclick="deleteDocument('${d.id}')">Delete</button>` : '') + '<br>').join('');
+      } catch (err) {
+        showError(err.detail || err);
+      }
     }
+
     function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
+
     async function ask() {
-      const body = {question: question.value, document_ids: selected(), chunk_size:+chunk.value,
-        overlap_percent:+overlap.value, top_k:+topk.value, dense:dense.checked,
-        bm25:bm25.checked, graph:graph.checked};
-      const response = await fetch('/api/search', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-      const data = await response.json(); answer.textContent = data.answer || data.detail || '';
-      citations.innerHTML = (data.citations || []).map(c => `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`).join('');
-      if (data.graph_path) citations.innerHTML += `<pre>${JSON.stringify(data.graph_path, null, 2)}</pre>`;
+      hideError();
+      const ansNode = document.getElementById('answer');
+      const traceBtnNode = document.getElementById('traceBtn');
+      const citationsNode = document.getElementById('citations');
+      
+      ansNode.style.display = 'block';
+      ansNode.textContent = 'Thinking...';
+      traceBtnNode.style.display = 'none';
+      citationsNode.innerHTML = '';
+      currentTraceId = null;
+
+      try {
+        const body = {
+          question: question.value, 
+          document_ids: selected(), 
+          chunk_size: +chunk.value,
+          overlap_percent: +overlap.value, 
+          top_k: +topk.value, 
+          dense: dense.checked,
+          bm25: bm25.checked, 
+          graph: graph.checked
+        };
+        
+        const response = await fetch('/api/search', {
+          method: 'POST', 
+          headers: {'Content-Type': 'application/json'}, 
+          body: JSON.stringify(body)
+        });
+        
+        const data = await response.json(); 
+        
+        if (!response.ok) {
+          throw data; 
+        }
+
+        ansNode.textContent = data.answer;
+        
+        if (data.trace_id) {
+          currentTraceId = data.trace_id;
+          traceBtnNode.style.display = 'inline-block';
+        }
+
+        citationsNode.innerHTML = (data.citations || []).map(c => 
+          `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`
+        ).join('');
+        
+        if (data.graph_path) {
+          citationsNode.innerHTML += `<pre>${JSON.stringify(data.graph_path, null, 2)}</pre>`;
+        }
+      } catch (err) {
+        ansNode.style.display = 'none';
+        showError(err.detail || err);
+      }
     }
-    async function words() {
-      const body = {document_ids:selected(), word:word.value || null, question:wordQuestion.value || null};
-      const response = await fetch('/api/words', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
-      wordResult.textContent = JSON.stringify(await response.json(), null, 2);
-    }
+
     async function addDocument() {
-      const response = await fetch('/api/documents', {method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:newName.value, content:newContent.value})});
-      if (!response.ok) { answer.textContent = (await response.json()).detail; return; }
-      newName.value = ''; newContent.value = ''; await loadDocs();
+      hideError();
+      try {
+        const response = await fetch('/api/documents', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name: newName.value, content: newContent.value})
+        });
+        const data = await response.json();
+        if (!response.ok) throw data;
+
+
+        alert("Trace ID received: " + data.trace_id);
+        lastIndexTraceId = data.trace_id;
+
+
+        const idxBtn = document.getElementById('indexTraceBtn');
+        
+        if (!idxBtn) {
+            alert("ERROR: JavaScript cannot find the button! Check your HTML id.");
+        } else {
+            idxBtn.style.display = 'inline-block';
+            idxBtn.style.backgroundColor = 'red';
+            idxBtn.style.color = 'white';
+            idxBtn.style.padding = '20px';
+            idxBtn.style.fontSize = '20px';
+            idxBtn.innerText = "🔍 TRACE BUTTON FOUND";
+        }
+        
+        newName.value = '';
+        newContent.value = '';
+        await loadDocs();
+      } catch (err) {
+        showError(err.detail || err);
+      }
     }
+    async function showIndexTrace() {
+      if (!lastIndexTraceId) return;
+      try {
+        const res = await fetch(`/api/traces/${lastIndexTraceId}`);
+        if (!res.ok) throw await res.json();
+        const traceData = await res.json();
+
+        let msg = `Indexing Trace ID: ${traceData.trace_id}\nTotal Time: ${traceData.duration_ms}ms\n\n`;
+        traceData.spans.forEach(span => {
+          msg += `[${span.name}] - ${span.duration_ms}ms\n`;
+          if (span.metadata.chunk_count !== undefined) msg += `  Chunks Created: ${span.metadata.chunk_count}\n`;
+          if (span.metadata.embedding_model) msg += `  Model: ${span.metadata.embedding_model}\n`;
+        });
+        alert(msg);
+      } catch (err) {
+        showError("Could not load indexing trace: " + (err.detail || err));
+      }
+    }
+
+    async function showTrace() {
+      if (!currentTraceId) return;
+      try {
+        const res = await fetch(`/api/traces/${currentTraceId}`);
+        if (!res.ok) throw await res.json();
+        const traceData = await res.json();
+        
+        let msg = `Trace ID: ${traceData.trace_id}\nTotal Time: ${traceData.duration_ms}ms\n\n`;
+        traceData.spans.forEach(span => {
+          msg += `[${span.name}] - ${span.duration_ms}ms\n`;
+          if (span.metadata.total_tokens) msg += `  Tokens: ${span.metadata.total_tokens}\n`;
+          if (span.metadata.chunks_retrieved) msg += `  Chunks Found: ${span.metadata.chunks_retrieved}\n`;
+        });
+        
+        alert(msg);
+      } catch (err) {
+        showError("Could not load trace: " + (err.detail || err));
+      }
+    }
+
+    async function words() {
+      hideError();
+      try {
+        const body = {document_ids:selected(), word:word.value || null, question:wordQuestion.value || null};
+        const response = await fetch('/api/words', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+        if (!response.ok) throw await response.json();
+        wordResult.textContent = JSON.stringify(await response.json(), null, 2);
+      } catch (err) {
+        showError(err.detail || err);
+      }
+    }
+
+    async function addDocument() {
+      hideError();
+      try {
+        const response = await fetch('/api/documents', {method:'POST', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({name:newName.value, content:newContent.value})});
+        if (!response.ok) throw await response.json();
+        newName.value = ''; newContent.value = ''; await loadDocs();
+      } catch (err) {
+        showError(err.detail || err);
+      }
+    }
+
     async function deleteDocument(id) {
-      const response = await fetch('/api/documents/' + encodeURIComponent(id), {method:'DELETE'});
-      if (!response.ok) { answer.textContent = (await response.json()).detail; return; }
-      await loadDocs();
+      hideError();
+      try {
+        const response = await fetch('/api/documents/' + encodeURIComponent(id), {method:'DELETE'});
+        if (!response.ok) throw await response.json();
+        await loadDocs();
+      } catch (err) {
+        showError(err.detail || err);
+      }
     }
+
     async function runEvaluation(corpus) {
-      const corpusIds = docs.filter(d => d.corpus === corpus).map(d => d.id);
-      const response = await fetch('/api/evaluate', {method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value,
-          overlap_percent:+overlap.value, top_k:10, dense:dense.checked,
-          bm25:bm25.checked, graph:graph.checked})});
-      evaluation.textContent = JSON.stringify(await response.json(), null, 2);
+      hideError();
+      try {
+        const corpusIds = docs.filter(d => d.corpus === corpus).map(d => d.id);
+        const response = await fetch('/api/evaluate', {method:'POST', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value,
+            overlap_percent:+overlap.value, top_k:10, dense:dense.checked,
+            bm25:bm25.checked, graph:graph.checked})});
+        if (!response.ok) throw await response.json();
+        evaluation.textContent = JSON.stringify(await response.json(), null, 2);
+      } catch (err) {
+        showError(err.detail || err);
+      }
     }
+
     loadDocs();
   </script>
 </body>
