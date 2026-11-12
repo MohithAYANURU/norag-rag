@@ -107,3 +107,31 @@ terms that occur in many chunks; this is especially useful for questions using
   final no-context pass, so no generated-answer comparison is claimed.
 - The application reports controlled API errors for missing keys, unknown
   documents, invalid parameters, and empty LLM responses.
+
+
+## V4 Decision Log
+
+### Part A: Observability (Completed by BUI Minh Nhat)
+
+**What do you trace? Where are the traces stored, and for how long?**
+We trace both user queries (`POST /api/search`) and document indexing (`POST /api/documents`). 
+*   **Search traces** record spans for retrieval (capturing retriever flags and `chunk_ids` found) and generation (capturing total tokens, latency, and estimated USD cost). 
+*   **Indexing traces** record spans for saving the file, chunking it (capturing chunk counts), and vector indexing (capturing the embedding model and ChromaDB collection). 
+All traces are stored locally in a zero-dependency `traces.jsonl` file in the root directory. They persist indefinitely on the local disk unless manually deleted.
+
+**Who can read them? Do they leave your machine?**
+Traces are strictly local and never leave the host machine. They can only be read by someone with direct file system access to `traces.jsonl` or someone accessing the local `/api/traces/` web endpoint. 
+
+**What data is excluded from traces?**
+To protect data privacy and keep log sizes manageable, we strictly forbid API keys, raw document text, and full LLM-generated answers from entering the trace logs. We log `chunk_ids` as references instead of the text itself. *(Note: Personal data redaction is handled prior to tracing via our Part C implementation).*
+
+**Which other options did you consider, and why did you reject them?**
+We considered using dedicated observability platforms like Langfuse (cloud-hosted) and Phoenix (self-hosted). We rejected them to strictly adhere to the V4 requirement that the application must be "Easy to install and run." Requiring the grader to configure external cloud API keys or spin up Docker containers introduces unnecessary friction. A local JSONL file approach is bulletproof, zero-dependency, and works instantly out of the box.
+
+---
+### Part B: New Features (To be completed by Teammate 2)
+*(Teammate 2: Document your feature's cost, latency, failure handling, and testing edge cases here)*
+
+---
+### Part C: Responsible AI (To be completed by Teammate 3)
+*(Teammate 3: Document your injection scanner methodology and personal data redaction policy here)*
