@@ -131,27 +131,30 @@ We considered using dedicated observability platforms like Langfuse (cloud-hoste
 ---
 ### Part B: New Features (To be completed by Teammate 2)
 
-The Ask section now supports balanced, concise, detailed, and bullet-point
-answer styles. The browser keeps successful question/answer pairs in memory
-for the current page session and sends them with the next request. The
-backend places the history before the current question and adds the selected
-style as a Gemini system directive.
+The Ask UI now provides balanced, concise, detailed, and bullet-point answer
+styles. It also retains successful question-and-answer pairs in browser memory
+and sends them as `history` with the next request. The backend adds the style
+directive to the Gemini system message and places the prior conversation before
+the current question.
 
-Each conversational turn adds the previous question and answer to the LLM
-input, so token usage and latency grow approximately linearly with retained
-history (in addition to the retrieved excerpts). There is no separate model
-call for this feature; the style and history are included in the existing
-generation call and generation span.
+This feature does not create an additional LLM request, so its fixed model-call
+cost is unchanged. Each retained turn adds its question and answer to the input
+tokens, increasing token cost and latency approximately linearly with history
+length, in addition to the retrieved excerpts. The model call remains inside
+the generation trace span.
 
-Failure handling remains explicit: missing `GOOGLE_API_KEY` returns 503, an
-empty LLM response returns 502, and malformed request fields are rejected by
-Pydantic with 422. A failed request is not appended to browser history, so a
-transient error does not contaminate later turns.
+Failure handling is explicit: a missing `GOOGLE_API_KEY` returns HTTP 503, an
+empty LLM response returns HTTP 502, and invalid request types are rejected by
+Pydantic with HTTP 422. Failed requests are not appended to browser history.
+History entries with missing question or answer fields are handled without
+crashing; unsupported history values are converted to text before being sent to
+the model.
 
-Edge cases tested include an empty history on the first question, multiple
-turns in sequence, each available style option, a history entry with missing
-fields, an empty LLM response, and an LLM/configuration failure. Retrieval
-and citation behavior is unchanged.
+The validation checklist covered an empty first-turn history, multiple
+conversation turns, all four style options, a failed request, an empty LLM
+response, missing LLM configuration, and malformed request data. Python syntax
+validation passed for `v2_app.py`; retrieval and citation behavior was left
+unchanged.
 
 ---
 ### Part C: Responsible AI (To be completed by Teammate 3)
