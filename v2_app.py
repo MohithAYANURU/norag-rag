@@ -52,6 +52,8 @@ class DocumentCreate(BaseModel):
 
 class SearchRequest(BaseModel):
     question: str = Field(min_length=1)
+    style: str = "balanced"
+    history: list = Field(default_factory=list)
     document_ids: list[str] | None = None
     chunk_size: int = Field(DEFAULT_CHUNK_SIZE, ge=100, le=5000)
     overlap_percent: int = Field(DEFAULT_OVERLAP, ge=0, le=80)
@@ -266,7 +268,12 @@ def retrieve(
     return _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
 
 
-def generate_answer(question: str, citations: list[Citation]) -> str:
+def generate_answer(
+    question: str,
+    citations: list[Citation],
+    style: str = "balanced",
+    history: list | None = None,
+) -> str:
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise HTTPException(503, "LLM is not configured: set GOOGLE_API_KEY")
@@ -274,10 +281,17 @@ def generate_answer(question: str, citations: list[Citation]) -> str:
         f"[{citation.source} / {citation.chunk_id}]\n{citation.text}"
         for citation in citations
     )
+    conversation = "\n\n".join(
+        f"User: {turn.get('question', '')}\nAssistant: {turn.get('answer', '')}"
+        if isinstance(turn, dict)
+        else str(turn)
+        for turn in (history or [])
+    )
     prompt = (
         "Answer using only the supplied excerpts. If they do not contain the "
         "answer, reply exactly that the information is not in the documents. "
         "Do not invent facts or citations.\n\n"
+        f"CONVERSATION HISTORY:\n{conversation or '(none)'}\n\n"
         f"EXCERPTS:\n{context}\n\nQUESTION:\n{question}"
     )
     client = OpenAI(
@@ -286,7 +300,16 @@ def generate_answer(question: str, citations: list[Citation]) -> str:
     )
     response = client.chat.completions.create(
         model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Follow this response-style directive for the answer: "
+                    f"{style.strip() or 'balanced'}"
+                ),
+            },
+            {"role": "user", "content": prompt},
+        ],
     )
     answer = response.choices[0].message.content
     if not answer:
@@ -449,7 +472,23 @@ def search(payload: SearchRequest):
         payload.bm25,
         payload.graph,
     )
-    answer = generate_answer(payload.question, citations) if payload.generate else ""
+    if payload.generate:
+        trace = Trace("search_run")
+        try:
+            with trace.add_span("generation", {
+                "style": payload.style,
+                "history_turns": len(payload.history),
+            }):
+                answer = generate_answer(
+                    payload.question,
+                    citations,
+                    payload.style,
+                    payload.history,
+                )
+        finally:
+            trace.finalize()
+    else:
+        answer = ""
     graph_path = None
     if payload.graph:
         selected = payload.document_ids or list(document_map())

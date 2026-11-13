@@ -23,6 +23,13 @@
   <section class="card">
     <h2>Ask</h2>
     <textarea id="question" placeholder="Ask a question about the selected documents"></textarea>
+    <label for="style">Answer style</label>
+    <select id="style">
+      <option value="balanced">Balanced</option>
+      <option value="concise">Concise</option>
+      <option value="detailed">Detailed</option>
+      <option value="bullet points">Bullet points</option>
+    </select>
     <div id="documents"></div>
 
     <details>
@@ -64,6 +71,7 @@
 
   <script>
     let docs = [];
+    let history = [];
     let currentTraceId = null;
     let lastIndexTraceId = null;
 
@@ -103,7 +111,9 @@
 
       try {
         const body = {
-          question: question.value, 
+          question: document.getElementById('question').value,
+          style: document.getElementById('style').value,
+          history,
           document_ids: selected(), 
           chunk_size: +chunk.value,
           overlap_percent: +overlap.value, 
@@ -126,6 +136,10 @@
         }
 
         ansNode.textContent = data.answer;
+        history.push({
+          question: body.question,
+          answer: data.answer
+        });
         
         if (data.trace_id) {
           currentTraceId = data.trace_id;

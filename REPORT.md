@@ -130,7 +130,28 @@ We considered using dedicated observability platforms like Langfuse (cloud-hoste
 
 ---
 ### Part B: New Features (To be completed by Teammate 2)
-*(Teammate 2: Document your feature's cost, latency, failure handling, and testing edge cases here)*
+
+The Ask section now supports balanced, concise, detailed, and bullet-point
+answer styles. The browser keeps successful question/answer pairs in memory
+for the current page session and sends them with the next request. The
+backend places the history before the current question and adds the selected
+style as a Gemini system directive.
+
+Each conversational turn adds the previous question and answer to the LLM
+input, so token usage and latency grow approximately linearly with retained
+history (in addition to the retrieved excerpts). There is no separate model
+call for this feature; the style and history are included in the existing
+generation call and generation span.
+
+Failure handling remains explicit: missing `GOOGLE_API_KEY` returns 503, an
+empty LLM response returns 502, and malformed request fields are rejected by
+Pydantic with 422. A failed request is not appended to browser history, so a
+transient error does not contaminate later turns.
+
+Edge cases tested include an empty history on the first question, multiple
+turns in sequence, each available style option, a history entry with missing
+fields, an empty LLM response, and an LLM/configuration failure. Retrieval
+and citation behavior is unchanged.
 
 ---
 ### Part C: Responsible AI (To be completed by Teammate 3)
