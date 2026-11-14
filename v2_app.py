@@ -39,6 +39,20 @@ DEFAULT_OVERLAP = 10
 DEFAULT_TOP_K = 5
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*")
+EMAIL_RE = re.compile(
+    r"[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+",
+    re.IGNORECASE,
+)
+PHONE_RE = re.compile(
+    r"(?<!\w)(?:"
+    r"(?:\+33[ .-]?|0)[1-9](?:[ .-]?\d{2}){4}"
+    r"|(?:\+1[ .-]?)?(?:\(\d{3}\)|\d{3})[ .-]?\d{3}[ .-]?\d{4}"
+    r")(?!\w)"
+)
+
+def redact_pii(text: str) -> str:
+    text = EMAIL_RE.sub("[REDACTED]", text)
+    return PHONE_RE.sub("[REDACTED]", text)
 
 app = FastAPI(title="RAG V2", version="2.0")
 chroma_client = chromadb.PersistentClient(path=str(DB_ROOT))
@@ -462,8 +476,9 @@ def delete_document(document_id: str):
 
 @app.post("/api/search", response_model=SearchResponse)
 def search(payload: SearchRequest):
+    safe_question = redact_pii(payload.question)
     citations = retrieve(
-        payload.question,
+        safe_question,
         payload.document_ids,
         payload.chunk_size,
         payload.overlap_percent,
@@ -473,6 +488,15 @@ def search(payload: SearchRequest):
         payload.graph,
     )
     if payload.generate:
+        safe_history = []
+        for turn in payload.history:
+            if isinstance(turn, dict):
+                safe_history.append({
+                    "question": redact_pii(str(turn.get("question", ""))),
+                    "answer": redact_pii(str(turn.get("answer", ""))),
+                })
+            else:
+                safe_history.append(redact_pii(str(turn)))
         trace = Trace("search_run")
         try:
             with trace.add_span("generation", {
@@ -480,10 +504,10 @@ def search(payload: SearchRequest):
                 "history_turns": len(payload.history),
             }):
                 answer = generate_answer(
-                    payload.question,
+                    safe_question,
                     citations,
                     payload.style,
-                    payload.history,
+                    safe_history,
                 )
         finally:
             trace.finalize()
@@ -497,11 +521,11 @@ def search(payload: SearchRequest):
             item["chunk_id"]: item
             for item in _chunks(selected, payload.chunk_size, payload.overlap_percent)
         }
-        _graph_results, graph_path = graph.retrieve(payload.question, chunk_map, payload.top_k)
+        _graph_results, graph_path = graph.retrieve(safe_question, chunk_map, payload.top_k)
     return SearchResponse(
         answer=answer,
         citations=citations,
-        question=payload.question,
+        question=safe_question,
         configuration={
             "chunk_size": payload.chunk_size,
             "overlap_percent": payload.overlap_percent,
