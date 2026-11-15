@@ -23,6 +23,9 @@ from openai import OpenAI, OpenAIError
 from pydantic import BaseModel, Field, ValidationError
 from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
 from tracer import Trace
+from threading import Lock, Timer
+from time import monotonic
+from uuid import uuid4
 
 load_dotenv()
 
@@ -49,6 +52,29 @@ embedding_function = SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_M
 class DocumentCreate(BaseModel):
     name: str = Field(min_length=1, max_length=120, pattern=r"^[A-Za-z0-9_. -]+$")
     content: str = Field(min_length=1)
+
+
+QUARANTINE_TTL_SECONDS = 15 * 60
+pending_uploads: dict[str, tuple[DocumentCreate, float]] = {}
+pending_lock = Lock()
+
+
+def expire_upload(review_id: str) -> None:
+    with pending_lock:
+        pending_uploads.pop(review_id, None)
+
+
+def queue_upload(payload: DocumentCreate) -> str:
+    review_id = uuid4().hex
+    expires_at = monotonic() + QUARANTINE_TTL_SECONDS
+
+    with pending_lock:
+        pending_uploads[review_id] = (payload, expires_at)
+
+    timer = Timer(QUARANTINE_TTL_SECONDS, expire_upload, args=(review_id,))
+    timer.daemon = True
+    timer.start()
+    return review_id
 
 
 class InjectionVerdict(BaseModel):
@@ -462,8 +488,19 @@ def list_documents():
 
 @app.post("/api/documents", status_code=201)
 def add_document(payload: DocumentCreate):
-    if scan_for_injection(payload.content).injection_detected:
-        raise HTTPException(400, "Quarantine")
+
+    verdict = scan_for_injection(payload.content)
+    if verdict.injection_detected:
+        review_id = queue_upload(payload)
+        raise HTTPException(
+            400,
+            detail={
+                "status": "quarantined",
+                "review_id": review_id,
+                "suspicious_excerpt": verdict.suspicious_excerpt.strip(),
+            },
+        )
+
     trace = Trace("indexing_run")
     document_id = f"user:{payload.name}"
 
