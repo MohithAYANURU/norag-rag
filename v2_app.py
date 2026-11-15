@@ -572,6 +572,12 @@ def _index_document(payload: DocumentCreate):
         trace.finalize()
 
 
+@app.post("/api/quarantine/{review_id}/approve", status_code=201)
+def approve_upload(review_id: str):
+    payload = _take_pending_upload(review_id)
+    return _index_document(payload)
+
+
 @app.delete("/api/quarantine/{review_id}")
 def discard_upload(review_id: str):
     _take_pending_upload(review_id)
