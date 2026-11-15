@@ -77,6 +77,14 @@ def queue_upload(payload: DocumentCreate) -> str:
     return review_id
 
 
+def _take_pending_upload(review_id: str) -> DocumentCreate:
+    with pending_lock:
+        entry = pending_uploads.pop(review_id, None)
+        if entry is None or monotonic() >= entry[1]:
+            raise HTTPException(404, "Review not found or expired")
+    return entry[0]
+
+
 class InjectionVerdict(BaseModel):
     injection_detected: bool = Field(strict=True)
     suspicious_excerpt: str
@@ -562,6 +570,12 @@ def _index_document(payload: DocumentCreate):
         }
     finally:
         trace.finalize()
+
+
+@app.delete("/api/quarantine/{review_id}")
+def discard_upload(review_id: str):
+    _take_pending_upload(review_id)
+    return {"status": "discarded"}
 
 
 @app.delete("/api/documents/{document_id:path}")
