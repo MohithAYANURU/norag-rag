@@ -488,7 +488,6 @@ def list_documents():
 
 @app.post("/api/documents", status_code=201)
 def add_document(payload: DocumentCreate):
-
     verdict = scan_for_injection(payload.content)
     if verdict.injection_detected:
         review_id = queue_upload(payload)
@@ -501,6 +500,10 @@ def add_document(payload: DocumentCreate):
             },
         )
 
+    return _index_document(payload)
+
+
+def _index_document(payload: DocumentCreate):
     trace = Trace("indexing_run")
     document_id = f"user:{payload.name}"
 
