@@ -2,7 +2,11 @@
 
 ## Team
 
-Mohith AYANURU (individual submission).
+The V4 team has three members.
+
+- BUI Minh Nhat - Part A: Observability.
+- Mohith AYANURU - Part B: Answer style and conversation mode.
+- Maxim Beridze - Part C: Upload scanning and redaction.
 
 ## Scope and decisions
 
