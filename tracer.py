@@ -3,8 +3,18 @@ import time
 import uuid
 from pathlib import Path
 from typing import Any
+from privacy import redact_pii
 
 TRACE_FILE = Path(__file__).resolve().parent / "traces.jsonl"
+
+def redact_trace(value):
+    if isinstance(value, str):
+        return redact_pii(value)
+    if isinstance(value, list):
+        return [redact_trace(item) for item in value]
+    if isinstance(value, dict):
+        return {key: redact_trace(item) for key, item in value.items()}
+    return value
 
 class Trace:
     def __init__(self, name: str):
@@ -25,7 +35,7 @@ class Trace:
             "spans": self.spans
         }
         with open(TRACE_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(trace_data) + "\n")
+            f.write(json.dumps(redact_trace(trace_data)) + "\n")
         return self.trace_id
 
 class Span:
@@ -38,10 +48,10 @@ class Span:
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, _exc_val, _exc_tb):
         duration = time.time() - self.start_time
         if exc_type:
-            self.metadata["error"] = str(exc_val)
+            self.metadata["error"] = exc_type.__name__
         self.trace.spans.append({
             "name": self.name,
             "duration_ms": round(duration * 1000, 2),

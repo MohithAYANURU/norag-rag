@@ -13,7 +13,7 @@ import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
-
+from privacy import redact_pii
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from dotenv import load_dotenv
@@ -39,21 +39,6 @@ DEFAULT_OVERLAP = 10
 DEFAULT_TOP_K = 5
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*")
-EMAIL_RE = re.compile(
-    r"[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+",
-    re.IGNORECASE,
-)
-PHONE_RE = re.compile(
-    r"(?<!\w)(?:"
-    r"(?:\+33[ .-]?|0)[1-9](?:[ .-]?\d{2}){4}"
-    r"|(?:\+1[ .-]?)?(?:\(\d{3}\)|\d{3})[ .-]?\d{3}[ .-]?\d{4}"
-    r")(?!\w)"
-)
-
-
-def redact_pii(text: str) -> str:
-    text = EMAIL_RE.sub("[REDACTED]", text)
-    return PHONE_RE.sub("[REDACTED]", text)
 
 
 app = FastAPI(title="RAG V2", version="2.0")
