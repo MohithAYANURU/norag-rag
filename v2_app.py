@@ -34,7 +34,6 @@ CORPUS_ROOT = ROOT.parent / "kestrel-kb" / "docs"
 OWN_ROOT = ROOT / "docs"
 USER_ROOT = ROOT / "user_docs"
 DB_ROOT = ROOT / "chroma_db_v2"
-BM25_ROOT = DB_ROOT / "bm25"
 GRAPH_FILE = ROOT / "graph_kestrel.json"
 WEB_ROOT = ROOT / "web"
 DEFAULT_CHUNK_SIZE = 800
