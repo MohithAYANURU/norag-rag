@@ -219,13 +219,29 @@
           traceBtnNode.style.display = 'inline-block';
         }
 
-        citationsNode.innerHTML = (data.citations || []).map(c =>
-          `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`
-        ).join('');
+        const results = document.createDocumentFragment();
+
+        for (const citation of data.citations || []) {
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const source = document.createElement('b');
+          source.textContent = citation.source;
+
+          const passage = document.createElement('p');
+          passage.textContent = citation.text;
+
+          card.append(source, ` (${citation.chunk_id})`, passage);
+          results.append(card);
+        }
 
         if (data.graph_path) {
-          citationsNode.innerHTML += `<pre>${JSON.stringify(data.graph_path, null, 2)}</pre>`;
+          const graph = document.createElement('pre');
+          graph.textContent = JSON.stringify(data.graph_path, null, 2);
+          results.append(graph);
         }
+
+        citationsNode.replaceChildren(results);
       } catch (err) {
         ansNode.style.display = 'none';
         showError(err.detail || err);
