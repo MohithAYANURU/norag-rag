@@ -597,12 +597,6 @@ def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
 
 
-@app.get("/bm25", response_class=HTMLResponse)
-def bm25_page() -> str:
-    return """<!doctype html><html><head><title>BM25</title></head>
-    <body><p style="font-size:4rem">Watch your sources!</p></body></html>"""
-
-
 @app.get("/api/documents")
 def list_documents():
     return [

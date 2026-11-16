@@ -33,7 +33,7 @@ question copy is `eval/questions.kestrel.jsonl`.
 
 Open `http://127.0.0.1:8000/`. **Words Explorer** shows vocabulary, the chunks
 containing a word, and which words from a question appear in the corpus.
-The unlinked V3 source-warning page is at `/bm25`. See [README.md](README.md)
+See [README.md](README.md)
 for environment setup and the Kestrel corpus location.
 
 Evaluation:
