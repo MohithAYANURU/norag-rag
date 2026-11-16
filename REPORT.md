@@ -131,7 +131,7 @@ To protect data privacy and keep log sizes manageable, we strictly forbid API ke
 We considered using dedicated observability platforms like Langfuse (cloud-hosted) and Phoenix (self-hosted). We rejected them to strictly adhere to the V4 requirement that the application must be "Easy to install and run." Requiring the grader to configure external cloud API keys or spin up Docker containers introduces unnecessary friction. A local JSONL file approach is bulletproof, zero-dependency, and works instantly out of the box.
 
 ---
-### Part B: New Features (Mohoith AYANURU)
+### Part B: New Features (Mohith AYANURU) — Completed
 
 The Ask UI now provides balanced, concise, detailed, and bullet-point answer
 styles. It also retains successful question-and-answer pairs in browser memory
@@ -157,6 +157,18 @@ conversation turns, all four style options, a failed request, an empty LLM
 response, missing LLM configuration, and malformed request data. Python syntax
 validation passed for `v2_app.py`; retrieval and citation behavior was left
 unchanged.
+
+Follow-up turns are rewritten into standalone retrieval queries before dense,
+BM25, or graph retrieval runs, so references such as “what about that?” can
+retrieve passages about the subject of the preceding turn. The response also
+returns up to three suggested next questions grounded in terms found in the
+retrieved excerpts. The UI renders those suggestions as buttons that populate
+the next question.
+
+The style controls are accompanied by a source glossary. The glossary extracts
+headings or source terms and displays their supporting source sentence; it is
+available through `/api/glossary` and the Ask UI without an additional LLM
+request.
 
 ---
 ### Part C: Responsible AI (Maxim Beridze)

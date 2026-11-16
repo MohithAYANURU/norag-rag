@@ -87,6 +87,8 @@
       <option value="detailed">Detailed</option>
       <option value="bullet points">Bullet points</option>
     </select>
+    <button type="button" onclick="loadGlossary()">Show source glossary</button>
+    <div id="glossary"></div>
     <div id="documents"></div>
 
     <details>
@@ -106,6 +108,7 @@
       Question</button>
 
     <pre id="answer" style="display: none;"></pre>
+    <div id="suggestions"></div>
     <button id="traceBtn" class="trace-btn" onclick="showTrace()">🔍 Trace Details</button>
     <div id="citations"></div>
   </section>
@@ -194,11 +197,13 @@
       const ansNode = document.getElementById('answer');
       const traceBtnNode = document.getElementById('traceBtn');
       const citationsNode = document.getElementById('citations');
+      const suggestionsNode = document.getElementById('suggestions');
 
       ansNode.style.display = 'block';
       ansNode.textContent = 'Thinking...';
       traceBtnNode.style.display = 'none';
       citationsNode.innerHTML = '';
+      suggestionsNode.innerHTML = '';
       currentTraceId = null;
 
       try {
@@ -233,6 +238,21 @@
           answer: data.answer
         });
 
+        if (data.suggested_questions?.length) {
+          const heading = document.createElement('p');
+          heading.textContent = 'Suggested next questions:';
+          suggestionsNode.append(heading);
+          for (const question of data.suggested_questions) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = question;
+            button.addEventListener('click', () => {
+              document.getElementById('question').value = question;
+            });
+            suggestionsNode.append(button);
+          }
+        }
+
         if (data.trace_id) {
           currentTraceId = data.trace_id;
           traceBtnNode.style.display = 'inline-block';
@@ -263,6 +283,30 @@
         citationsNode.replaceChildren(results);
       } catch (err) {
         ansNode.style.display = 'none';
+        showError(err.detail || err);
+      }
+    }
+
+    async function loadGlossary() {
+      hideError();
+      try {
+        const response = await fetch('/api/glossary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ document_ids: selected() })
+        });
+        if (!response.ok) throw await response.json();
+        const data = await response.json();
+        const glossaryNode = document.getElementById('glossary');
+        glossaryNode.replaceChildren();
+        for (const entry of data.entries || []) {
+          const item = document.createElement('p');
+          const term = document.createElement('b');
+          term.textContent = `${entry.term}: `;
+          item.append(term, `${entry.definition} (${entry.source})`);
+          glossaryNode.append(item);
+        }
+      } catch (err) {
         showError(err.detail || err);
       }
     }
