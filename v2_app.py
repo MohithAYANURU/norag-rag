@@ -26,6 +26,7 @@ from threading import Lock, Timer
 from time import monotonic
 from uuid import uuid4
 from llm_config import get_llm_config
+from build_graph import build_graph_from_chunks
 
 load_dotenv()
 
@@ -34,7 +35,8 @@ CORPUS_ROOT = ROOT.parent / "kestrel-kb" / "docs"
 OWN_ROOT = ROOT / "docs"
 USER_ROOT = ROOT / "user_docs"
 DB_ROOT = ROOT / "chroma_db_v2"
-GRAPH_FILE = ROOT / "graph_kestrel.json"
+GRAPH_STORE = ROOT / "graph_store"
+MAX_GRAPH_CHUNKS = 50
 WEB_ROOT = ROOT / "web"
 DEFAULT_CHUNK_SIZE = 800
 DEFAULT_OVERLAP = 10
@@ -43,11 +45,41 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*")
 HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.+?)\s*$", re.MULTILINE)
 STOP_WORDS = {
-    "about", "after", "again", "also", "and", "are", "because", "been",
-    "before", "being", "between", "could", "does", "from", "have", "into",
-    "more", "most", "only", "other", "should", "that", "their", "these",
-    "they", "this", "those", "using", "what", "when", "where", "which",
-    "with", "would", "your",
+    "about",
+    "after",
+    "again",
+    "also",
+    "and",
+    "are",
+    "because",
+    "been",
+    "before",
+    "being",
+    "between",
+    "could",
+    "does",
+    "from",
+    "have",
+    "into",
+    "more",
+    "most",
+    "only",
+    "other",
+    "should",
+    "that",
+    "their",
+    "these",
+    "they",
+    "this",
+    "those",
+    "using",
+    "what",
+    "when",
+    "where",
+    "which",
+    "with",
+    "would",
+    "your",
 }
 
 
@@ -64,6 +96,12 @@ class DocumentCreate(BaseModel):
 QUARANTINE_TTL_SECONDS = 15 * 60
 pending_uploads: dict[str, tuple[DocumentCreate, float]] = {}
 pending_lock = Lock()
+
+
+class GraphBuildRequest(BaseModel):
+    document_ids: list[str] = Field(min_length=1)
+    chunk_size: int = Field(DEFAULT_CHUNK_SIZE, ge=100, le=5000)
+    overlap_percent: int = Field(DEFAULT_OVERLAP, ge=0, le=80)
 
 
 def expire_upload(review_id: str) -> None:
@@ -272,6 +310,24 @@ def _chunks(
     return chunks
 
 
+def _graph_inputs(document_ids, chunk_size, overlap_percent):
+    selected = sorted(set(document_ids))
+    items = _chunks(selected, chunk_size, overlap_percent)
+    passages = []
+    chunk_map = {}
+
+    for item in items:
+        index = item["chunk_id"].rsplit(":", 1)[1]
+        graph_chunk_id = f"{item['document_id']}:{index}"
+
+        passages.append((graph_chunk_id, item["text"]))
+        chunk_map[graph_chunk_id] = item
+
+    data = json.dumps([selected, chunk_size, overlap_percent, passages])
+    key = hashlib.sha256(data.encode("utf-8")).hexdigest()
+    return GRAPH_STORE / f"{key}.json", passages, chunk_map
+
+
 def _to_citations(results: list[tuple[dict[str, Any], float]]) -> list[Citation]:
     return [
         Citation(
@@ -299,7 +355,22 @@ def retrieve(
     selected = document_ids or list(docs)
     if not selected:
         raise HTTPException(422, "No documents are available")
-    chunks = _chunks(selected, chunk_size, overlap)
+
+    graph_data = None
+    graph_chunks = {}
+
+    if graph:
+        path, _, graph_chunks = _graph_inputs(selected, chunk_size, overlap)
+        if not path.is_file():
+            raise HTTPException(
+                status_code=409,
+                detail="Build a graph for these documents and chunk settings, or turn off Concept graph.",
+            )
+        graph_data = ConceptGraph.load(path)
+        chunks = list(graph_chunks.values())
+    else:
+        chunks = _chunks(selected, chunk_size, overlap)
+
     ranked_lists = []
     if dense:
         collection = _collection(selected, chunk_size, overlap)
@@ -327,12 +398,12 @@ def retrieve(
     if bm25:
         index = BM25Index(chunks)
         ranked_lists.append(index.search(question, top_k))
+
     graph_path = None
-    if graph:
-        graph_data = ConceptGraph.load(GRAPH_FILE)
-        chunk_map = {item["chunk_id"]: item for item in chunks}
-        graph_results, graph_path = graph_data.retrieve(question, chunk_map, top_k)
+    if graph_data is not None:
+        graph_results, graph_path = graph_data.retrieve(question, graph_chunks, top_k)
         ranked_lists.append(graph_results)
+
     if not ranked_lists:
         raise HTTPException(422, "Enable at least one retriever")
     citations = _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
@@ -595,6 +666,37 @@ def word_analysis(
 @app.get("/", response_class=HTMLResponse)
 def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
+
+
+@app.post("/api/graph/build", response_model=ConceptGraph)
+def build_selected_graph(payload: GraphBuildRequest):
+    path, passages, _ = _graph_inputs(
+        payload.document_ids, payload.chunk_size, payload.overlap_percent
+    )
+
+    if path.is_file():
+        return ConceptGraph.load(path)
+
+    if len(passages) > MAX_GRAPH_CHUNKS:
+        raise HTTPException(
+            422, "Select fewer documents: a graph build is limited to 50 chunks."
+        )
+
+    client, model = _llm_client()
+    try:
+        graph = build_graph_from_chunks(client, model, passages)
+    except (OpenAIError, ValueError, RuntimeError) as exc:
+        raise HTTPException(502, "Could not build the concept graph.") from exc
+
+    GRAPH_STORE.mkdir(exist_ok=True)
+    temporary = path.with_suffix(f".{uuid4().hex}.tmp")
+    try:
+        temporary.write_text(graph.model_dump_json(indent=2), encoding="utf-8")
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+    return graph
 
 
 @app.get("/api/documents")
