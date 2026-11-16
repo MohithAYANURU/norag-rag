@@ -221,6 +221,20 @@ def _collection(document_ids: list[str], chunk_size: int, overlap: int):
     return collection
 
 
+def _invalidate_dense_indexes(document_id: str) -> None:
+    for collection in chroma_client.list_collections():
+        if not collection.name.startswith("v2_"):
+            continue
+
+        matches = collection.get(
+            where={"document_id": document_id},
+            limit=1,
+            include=[],
+        )
+        if matches["ids"]:
+            chroma_client.delete_collection(collection.name)
+
+
 def _chunks(
     document_ids: list[str], chunk_size: int, overlap: int
 ) -> list[dict[str, Any]]:
@@ -526,6 +540,7 @@ def _index_document(payload: DocumentCreate):
         ) as span:
             USER_ROOT.mkdir(exist_ok=True)
             path = USER_ROOT / payload.name
+            _invalidate_dense_indexes(document_id)
             path.write_text(payload.content, encoding="utf-8")
             span.metadata["char_count"] = len(payload.content)
 
@@ -553,11 +568,6 @@ def _index_document(payload: DocumentCreate):
                 "vectors_indexed": len(chunks),
             },
         ) as span:
-            stale_key = f"{document_id}|{DEFAULT_CHUNK_SIZE}|{DEFAULT_OVERLAP}"
-            try:
-                chroma_client.delete_collection(f"v2_{_safe_id(stale_key)}")
-            except Exception:
-                pass
 
             collection = _collection([document_id], DEFAULT_CHUNK_SIZE, DEFAULT_OVERLAP)
             span.metadata["collection_name"] = collection.name
@@ -592,6 +602,7 @@ def delete_document(document_id: str):
         raise HTTPException(404, "Document not found")
     if not document["managed"]:
         raise HTTPException(409, "Built-in documents cannot be deleted")
+    _invalidate_dense_indexes(document_id)
     document["path"].unlink(missing_ok=False)
     return {"deleted": document_id}
 
