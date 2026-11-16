@@ -1,23 +1,80 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RAG V2</title>
   <style>
-    body { font: 16px system-ui; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-    textarea, input, select, button { font: inherit; margin: .25rem 0; padding: .5rem; }
-    textarea { width: 100%; min-height: 7rem; } .row { display:flex; gap:1rem; flex-wrap:wrap; }
-    .card { border:1px solid #ddd; border-radius:8px; padding:1rem; margin:1rem 0; }
-    pre { white-space: pre-wrap; background:#f6f6f6; padding:1rem; }
-    .error { color: #d32f2f; background-color: #ffebee; border: 1px solid #ef5350; padding: 1rem; border-radius: 4px; display: none; }
-    .trace-btn { background-color: #e0e0e0; color: #333; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin-top: 1rem; display: none; }
-    .trace-btn:hover { background-color: #bdbdbd; }
+    body {
+      font: 16px system-ui;
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    textarea,
+    input,
+    select,
+    button {
+      font: inherit;
+      margin: .25rem 0;
+      padding: .5rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 7rem;
+    }
+
+    .row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      background: #f6f6f6;
+      padding: 1rem;
+    }
+
+    .error {
+      color: #d32f2f;
+      background-color: #ffebee;
+      border: 1px solid #ef5350;
+      padding: 1rem;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .trace-btn {
+      background-color: #e0e0e0;
+      color: #333;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .trace-btn:hover {
+      background-color: #bdbdbd;
+    }
   </style>
 </head>
+
 <body>
   <h1>RAG V2</h1>
-  
+
   <div id="errorBox" class="error"></div>
 
   <section class="card">
@@ -44,33 +101,49 @@
       </div>
     </details>
 
-    <button onclick="ask()" style="background: #2196f3; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Ask Question</button>
-    
+    <button onclick="ask()"
+      style="background: #2196f3; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Ask
+      Question</button>
+
     <pre id="answer" style="display: none;"></pre>
     <button id="traceBtn" class="trace-btn" onclick="showTrace()">🔍 Trace Details</button>
     <div id="citations"></div>
   </section>
 
   <details class="card">
-    <summary><h2>Document Management & Evaluation</h2></summary>
+    <summary>
+      <h2>Document Management & Evaluation</h2>
+    </summary>
     <input id="newName" placeholder="filename.txt">
     <textarea id="newContent" placeholder="Document content"></textarea>
     <button type="button" onclick="addDocument()">Add document</button>
-    <button id="indexTraceBtn" class="trace-btn" style="display: none;" onclick="showIndexTrace()">🔍 Indexing Trace</button>
+    <div id="quarantinePanel" hidden>
+      <p>This document was flagged and has not been indexed.</p>
+      <pre id="quarantineExcerpt"></pre>
+      <button type="button" onclick="reviewUpload(true)">Index anyway</button>
+      <button type="button" onclick="reviewUpload(false)">Discard</button>
+    </div>
+    <button id="indexTraceBtn" class="trace-btn" style="display: none;" onclick="showIndexTrace()">🔍 Indexing
+      Trace</button>
     <button onclick="runEvaluation('kestrel')">Evaluate Kestrel</button>
     <button onclick="runEvaluation('own')">Evaluate own corpus</button>
     <pre id="evaluation"></pre>
   </details>
 
   <details class="card">
-    <summary><h2>Words Explorer</h2></summary>
+    <summary>
+      <h2>Words Explorer</h2>
+    </summary>
     <input id="word" placeholder="word (optional)">
     <input id="wordQuestion" placeholder="or type a question">
-    <button onclick="words()">Explore</button><pre id="wordResult"></pre>
+    <button onclick="words()">Explore</button>
+    <pre id="wordResult"></pre>
   </details>
 
   <script>
     let docs = [];
+    let pendingReviewId = null;
+    let reviewBusy = false;
     let history = [];
     let currentTraceId = null;
     let lastIndexTraceId = null;
@@ -102,7 +175,7 @@
       const ansNode = document.getElementById('answer');
       const traceBtnNode = document.getElementById('traceBtn');
       const citationsNode = document.getElementById('citations');
-      
+
       ansNode.style.display = 'block';
       ansNode.textContent = 'Thinking...';
       traceBtnNode.style.display = 'none';
@@ -114,25 +187,25 @@
           question: document.getElementById('question').value,
           style: document.getElementById('style').value,
           history,
-          document_ids: selected(), 
+          document_ids: selected(),
           chunk_size: +chunk.value,
-          overlap_percent: +overlap.value, 
-          top_k: +topk.value, 
+          overlap_percent: +overlap.value,
+          top_k: +topk.value,
           dense: dense.checked,
-          bm25: bm25.checked, 
+          bm25: bm25.checked,
           graph: graph.checked
         };
-        
+
         const response = await fetch('/api/search', {
-          method: 'POST', 
-          headers: {'Content-Type': 'application/json'}, 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body)
         });
-        
-        const data = await response.json(); 
-        
+
+        const data = await response.json();
+
         if (!response.ok) {
-          throw data; 
+          throw data;
         }
 
         ansNode.textContent = data.answer;
@@ -140,16 +213,16 @@
           question: body.question,
           answer: data.answer
         });
-        
+
         if (data.trace_id) {
           currentTraceId = data.trace_id;
           traceBtnNode.style.display = 'inline-block';
         }
 
-        citationsNode.innerHTML = (data.citations || []).map(c => 
+        citationsNode.innerHTML = (data.citations || []).map(c =>
           `<div class="card"><b>${c.source}</b> (${c.chunk_id})<p>${c.text}</p></div>`
         ).join('');
-        
+
         if (data.graph_path) {
           citationsNode.innerHTML += `<pre>${JSON.stringify(data.graph_path, null, 2)}</pre>`;
         }
@@ -159,42 +232,7 @@
       }
     }
 
-    async function addDocument() {
-      hideError();
-      try {
-        const response = await fetch('/api/documents', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({name: newName.value, content: newContent.value})
-        });
-        const data = await response.json();
-        if (!response.ok) throw data;
 
-
-        alert("Trace ID received: " + data.trace_id);
-        lastIndexTraceId = data.trace_id;
-
-
-        const idxBtn = document.getElementById('indexTraceBtn');
-        
-        if (!idxBtn) {
-            alert("ERROR: JavaScript cannot find the button! Check your HTML id.");
-        } else {
-            idxBtn.style.display = 'inline-block';
-            idxBtn.style.backgroundColor = 'red';
-            idxBtn.style.color = 'white';
-            idxBtn.style.padding = '20px';
-            idxBtn.style.fontSize = '20px';
-            idxBtn.innerText = "🔍 TRACE BUTTON FOUND";
-        }
-        
-        newName.value = '';
-        newContent.value = '';
-        await loadDocs();
-      } catch (err) {
-        showError(err.detail || err);
-      }
-    }
     async function showIndexTrace() {
       if (!lastIndexTraceId) return;
       try {
@@ -220,14 +258,14 @@
         const res = await fetch(`/api/traces/${currentTraceId}`);
         if (!res.ok) throw await res.json();
         const traceData = await res.json();
-        
+
         let msg = `Trace ID: ${traceData.trace_id}\nTotal Time: ${traceData.duration_ms}ms\n\n`;
         traceData.spans.forEach(span => {
           msg += `[${span.name}] - ${span.duration_ms}ms\n`;
           if (span.metadata.total_tokens) msg += `  Tokens: ${span.metadata.total_tokens}\n`;
           if (span.metadata.chunks_retrieved) msg += `  Chunks Found: ${span.metadata.chunks_retrieved}\n`;
         });
-        
+
         alert(msg);
       } catch (err) {
         showError("Could not load trace: " + (err.detail || err));
@@ -237,8 +275,8 @@
     async function words() {
       hideError();
       try {
-        const body = {document_ids:selected(), word:word.value || null, question:wordQuestion.value || null};
-        const response = await fetch('/api/words', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+        const body = { document_ids: selected(), word: word.value || null, question: wordQuestion.value || null };
+        const response = await fetch('/api/words', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
         if (!response.ok) throw await response.json();
         wordResult.textContent = JSON.stringify(await response.json(), null, 2);
       } catch (err) {
@@ -247,21 +285,81 @@
     }
 
     async function addDocument() {
+
+      if (pendingReviewId) {
+        showError('Approve or discard the flagged upload before adding another.');
+        return;
+      }
+
       hideError();
+
       try {
-        const response = await fetch('/api/documents', {method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({name:newName.value, content:newContent.value})});
-        if (!response.ok) throw await response.json();
-        newName.value = ''; newContent.value = ''; await loadDocs();
+        const response = await fetch('/api/documents', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newName.value, content: newContent.value })
+        });
+
+        const data = await response.json();
+        if (response.status === 400 && data.detail?.status === 'quarantined') {
+          pendingReviewId = data.detail.review_id;
+          document.getElementById('quarantineExcerpt').textContent =
+            data.detail.suspicious_excerpt;
+          document.getElementById('quarantinePanel').hidden = false;
+          return;
+        }
+
+        if (!response.ok) throw data;
+
+        lastIndexTraceId = data.trace_id ?? null;
+        newName.value = '';
+        newContent.value = '';
+        await loadDocs();
+
       } catch (err) {
         showError(err.detail || err);
+      }
+    }
+
+
+    async function reviewUpload(approve) {
+      if (!pendingReviewId || reviewBusy) return;
+      reviewBusy = true;
+      hideError();
+
+      try {
+        const url = `/api/quarantine/${encodeURIComponent(pendingReviewId)}`;
+        const response = await fetch(approve ? `${url}/approve` : url, {
+          method: approve ? 'POST' : 'DELETE',
+        });
+
+        if (response.ok || response.status === 404 || approve) {
+          pendingReviewId = null;
+          document.getElementById('quarantinePanel').hidden = true;
+          document.getElementById('quarantineExcerpt').textContent = '';
+        }
+
+        if (response.status === 404) {
+          showError('This review expired or was already used. Upload the document again.');
+        } else if (!response.ok) {
+          showError(approve
+            ? 'Indexing failed. Upload the document again.'
+            : 'Could not discard the upload. Try again.');
+        } else if (approve) {
+          newName.value = '';
+          newContent.value = '';
+          await loadDocs();
+        }
+      } catch {
+        showError('Could not reach the server. Check the connection.');
+      } finally {
+        reviewBusy = false;
       }
     }
 
     async function deleteDocument(id) {
       hideError();
       try {
-        const response = await fetch('/api/documents/' + encodeURIComponent(id), {method:'DELETE'});
+        const response = await fetch('/api/documents/' + encodeURIComponent(id), { method: 'DELETE' });
         if (!response.ok) throw await response.json();
         await loadDocs();
       } catch (err) {
@@ -273,10 +371,14 @@
       hideError();
       try {
         const corpusIds = docs.filter(d => d.corpus === corpus).map(d => d.id);
-        const response = await fetch('/api/evaluate', {method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({corpus, document_ids:corpusIds, chunk_size:+chunk.value,
-            overlap_percent:+overlap.value, top_k:10, dense:dense.checked,
-            bm25:bm25.checked, graph:graph.checked})});
+        const response = await fetch('/api/evaluate', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            corpus, document_ids: corpusIds, chunk_size: +chunk.value,
+            overlap_percent: +overlap.value, top_k: 10, dense: dense.checked,
+            bm25: bm25.checked, graph: graph.checked
+          })
+        });
         if (!response.ok) throw await response.json();
         evaluation.textContent = JSON.stringify(await response.json(), null, 2);
       } catch (err) {
@@ -287,4 +389,5 @@
     loadDocs();
   </script>
 </body>
+
 </html>
