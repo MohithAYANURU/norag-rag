@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from llm_config import get_llm_config
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -85,16 +86,15 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def no_context(question: str) -> dict[str, str]:
-    key = os.getenv("GOOGLE_API_KEY")
-    if not key:
-        return {"status": "skipped", "answer": "SKIPPED: GOOGLE_API_KEY is not configured"}
-    client = OpenAI(
-        api_key=key,
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    )
+    try:
+        config = get_llm_config()
+    except ValueError as exc:
+        return {"status": "skipped", "answer": f"SKIPPED: {exc}"}
+
+    client = OpenAI(api_key=config.api_key, base_url=config.base_url)
     try:
         response = client.chat.completions.create(
-            model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
+            model=config.model,
             messages=[{"role": "user", "content": question}],
         )
     except Exception as exc:

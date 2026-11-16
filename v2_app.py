@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 from collections import Counter
 from pathlib import Path
@@ -26,6 +25,7 @@ from tracer import Trace
 from threading import Lock, Timer
 from time import monotonic
 from uuid import uuid4
+from llm_config import get_llm_config
 
 load_dotenv()
 
@@ -329,15 +329,22 @@ def retrieve(
     return citations, graph_path
 
 
+def _llm_client() -> tuple[OpenAI, str]:
+    try:
+        config = get_llm_config()
+    except ValueError as exc:
+        raise HTTPException(503, str(exc)) from exc
+
+    client = OpenAI(api_key=config.api_key, base_url=config.base_url)
+    return client, config.model
+
+
 def generate_answer(
     question: str,
     citations: list[Citation],
     style: str = "balanced",
     history: list | None = None,
 ) -> str:
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise HTTPException(503, "LLM is not configured: set GOOGLE_API_KEY")
     context = "\n\n---\n\n".join(
         f"[{citation.source} / {citation.chunk_id}]\n{citation.text}"
         for citation in citations
@@ -357,12 +364,9 @@ def generate_answer(
         f"CONVERSATION HISTORY:\n{conversation or '(none)'}\n\n"
         f"EXCERPTS:\n{context}\n\nQUESTION:\n{question}"
     )
-    client = OpenAI(
-        api_key=api_key,
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    )
+    client, model = _llm_client()
     response = client.chat.completions.create(
-        model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
+        model=model,
         messages=[
             {
                 "role": "system",
@@ -382,17 +386,11 @@ def generate_answer(
 
 def scan_for_injection(content: str) -> InjectionVerdict:
     safe_content = redact_pii(content)
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise HTTPException(503, "LLM is not configured: set GOOGLE_API_KEY")
 
-    client = OpenAI(
-        api_key=api_key,
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    )
+    client, model = _llm_client()
     try:
         response = client.chat.completions.parse(
-            model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
+            model=model,
             messages=[
                 {
                     "role": "system",

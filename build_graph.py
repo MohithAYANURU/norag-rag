@@ -5,11 +5,8 @@ and repeatable after the one-time extraction cost.
 """
 
 from __future__ import annotations
-
-import json
-import os
+from llm_config import get_llm_config
 from pathlib import Path
-
 from openai import OpenAI
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -27,7 +24,7 @@ class Extraction(BaseModel):
     relations: list[Relation] = Field(default_factory=list)
 
 
-def extract(client: OpenAI, chunk_id: str, text: str) -> Extraction:
+def extract(client: OpenAI, model: str, chunk_id: str, text: str) -> Extraction:
     prompt = (
         "Extract only facts explicitly stated in this text. Return JSON with "
         "entities (id, name, type, chunk_ids) and relations "
@@ -35,7 +32,7 @@ def extract(client: OpenAI, chunk_id: str, text: str) -> Extraction:
         f"and set chunk_ids to ['{chunk_id}'] for every extracted item.\n\n{text}"
     )
     response = client.chat.completions.create(
-        model=os.getenv("RAG_MODEL", "gemini-3.5-flash-lite"),
+        model=model,
         response_format={"type": "json_object"},
         messages=[{"role": "user", "content": prompt}],
     )
@@ -59,15 +56,10 @@ def chunks(text: str) -> list[str]:
 
 
 def main() -> None:
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise SystemExit("Set GOOGLE_API_KEY before building the graph")
+    config = get_llm_config()
+    client = OpenAI(api_key=config.api_key, base_url=config.base_url)
     if not CORPUS.exists():
         raise SystemExit(f"Kestrel corpus not found: {CORPUS}")
-    client = OpenAI(
-        api_key=api_key,
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    )
     entities: dict[str, Entity] = {}
     relations: dict[tuple[str, str, str], Relation] = {}
     for path in sorted(CORPUS.glob("*")):
@@ -76,7 +68,7 @@ def main() -> None:
         text = path.read_text(encoding="utf-8")
         for index, chunk in enumerate(chunks(text)):
             chunk_id = f"{path.name}:{index}"
-            extraction = extract(client, chunk_id, chunk)
+            extraction = extract(client, config.model, chunk_id, chunk)
             for entity in extraction.entities:
                 entities.setdefault(entity.id, entity)
             for relation in extraction.relations:
