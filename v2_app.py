@@ -270,7 +270,7 @@ def retrieve(
     dense: bool = True,
     bm25: bool = True,
     graph: bool = False,
-) -> list[Citation]:
+) -> tuple[list[Citation], dict[str, Any] | None]:
     docs = document_map()
     selected = document_ids or list(docs)
     if not selected:
@@ -303,14 +303,16 @@ def retrieve(
     if bm25:
         index = BM25Index(chunks)
         ranked_lists.append(index.search(question, top_k))
+    graph_path = None
     if graph:
         graph_data = ConceptGraph.load(GRAPH_FILE)
         chunk_map = {item["chunk_id"]: item for item in chunks}
-        graph_results, _path = graph_data.retrieve(question, chunk_map, top_k)
+        graph_results, graph_path = graph_data.retrieve(question, chunk_map, top_k)
         ranked_lists.append(graph_results)
     if not ranked_lists:
         raise HTTPException(422, "Enable at least one retriever")
-    return _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
+    citations = _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
+    return citations, graph_path
 
 
 def generate_answer(
@@ -597,7 +599,7 @@ def delete_document(document_id: str):
 @app.post("/api/search", response_model=SearchResponse)
 def search(payload: SearchRequest):
     safe_question = redact_pii(payload.question)
-    citations = retrieve(
+    citations, graph_path = retrieve(
         safe_question,
         payload.document_ids,
         payload.chunk_size,
@@ -638,17 +640,7 @@ def search(payload: SearchRequest):
             trace.finalize()
     else:
         answer = ""
-    graph_path = None
-    if payload.graph:
-        selected = payload.document_ids or list(document_map())
-        graph = ConceptGraph.load(GRAPH_FILE)
-        chunk_map = {
-            item["chunk_id"]: item
-            for item in _chunks(selected, payload.chunk_size, payload.overlap_percent)
-        }
-        _graph_results, graph_path = graph.retrieve(
-            safe_question, chunk_map, payload.top_k
-        )
+
     return SearchResponse(
         answer=answer,
         citations=citations,
@@ -695,7 +687,7 @@ def evaluate(payload: EvaluationRequest):
     ]
     rows = []
     for question in questions:
-        citations = retrieve(
+        citations, _ = retrieve(
             question["question"],
             document_ids,
             payload.chunk_size,
