@@ -160,9 +160,28 @@
         const res = await fetch('/api/documents');
         if (!res.ok) throw await res.json();
         docs = await res.json();
-        document.getElementById('documents').innerHTML = docs.map(d =>
-          `<label><input type="checkbox" value="${d.id}" checked> ${d.corpus}/${d.name}</label>` +
-          (d.managed ? ` <button onclick="deleteDocument('${d.id}')">Delete</button>` : '') + '<br>').join('');
+        document.getElementById('documents').innerHTML = docs.map
+        const rows = document.createDocumentFragment();
+
+        for (const doc of docs) {
+          const label = document.createElement('label');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = doc.id;
+          checkbox.checked = true;
+          label.append(checkbox, ` ${doc.corpus}/${doc.name}`);
+          rows.append(label);
+
+          if (doc.managed) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Delete';
+            button.addEventListener('click', () => deleteDocument(doc.id));
+            rows.append(' ', button);
+          }
+
+          rows.append(document.createElement('br'));
+        }
       } catch (err) {
         showError(err.detail || err);
       }
