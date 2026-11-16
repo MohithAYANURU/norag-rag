@@ -163,7 +163,6 @@
         const res = await fetch('/api/documents');
         if (!res.ok) throw await res.json();
         docs = await res.json();
-        document.getElementById('documents').innerHTML = docs.map
         const rows = document.createDocumentFragment();
 
         for (const doc of docs) {
@@ -185,6 +184,8 @@
 
           rows.append(document.createElement('br'));
         }
+
+        document.getElementById('documents').replaceChildren(rows);
       } catch (err) {
         showError(err.detail || err);
       }
