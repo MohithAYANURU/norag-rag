@@ -1,6 +1,8 @@
 import json
+import os
 import time
 import uuid
+from math import isfinite
 from pathlib import Path
 from typing import Any
 from privacy import redact_pii
@@ -41,6 +43,28 @@ class Trace:
         return self.trace_id
 
 
+def estimate_cost_usd(
+    prompt_tokens: int | None, completion_tokens: int | None
+) -> float | None:
+    if prompt_tokens is None or completion_tokens is None:
+        return None
+
+    try:
+        input_rate = float(os.getenv("LLM_INPUT_USD_PER_1M", ""))
+        output_rate = float(os.getenv("LLM_OUTPUT_USD_PER_1M", ""))
+    except ValueError:
+        return None
+
+    if not all(isfinite(rate) and rate >= 0 for rate in (input_rate, output_rate)):
+        return None
+
+    estimate = (
+        (prompt_tokens / 1_000_000) * input_rate
+        + (completion_tokens / 1_000_000) * output_rate
+    )
+    return estimate if isfinite(estimate) else None
+
+
 class Span:
     def __init__(self, trace: Trace, name: str, metadata: dict):
         self.trace = trace
@@ -69,6 +93,10 @@ class Span:
 
         for field in ("prompt_tokens", "completion_tokens", "total_tokens"):
             self.metadata[field] = getattr(usage, field, None)
+
+        self.metadata["cost_usd"] = estimate_cost_usd(
+            self.metadata["prompt_tokens"], self.metadata["completion_tokens"]
+        )
 
 
 TRACE_VIEW_FIELDS = {

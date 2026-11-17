@@ -551,8 +551,14 @@
         let msg = `Trace ID: ${traceData.trace_id}\nTotal Time: ${traceData.duration_ms}ms\n\n`;
         traceData.spans.forEach(span => {
           msg += `[${span.name}] - ${span.duration_ms}ms\n`;
-          if (span.metadata.total_tokens) msg += `  Tokens: ${span.metadata.total_tokens}\n`;
-          if (span.metadata.chunks_retrieved) msg += `  Chunks Found: ${span.metadata.chunks_retrieved}\n`;
+          const { model, total_tokens, cost_usd, chunks_retrieved } = span.metadata;
+          if (model) {
+            msg += `  Tokens: ${total_tokens ?? 'Unavailable'}\n`;
+            const cost = cost_usd == null ? 'Unavailable'
+              : cost_usd === 0 ? '$0.00' : `$${cost_usd.toFixed(8)}`;
+            msg += `  Estimated cost: ${cost}\n`;
+          }
+          if (chunks_retrieved != null) msg += `  Chunks Found: ${chunks_retrieved}\n`;
         });
 
         alert(msg);

@@ -95,7 +95,11 @@ the provider for scanning or answer generation. Original source files are
 not rewritten.
 
 Generation and indexing spans are written locally to `traces.jsonl`. The file
-is ignored by Git.
+is ignored by Git. Search traces include the token counts reported by the
+provider. To show an estimated cost, set `LLM_INPUT_USD_PER_1M` and
+`LLM_OUTPUT_USD_PER_1M` in `.env` to the USD rates per million tokens for your
+configured model. When either rate or token count is missing, cost is shown as
+unavailable.
 
 ## Run retrieval evaluation
 
