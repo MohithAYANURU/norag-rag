@@ -51,8 +51,7 @@ Open [localhost:8000](http://127.0.0.1:8000/). The module is still called
 
 - **Ask:** Select one or more documents and ask a question. Expand **Advanced
   Retrieval Settings** to adjust chunk size, overlap, top-k, or the retrievers.
-  Dense and BM25 are enabled by default; the optional concept graph uses
-  `graph_kestrel.json`.
+  Dense and BM25 are enabled by default.
 - **Answer style:** Choose balanced, concise, detailed, or bullet points.
   Successful exchanges are kept in the page's memory for follow-up questions.
   Reload the page to start a fresh conversation.
@@ -65,6 +64,23 @@ The bundled sources are in `docs/`. To use the course Kestrel corpus, unpack
 `kestrel-kb` alongside this repository so that `../kestrel-kb/docs/` contains
 the source files and `../kestrel-kb/eval/questions.starter.jsonl` exists for
 the browser's **Evaluate Kestrel** button.
+
+## Build and use a concept graph
+
+1. Select a small document or upload a short excerpt. Uncheck any other documents.
+2. Open **Advanced Retrieval Settings** and click **Build graph**.
+3. When **Graph ready** appears, enable **Concept graph** and ask a question
+   without changing the selected documents, chunk size, or overlap.
+
+For a quick test, upload `graph-demo.txt` with the text "Paris is the capital of
+France. France is a country in Europe." Select only that file, build the graph,
+and ask "What is the capital of France?"
+
+A new build is limited to 50 chunks and makes one model call per chunk. If the
+selection is too large, select fewer documents or use a shorter excerpt.
+Graphs are saved locally in `graph_store/` and reused when the selected
+documents, their contents, chunk size, and overlap match. If any of those
+change, build the matching graph or turn off **Concept graph** before asking.
 
 ## Upload checks, redaction, and traces
 
