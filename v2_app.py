@@ -21,7 +21,7 @@ from fastapi.responses import HTMLResponse
 from openai import OpenAI, OpenAIError
 from pydantic import BaseModel, Field, ValidationError
 from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
-from tracer import Trace, read_trace
+from tracer import Trace, read_trace, Span
 from threading import Lock, Timer
 from time import monotonic
 from uuid import uuid4, UUID
@@ -436,10 +436,13 @@ def _history_text(history: list | None) -> str:
     )
 
 
-def rewrite_follow_up(question: str, history: list | None) -> str:
+def rewrite_follow_up(
+    question: str, history: list | None, *, span: Span | None = None
+) -> str:
     """Turn a conversational follow-up into a standalone retrieval query."""
     if not history:
         return question
+
 
     client, model = _llm_client()
     prompt = (
@@ -461,8 +464,12 @@ def rewrite_follow_up(question: str, history: list | None) -> str:
                 {"role": "user", "content": redact_pii(prompt)},
             ],
         )
+
     except OpenAIError as exc:
         raise HTTPException(503, "Follow-up query rewriting is unavailable") from exc
+
+    if span is not None:
+        span.record_model_usage(response, model)
 
     rewritten = response.choices[0].message.content if response.choices else None
     if not rewritten or not rewritten.strip():
@@ -536,6 +543,8 @@ def generate_answer(
     citations: list[Citation],
     style: Literal["balanced", "concise", "detailed", "bullet points"] = "balanced",
     history: list | None = None,
+    *,
+    span: Span | None = None,
 ) -> str:
     context = "\n\n---\n\n".join(
         f"[{citation.source} / {citation.chunk_id}]\n{citation.text}"
@@ -563,6 +572,8 @@ def generate_answer(
             {"role": "user", "content": redact_pii(prompt)},
         ],
     )
+    if span is not None:
+        span.record_model_usage(response, model)
     answer = response.choices[0].message.content
     if not answer:
         raise HTTPException(502, "LLM returned an empty answer")
@@ -856,8 +867,10 @@ def search(payload: SearchRequest):
             safe_history.append(redact_pii(str(turn)))
     trace = Trace("search_run")
     try:
-        with trace.add_span("rewrite_query", {"history_turns": len(safe_history)}):
-            retrieval_question = rewrite_follow_up(safe_question, safe_history)
+        with trace.add_span(
+            "rewrite_query", {"history_turns": len(safe_history)}
+        ) as span:
+            retrieval_question = rewrite_follow_up(safe_question, safe_history, span=span)
 
         with trace.add_span(
             "retrieval",
@@ -881,9 +894,9 @@ def search(payload: SearchRequest):
             with trace.add_span(
                 "generation",
                 {"style": payload.style, "history_turns": len(safe_history)},
-            ):
+            ) as span:
                 answer = generate_answer(
-                    safe_question, citations, payload.style, safe_history
+                    safe_question, citations, payload.style, safe_history, span=span
                 )
     finally:
         trace.finalize()

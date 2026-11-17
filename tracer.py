@@ -63,6 +63,13 @@ class Span:
             }
         )
 
+    def record_model_usage(self, response: Any, model: str) -> None:
+        self.metadata["model"] = getattr(response, "model", None) or model
+        usage = getattr(response, "usage", None)
+
+        for field in ("prompt_tokens", "completion_tokens", "total_tokens"):
+            self.metadata[field] = getattr(usage, field, None)
+
 
 TRACE_VIEW_FIELDS = {
     "chunk_count",
