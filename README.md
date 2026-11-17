@@ -51,11 +51,14 @@ Open [localhost:8000](http://127.0.0.1:8000/). The module is still called
 
 - **Ask:** Select one or more documents and ask a question. Expand **Advanced
   Retrieval Settings** to adjust chunk size, overlap, top-k, or the retrievers.
-  Dense and BM25 are enabled by default; the optional concept graph uses
-  `graph_kestrel.json`.
-- **Answer style:** Choose balanced, concise, detailed, or bullet points.
-  Successful exchanges are kept in the page's memory for follow-up questions.
-  Reload the page to start a fresh conversation.
+  Dense and BM25 are enabled by default.
+- **Answer style and conversation:** Choose balanced, concise, detailed, or
+  bullet points. Successful exchanges stay in the page's memory so follow-ups
+  can be rewritten as standalone search queries. Suggested questions fill the
+  question box so you can edit them before asking. Reload to start a fresh
+  conversation.
+- **Source glossary:** Open the collapsible glossary to see terms and their
+  definitions from the selected documents.
 - **Document Management & Evaluation:** Add a document by entering a filename
   and its text. Use a `.txt` or `.md` extension so it appears in the source list.
 - **Words Explorer:** Look up a word or see which words in a question appear
@@ -65,6 +68,26 @@ The bundled sources are in `docs/`. To use the course Kestrel corpus, unpack
 `kestrel-kb` alongside this repository so that `../kestrel-kb/docs/` contains
 the source files and `../kestrel-kb/eval/questions.starter.jsonl` exists for
 the browser's **Evaluate Kestrel** button.
+
+## Build and use a concept graph
+
+1. Select a small document or upload a short excerpt. Uncheck any other documents.
+2. Open **Advanced Retrieval Settings** and click **Build graph**.
+3. When **Graph ready** appears, open the concept explorer in **List** or
+   **Graph** view. Select a concept and expand a link to read its source passage.
+   **Ask about this concept** drafts a question you can edit before submitting.
+4. To use the graph for search, enable **Concept graph** and ask a question
+   with the same documents, chunk size, and overlap.
+
+For a quick test, upload `graph-demo.txt` with the text "Paris is the capital of
+France. France is a country in Europe." Select only that file, build the graph,
+and ask "What is the capital of France?"
+
+A new build is limited to 50 chunks and makes one model call per chunk. If the
+selection is too large, select fewer documents or use a shorter excerpt.
+Graphs are saved locally in `graph_store/` and reused when the selected
+documents, their contents, chunk size, and overlap match. If any of those
+change, build the matching graph or turn off **Concept graph** before asking.
 
 ## Upload checks, redaction, and traces
 
@@ -78,8 +101,29 @@ phone numbers in questions, conversation history, and document text sent to
 the provider for scanning or answer generation. Original source files are
 not rewritten.
 
-Generation and indexing spans are written locally to `traces.jsonl`. The file
-is ignored by Git.
+Traces are saved locally in `traces.jsonl`, which is ignored by Git.
+
+- After an answer, click **Trace Details** to see query rewriting, retrieval,
+  and generation timings. Model calls include token counts when the provider
+  reports them. The first question skips the rewrite call.
+- After adding a document or choosing **Index anyway**, open **Document
+  Management & Evaluation** and click **Indexing Trace** to see the save,
+  chunking, and embedding steps for the latest successful upload.
+
+To show an estimated cost in search traces, set `LLM_INPUT_USD_PER_1M` and
+`LLM_OUTPUT_USD_PER_1M` in `.env` to your model's input and output rates in USD
+per million tokens. Restart the app after changing the rates. If either rate
+or token count is missing, the estimate is shown as **Unavailable**.
+
+## Quick verification
+
+1. Add the short demo document above and open **Indexing Trace** to check the
+   save, chunking, and embedding steps.
+2. Select only that document, build its graph, and confirm that a link opens
+   the same source passage in both **List** and **Graph** view.
+3. Ask the demo question and follow with "Which continent is that country in?" Open
+   **Trace Details** after each answer. Check the timings and token counts;
+   with rates configured, check that the model calls show an estimated cost.
 
 ## Run retrieval evaluation
 

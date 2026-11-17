@@ -31,3 +31,4 @@ future/
 user_docs/
 traces.jsonl
 local/
+graph_store/

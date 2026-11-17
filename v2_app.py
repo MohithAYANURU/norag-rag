@@ -21,11 +21,12 @@ from fastapi.responses import HTMLResponse
 from openai import OpenAI, OpenAIError
 from pydantic import BaseModel, Field, ValidationError
 from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
-from tracer import Trace
+from tracer import Trace, read_trace, Span
 from threading import Lock, Timer
 from time import monotonic
-from uuid import uuid4
+from uuid import uuid4, UUID
 from llm_config import get_llm_config
+from build_graph import build_graph_from_chunks
 
 load_dotenv()
 
@@ -34,7 +35,8 @@ CORPUS_ROOT = ROOT.parent / "kestrel-kb" / "docs"
 OWN_ROOT = ROOT / "docs"
 USER_ROOT = ROOT / "user_docs"
 DB_ROOT = ROOT / "chroma_db_v2"
-GRAPH_FILE = ROOT / "graph_kestrel.json"
+GRAPH_STORE = ROOT / "graph_store"
+MAX_GRAPH_CHUNKS = 50
 WEB_ROOT = ROOT / "web"
 DEFAULT_CHUNK_SIZE = 800
 DEFAULT_OVERLAP = 10
@@ -43,11 +45,41 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*")
 HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.+?)\s*$", re.MULTILINE)
 STOP_WORDS = {
-    "about", "after", "again", "also", "and", "are", "because", "been",
-    "before", "being", "between", "could", "does", "from", "have", "into",
-    "more", "most", "only", "other", "should", "that", "their", "these",
-    "they", "this", "those", "using", "what", "when", "where", "which",
-    "with", "would", "your",
+    "about",
+    "after",
+    "again",
+    "also",
+    "and",
+    "are",
+    "because",
+    "been",
+    "before",
+    "being",
+    "between",
+    "could",
+    "does",
+    "from",
+    "have",
+    "into",
+    "more",
+    "most",
+    "only",
+    "other",
+    "should",
+    "that",
+    "their",
+    "these",
+    "they",
+    "this",
+    "those",
+    "using",
+    "what",
+    "when",
+    "where",
+    "which",
+    "with",
+    "would",
+    "your",
 }
 
 
@@ -64,6 +96,12 @@ class DocumentCreate(BaseModel):
 QUARANTINE_TTL_SECONDS = 15 * 60
 pending_uploads: dict[str, tuple[DocumentCreate, float]] = {}
 pending_lock = Lock()
+
+
+class GraphBuildRequest(BaseModel):
+    document_ids: list[str] = Field(min_length=1)
+    chunk_size: int = Field(DEFAULT_CHUNK_SIZE, ge=100, le=5000)
+    overlap_percent: int = Field(DEFAULT_OVERLAP, ge=0, le=80)
 
 
 def expire_upload(review_id: str) -> None:
@@ -119,6 +157,10 @@ class Citation(BaseModel):
     distance: float | None = None
 
 
+class GraphBuildResponse(ConceptGraph):
+    sources: dict[str, Citation]
+
+
 class SearchResponse(BaseModel):
     answer: str
     citations: list[Citation]
@@ -127,6 +169,7 @@ class SearchResponse(BaseModel):
     suggested_questions: list[str] = Field(default_factory=list)
     configuration: dict[str, Any]
     graph_path: dict[str, Any] | None = None
+    trace_id: str
 
 
 class WordsRequest(BaseModel):
@@ -272,6 +315,24 @@ def _chunks(
     return chunks
 
 
+def _graph_inputs(document_ids, chunk_size, overlap_percent):
+    selected = sorted(set(document_ids))
+    items = _chunks(selected, chunk_size, overlap_percent)
+    passages = []
+    chunk_map = {}
+
+    for item in items:
+        index = item["chunk_id"].rsplit(":", 1)[1]
+        graph_chunk_id = f"{item['document_id']}:{index}"
+
+        passages.append((graph_chunk_id, item["text"]))
+        chunk_map[graph_chunk_id] = item
+
+    data = json.dumps([selected, chunk_size, overlap_percent, passages])
+    key = hashlib.sha256(data.encode("utf-8")).hexdigest()
+    return GRAPH_STORE / f"{key}.json", passages, chunk_map
+
+
 def _to_citations(results: list[tuple[dict[str, Any], float]]) -> list[Citation]:
     return [
         Citation(
@@ -299,7 +360,22 @@ def retrieve(
     selected = document_ids or list(docs)
     if not selected:
         raise HTTPException(422, "No documents are available")
-    chunks = _chunks(selected, chunk_size, overlap)
+
+    graph_data = None
+    graph_chunks = {}
+
+    if graph:
+        path, _, graph_chunks = _graph_inputs(selected, chunk_size, overlap)
+        if not path.is_file():
+            raise HTTPException(
+                status_code=409,
+                detail="Build a graph for these documents and chunk settings, or turn off Concept graph.",
+            )
+        graph_data = ConceptGraph.load(path)
+        chunks = list(graph_chunks.values())
+    else:
+        chunks = _chunks(selected, chunk_size, overlap)
+
     ranked_lists = []
     if dense:
         collection = _collection(selected, chunk_size, overlap)
@@ -327,12 +403,12 @@ def retrieve(
     if bm25:
         index = BM25Index(chunks)
         ranked_lists.append(index.search(question, top_k))
+
     graph_path = None
-    if graph:
-        graph_data = ConceptGraph.load(GRAPH_FILE)
-        chunk_map = {item["chunk_id"]: item for item in chunks}
-        graph_results, graph_path = graph_data.retrieve(question, chunk_map, top_k)
+    if graph_data is not None:
+        graph_results, graph_path = graph_data.retrieve(question, graph_chunks, top_k)
         ranked_lists.append(graph_results)
+
     if not ranked_lists:
         raise HTTPException(422, "Enable at least one retriever")
     citations = _to_citations(reciprocal_rank_fusion(ranked_lists, top_k))
@@ -360,10 +436,13 @@ def _history_text(history: list | None) -> str:
     )
 
 
-def rewrite_follow_up(question: str, history: list | None) -> str:
+def rewrite_follow_up(
+    question: str, history: list | None, *, span: Span | None = None
+) -> str:
     """Turn a conversational follow-up into a standalone retrieval query."""
     if not history:
         return question
+
 
     client, model = _llm_client()
     prompt = (
@@ -385,8 +464,12 @@ def rewrite_follow_up(question: str, history: list | None) -> str:
                 {"role": "user", "content": redact_pii(prompt)},
             ],
         )
+
     except OpenAIError as exc:
         raise HTTPException(503, "Follow-up query rewriting is unavailable") from exc
+
+    if span is not None:
+        span.record_model_usage(response, model)
 
     rewritten = response.choices[0].message.content if response.choices else None
     if not rewritten or not rewritten.strip():
@@ -460,6 +543,8 @@ def generate_answer(
     citations: list[Citation],
     style: Literal["balanced", "concise", "detailed", "bullet points"] = "balanced",
     history: list | None = None,
+    *,
+    span: Span | None = None,
 ) -> str:
     context = "\n\n---\n\n".join(
         f"[{citation.source} / {citation.chunk_id}]\n{citation.text}"
@@ -487,6 +572,8 @@ def generate_answer(
             {"role": "user", "content": redact_pii(prompt)},
         ],
     )
+    if span is not None:
+        span.record_model_usage(response, model)
     answer = response.choices[0].message.content
     if not answer:
         raise HTTPException(502, "LLM returned an empty answer")
@@ -595,6 +682,62 @@ def word_analysis(
 @app.get("/", response_class=HTMLResponse)
 def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
+
+
+def _graph_build_response(
+    graph: ConceptGraph, chunk_map: dict[str, dict[str, Any]]
+) -> GraphBuildResponse:
+    linked_ids = {
+        chunk_id for relation in graph.relations for chunk_id in relation.chunk_ids
+    }
+    return GraphBuildResponse(
+        entities=graph.entities,
+        relations=graph.relations,
+        sources={
+            chunk_id: Citation(**chunk_map[chunk_id])
+            for chunk_id in sorted(linked_ids)
+            if chunk_id in chunk_map
+        },
+    )
+
+
+@app.post("/api/graph/build", response_model=GraphBuildResponse)
+def build_selected_graph(payload: GraphBuildRequest):
+    path, passages, chunk_map = _graph_inputs(
+        payload.document_ids, payload.chunk_size, payload.overlap_percent
+    )
+
+    if path.is_file():
+        return _graph_build_response(ConceptGraph.load(path), chunk_map)
+
+    if len(passages) > MAX_GRAPH_CHUNKS:
+        raise HTTPException(
+            422, "Select fewer documents: a graph build is limited to 50 chunks."
+        )
+
+    client, model = _llm_client()
+    try:
+        graph = build_graph_from_chunks(client, model, passages)
+    except (OpenAIError, ValueError, RuntimeError) as exc:
+        raise HTTPException(502, "Could not build the concept graph.") from exc
+
+    GRAPH_STORE.mkdir(exist_ok=True)
+    temporary = path.with_suffix(f".{uuid4().hex}.tmp")
+    try:
+        temporary.write_text(graph.model_dump_json(indent=2), encoding="utf-8")
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+    return _graph_build_response(graph, chunk_map)
+
+
+@app.get("/api/traces/{trace_id}")
+def get_trace(trace_id: UUID):
+    trace = read_trace(str(trace_id))
+    if trace is None:
+        raise HTTPException(status_code=404, detail="Trace not found.")
+    return trace
 
 
 @app.get("/api/documents")
@@ -722,37 +865,41 @@ def search(payload: SearchRequest):
             )
         else:
             safe_history.append(redact_pii(str(turn)))
-    retrieval_question = rewrite_follow_up(safe_question, safe_history)
-    citations, graph_path = retrieve(
-        retrieval_question,
-        payload.document_ids,
-        payload.chunk_size,
-        payload.overlap_percent,
-        payload.top_k,
-        payload.dense,
-        payload.bm25,
-        payload.graph,
-    )
-    if payload.generate:
-        trace = Trace("search_run")
-        try:
+    trace = Trace("search_run")
+    try:
+        with trace.add_span(
+            "rewrite_query", {"history_turns": len(safe_history)}
+        ) as span:
+            retrieval_question = rewrite_follow_up(safe_question, safe_history, span=span)
+
+        with trace.add_span(
+            "retrieval",
+            {"dense": payload.dense, "bm25": payload.bm25, "graph": payload.graph},
+        ) as span:
+            citations, graph_path = retrieve(
+                retrieval_question,
+                payload.document_ids,
+                payload.chunk_size,
+                payload.overlap_percent,
+                payload.top_k,
+                payload.dense,
+                payload.bm25,
+                payload.graph,
+            )
+            span.metadata["chunks_retrieved"] = len(citations)
+            span.metadata["chunk_ids"] = [citation.chunk_id for citation in citations]
+
+        answer = ""
+        if payload.generate:
             with trace.add_span(
                 "generation",
-                {
-                    "style": payload.style,
-                    "history_turns": len(payload.history),
-                },
-            ):
+                {"style": payload.style, "history_turns": len(safe_history)},
+            ) as span:
                 answer = generate_answer(
-                    safe_question,
-                    citations,
-                    payload.style,
-                    safe_history,
+                    safe_question, citations, payload.style, safe_history, span=span
                 )
-        finally:
-            trace.finalize()
-    else:
-        answer = ""
+    finally:
+        trace.finalize()
 
     return SearchResponse(
         answer=answer,
@@ -771,6 +918,7 @@ def search(payload: SearchRequest):
             "fusion": "reciprocal_rank_fusion",
         },
         graph_path=graph_path,
+        trace_id=trace.trace_id
     )
 
 

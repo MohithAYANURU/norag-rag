@@ -111,6 +111,41 @@ terms that occur in many chunks; this is especially useful for questions using
   documents, invalid parameters, and empty LLM responses.
 
 
+## V4 integration and verification
+
+- **Search and indexing traces.** Search creates one trace for query rewriting,
+  retrieval, and generation when enabled. Successful answers return a trace ID.
+  Clean uploads and approved uploads also return a trace ID after indexing.
+  Both buttons use `GET /api/traces/{trace_id}`, which returns the matching
+  record with selected metadata rather than the full raw log.
+- **Model calls and cost.** An initial generated answer makes one model call.
+  A follow-up with history makes one additional call to rewrite the question
+  before retrieval. Changing the answer style and opening the glossary do not
+  add a call. The trace stores provider-reported token counts for both search
+  model steps and estimates USD cost from the configured input and output rates.
+  The estimate stays unavailable if usage or rates are missing.
+- **Concept explorer.** Graphs are built from selected documents, including
+  uploads, with a limit of 50 chunks per build. The app reuses a saved graph
+  when the selection, document contents, and chunk settings match. List and
+  Graph views share a details panel with relation sources. The app can use
+  the same saved graph for retrieval.
+
+**Checks performed.** Tests with mocked model responses checked first questions,
+follow-ups, retrieval-only requests, and a retrieval failure. Each request
+wrote one trace; successful responses opened the matching record. The tests
+also checked trace field filtering, the indexing viewer for normal and
+approved uploads, missing usage, and zero rates. With sample rates of USD 2
+and USD 8 per million tokens, 1,000 input and 250 output tokens produced an
+estimate of USD 0.004.
+
+Graph checks covered cache reuse, source lookup, a missing graph for changed
+chunk settings, and the shared details panel in both views. One saved graph
+and one indexing record with all three indexing steps were also found in the
+local files. The final browser walkthrough with live search token counts and
+cost was not verified in these checks. The [README](README.md#quick-verification)
+gives the steps to reproduce it. The saved retrieval results above were not
+rerun for this verification.
+
 ## V4 Decision Log
 
 ### Part A: Observability (BUI Minh Nhat)
@@ -180,11 +215,11 @@ can quote an attack without telling the app to follow it. The tradeoff is an
 extra provider call on upload and a possibility of misclassification.
 
 Before saving or indexing an upload, the server masks matching contact data
-and sends the text to Gemini as data to inspect. The response must contain
-a boolean verdict and, for flagged text, a short excerpt. The server checks
-that the excerpt appears in the text actually sent. A missing or invalid
-verdict, an invalid excerpt for a flagged document, or a provider failure
-returns HTTP 503 and stops the upload.
+and sends the text to the configured model as data to inspect. The response
+contains a boolean verdict and, for flagged text, a short excerpt. The server
+checks that a flagged excerpt appears in the text it sent. A missing or
+invalid verdict, an invalid excerpt on a flagged upload, or a provider
+failure returns HTTP 503 and stops the upload.
 
 Flagged uploads stay in server memory for up to 15 minutes and are not
 searchable during review. The panel shows the verified excerpt as plain
@@ -203,16 +238,16 @@ messages for scanning and answer generation, including retrieved excerpts.
 New traces mask matching strings before writing to disk and record exception
 types instead of raw error messages. Original documents and the local source
 views are unchanged. The patterns do not cover names, all phone formats, or
-obfuscated data. The custom style string in a direct API request is outside
-the current prompt redaction, and old traces are not rewritten.
+obfuscated data. The API accepts only the four predefined answer styles.
+Old traces are not rewritten.
 
 **Changes to shared code.**
 
-- **Part A (observability):** I added redaction at the point where traces
-  are written and kept only the exception type on failures. I kept the
-  indexing spans when extracting the indexer and preserved the indexing
-  trace ID in the combined upload handler. This work did not add a
-  trace-reading API or a trace ID to the search response.
+- **Part A (observability):** I added redaction when traces are written and
+  kept only the exception type on failures. I preserved the indexing spans
+  and trace ID when combining the upload handlers. The later integration
+  added the trace reader, connected both viewer buttons, and included the
+  search spans, model usage, and cost estimates described above.
 - **Part B (conversation mode):** I kept the existing answer style controls
   and history format. I added redaction of previous questions and answers
   before that history is sent to the provider.
