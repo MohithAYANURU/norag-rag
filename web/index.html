@@ -107,6 +107,12 @@
       <p id="graphBuildStatus" role="status"></p>
     </details>
 
+    <section id="graphExplorer" hidden>
+      <h3>Explore concept graph</h3>
+      <div id="conceptList"></div>
+      <div id="conceptDetails" aria-live="polite"></div>
+    </section>
+
     <button onclick="ask()"
       style="background: #2196f3; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Ask
       Question</button>
@@ -197,7 +203,61 @@
 
     function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
 
+    function renderGraphExplorer(graph) {
+      const panel = document.getElementById('graphExplorer');
+      const list = document.getElementById('conceptList');
+      const details = document.getElementById('conceptDetails');
+
+      list.replaceChildren();
+      details.textContent = graph.entities.length
+        ? 'Select a concept to see its links.'
+        : 'No concepts were found.';
+
+      for (const entity of graph.entities) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = entity.name;
+        button.addEventListener('click', () => renderConceptDetails(graph, entity.id));
+        list.append(button);
+      }
+
+      panel.hidden = false;
+    }
+
+    function renderConceptDetails(graph, conceptId) {
+      const details = document.getElementById('conceptDetails');
+      const names = new Map(graph.entities.map(entity => [entity.id, entity.name]));
+      const title = document.createElement('h4');
+      title.textContent = names.get(conceptId) || conceptId;
+      details.replaceChildren(title);
+
+      const links = graph.relations.filter(link =>
+        link.subject === conceptId || link.object === conceptId
+      );
+      if (!links.length) details.append('No links for this concept.');
+
+      for (const link of links) {
+        const row = document.createElement('details');
+        const label = document.createElement('summary');
+        const subject = names.get(link.subject) || link.subject;
+        const object = names.get(link.object) || link.object;
+        label.textContent = [subject, link.predicate, object].join(' ');
+        row.append(label);
+
+        const sources = link.chunk_ids.map(id => graph.sources[id]).filter(Boolean);
+        if (!sources.length) row.append('No source passage is available.');
+
+        for (const source of sources) {
+          const passage = document.createElement('p');
+          passage.textContent = `${source.source} (${source.chunk_id}): ${source.text}`;
+          row.append(passage);
+        }
+        details.append(row);
+      }
+    }
+
     async function buildGraph() {
+      document.getElementById('graphExplorer').hidden = true;
       hideError();
       const button = document.getElementById('buildGraphButton');
       const status = document.getElementById('graphBuildStatus');
@@ -229,6 +289,7 @@
           return;
         }
         status.textContent = `Graph ready: ${data.entities.length} concepts, ${data.relations.length} links.`;
+        renderGraphExplorer(data);
       } catch (err) {
         status.textContent = '';
         showError(err.message || 'Could not build the graph.');
