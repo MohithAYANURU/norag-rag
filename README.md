@@ -44,14 +44,14 @@ are rejected.
 .\.venv\Scripts\python.exe -m uvicorn v2_app:app --reload --port 8000
 ```
 
-Open [localhost:8000](http://127.0.0.1:8000/). The module is still called
-`v2_app.py` and the page heading still reads **RAG V2** on the V4 branch.
+Open [localhost:8000](http://127.0.0.1:8000/). The workspace opens in dark
+mode; use the theme button at the top to switch to light mode.
 
 ## Use the app
 
-- **Ask:** Select one or more documents and ask a question. Expand **Advanced
-  Retrieval Settings** to adjust chunk size, overlap, top-k, or the retrievers.
-  Dense and BM25 are enabled by default.
+- **Ask:** Select one or more documents in **Documents**, then enter a question.
+  Open **Retrieval settings** to adjust chunk size, overlap, top-k, or the
+  retrievers. Dense and BM25 are enabled by default.
 - **Answer style and conversation:** Choose balanced, concise, detailed, or
   bullet points. Successful exchanges stay in the page's memory so follow-ups
   can be rewritten as standalone search queries. Suggested questions fill the
@@ -59,10 +59,10 @@ Open [localhost:8000](http://127.0.0.1:8000/). The module is still called
   conversation.
 - **Source glossary:** Open the collapsible glossary to see terms and their
   definitions from the selected documents.
-- **Document Management & Evaluation:** Add a document by entering a filename
+- **Add a document:** Add a document by entering a filename
   and its text. Use a `.txt` or `.md` extension so it appears in the source list.
-- **Words Explorer:** Look up a word or see which words in a question appear
-  in the selected documents and chunks.
+- **Evaluation and tools:** Run a corpus evaluation or open **Words Explorer**
+  to look up terms in the selected documents.
 
 The bundled sources are in `docs/`. To use the course Kestrel corpus, unpack
 `kestrel-kb` alongside this repository so that `../kestrel-kb/docs/` contains
@@ -72,7 +72,7 @@ the browser's **Evaluate Kestrel** button.
 ## Build and use a concept graph
 
 1. Select a small document or upload a short excerpt. Uncheck any other documents.
-2. Open **Advanced Retrieval Settings** and click **Build graph**.
+2. Open **Retrieval settings** in **Documents** and click **Build graph**.
 3. When **Graph ready** appears, open the concept explorer in **List** or
    **Graph** view. Select a concept and expand a link to read its source passage.
    **Ask about this concept** drafts a question you can edit before submitting.
@@ -106,8 +106,8 @@ Traces are saved locally in `traces.jsonl`, which is ignored by Git.
 - After an answer, click **Trace Details** to see query rewriting, retrieval,
   and generation timings. Model calls include token counts when the provider
   reports them. The first question skips the rewrite call.
-- After adding a document or choosing **Index anyway**, open **Document
-  Management & Evaluation** and click **Indexing Trace** to see the save,
+- After adding a document or choosing **Index anyway**, click **Indexing Trace**
+  in **Add a document** to see the save,
   chunking, and embedding steps for the latest successful upload.
 
 To show an estimated cost in search traces, set `LLM_INPUT_USD_PER_1M` and

@@ -4,169 +4,359 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RAG V2</title>
+  <title>RAG V4</title>
   <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101620;
+      --panel: #172131;
+      --surface: #1e2b3e;
+      --line: #34455e;
+      --text: #eef3fa;
+      --muted: #aab9cd;
+      --accent: #a4caff;
+      --primary: #a4caff;
+      --primary-text: #12213d;
+      --focus: #7fbaff;
+      --danger: #ffb2bb;
+      --danger-bg: #352431;
+    }
+
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #eef2f8;
+      --panel: #ffffff;
+      --surface: #f1f5fb;
+      --line: #c8d4e3;
+      --text: #172537;
+      --muted: #4d6079;
+      --accent: #154da3;
+      --primary: #194eaa;
+      --primary-text: #ffffff;
+      --focus: #145fbf;
+      --danger: #96283a;
+      --danger-bg: #fff0f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
     body {
-      font: 16px system-ui;
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+      margin: 0 auto;
+      max-width: 83rem;
+      padding: 1.75rem clamp(1rem, 4vw, 3rem) 3rem;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 system-ui, sans-serif;
     }
 
-    textarea,
-    input,
-    select,
-    button {
-      font: inherit;
-      margin: .25rem 0;
-      padding: .5rem;
-    }
+    h1, h2, h3, h4, p { margin: 0; }
+    h1 { font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.15; }
+    h2 { font-size: 1.16rem; }
+    h3 { font-size: 1rem; }
+    h4 { font-size: .98rem; }
+    p { overflow-wrap: anywhere; }
+    .muted { color: var(--muted); font-size: .9rem; }
+    .page-header p { margin-top: .35rem; }
 
-    textarea {
-      width: 100%;
-      min-height: 7rem;
-    }
-
-    .row {
+    .page-header, .panel-heading, .card-heading, .question-actions {
       display: flex;
-      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
       flex-wrap: wrap;
     }
 
-    .card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1rem;
-      margin: 1rem 0;
+    .page-header { margin-bottom: 1.15rem; }
+    .workspace {
+      display: grid;
+      grid-template-areas: "ask sources" "tools tools";
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 21rem);
+      gap: 1rem;
+      align-items: start;
     }
 
-    pre {
-      white-space: pre-wrap;
-      background: #f6f6f6;
-      padding: 1rem;
+    .ask-column { grid-area: ask; }
+    .source-column { grid-area: sources; }
+    .tools { grid-area: tools; }
+    .stack { display: grid; min-width: 0; gap: 1rem; }
+    .panel, .card {
+      min-width: 0;
+      padding: 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
     }
+
+    .card { background: var(--surface); }
+    .panel > :where(p, textarea, .question-actions, .answer, .graph-explorer, .documents,
+      .button-row, .settings, .form-fields, .glossary, .tools-body, .notebook-list) {
+      margin-top: .75rem;
+    }
+
+    textarea, input, select, button { font: inherit; }
+    textarea, input:not([type="checkbox"]), select {
+      min-width: 0;
+      padding: .48rem .65rem;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    textarea { display: block; width: 100%; min-height: 6rem; resize: vertical; }
+    ::placeholder { color: var(--muted); }
+    input[type="checkbox"] { margin: 0; flex: 0 0 auto; accent-color: var(--accent); }
+
+    button {
+      padding: .45rem .75rem;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    button:hover { border-color: var(--accent); }
+    button:disabled { cursor: wait; opacity: .65; }
+    .primary { background: var(--primary); color: var(--primary-text); border-color: var(--primary); font-weight: 650; }
+    .small-button { padding: .28rem .55rem; font-size: .83rem; }
+    .danger-button { color: var(--danger); }
+    .trace-btn { display: none; }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+    details > summary { cursor: pointer; font-weight: 650; }
+    details > summary::marker { color: var(--accent); }
+    details > summary h2 { display: inline; font-size: 1rem; }
+    .button-row, .style-control, .toggle-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    pre, .answer {
+      padding: .85rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      margin: .7rem 0 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    pre { max-height: 18rem; overflow: auto; font-size: .85rem; }
+    .answer { max-height: none; font: inherit; }
+    .answers-list:not(:empty), .notebook-list:not(:empty) {
+      display: grid;
+      gap: .7rem;
+      margin-top: .75rem;
+    }
+    .citation-chunk { display: block; margin: .3rem 0; }
+    .citation-card p, .evidence-passage { margin-top: .4rem; white-space: pre-wrap; }
+    .suggestions:not(:empty) { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin: .65rem 0; }
+    .graph-explorer { border-top: 1px solid var(--line); padding-top: .75rem; }
+    #conceptList { display: flex; flex-wrap: wrap; gap: .4rem; margin: .65rem 0; }
+    #conceptDetails > * + * { margin-top: .45rem; }
+    #conceptGraph svg { display: block; }
+    #conceptGraph text { fill: var(--text); }
+    #conceptGraph [role="button"]:focus-visible circle { stroke: var(--focus); stroke-width: 3px; }
+
+    .documents {
+      max-height: 18rem;
+      overflow-y: auto;
+      border-top: 1px solid var(--line);
+    }
+
+    .document-row {
+      display: flex;
+      gap: .45rem;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 2.65rem;
+      padding: .35rem .1rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .document-choice { display: flex; align-items: center; gap: .5rem; min-width: 0; overflow-wrap: anywhere; }
+    .settings { border-top: 1px solid var(--line); padding-top: .65rem; }
+    .setting-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; margin: .6rem 0; }
+    .setting-fields label { display: grid; gap: .18rem; color: var(--muted); font-size: .83rem; }
+    .setting-fields input, .form-fields input { width: 100%; }
+    .toggle-row label { display: inline-flex; align-items: center; gap: .32rem; }
+    .form-fields { display: grid; gap: .55rem; }
+    .form-fields label { display: grid; gap: .2rem; }
+    .glossary p { margin-top: .4rem; }
+    .tools-body { display: grid; gap: .8rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+    .tool-group > * + * { margin-top: .5rem; }
+    .note-label { display: block; margin-top: .65rem; font-size: .87rem; }
+    .note-label textarea { min-height: 3rem; margin-top: .3rem; }
+    .evidence-actions { margin-top: .55rem; text-align: right; }
 
     .error {
-      color: #d32f2f;
-      background-color: #ffebee;
-      border: 1px solid #ef5350;
-      padding: 1rem;
-      border-radius: 4px;
       display: none;
+      margin-bottom: .9rem;
+      padding: .7rem .9rem;
+      border: 1px solid var(--danger);
+      border-radius: 8px;
+      background: var(--danger-bg);
+      color: var(--danger);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    .trace-btn {
-      background-color: #e0e0e0;
-      color: #333;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 1rem;
-      display: none;
-    }
-
-    .trace-btn:hover {
-      background-color: #bdbdbd;
+    @media (max-width: 46rem) {
+      body { padding-top: 1rem; }
+      .workspace { grid-template-areas: "sources" "ask" "tools"; grid-template-columns: minmax(0, 1fr); }
+      .documents { max-height: 12rem; }
+      .tools-body { grid-template-columns: minmax(0, 1fr); }
+      .panel, .card { padding: .85rem; }
     }
   </style>
 </head>
 
 <body>
-  <h1>RAG V2</h1>
+  <header class="page-header">
+    <div>
+      <h1>RAG V4</h1>
+      <p class="muted">Ask questions across your documents and check the sources behind each answer.</p>
+    </div>
+    <button type="button" id="themeToggle" onclick="toggleTheme()">Light mode</button>
+  </header>
 
-  <div id="errorBox" class="error"></div>
+  <div id="errorBox" class="error" role="alert"></div>
 
-  <section class="card">
-    <h2>Ask</h2>
-    <textarea id="question" placeholder="Ask a question about the selected documents"></textarea>
-    <label for="style">Answer style</label>
-    <select id="style">
-      <option value="balanced">Balanced</option>
-      <option value="concise">Concise</option>
-      <option value="detailed">Detailed</option>
-      <option value="bullet points">Bullet points</option>
-    </select>
-    <details ontoggle="if (this.open) loadGlossary()">
-      <summary>Source glossary</summary>
-      <div id="glossary"></div>
-    </details>
-    <div id="documents"></div>
+  <main class="workspace">
+    <aside class="source-column stack" aria-label="Sources and settings">
+      <section class="panel" aria-labelledby="documentsTitle">
+        <div class="panel-heading">
+          <h2 id="documentsTitle">Documents</h2>
+          <span id="documentCount" class="muted" aria-live="polite"></span>
+        </div>
+        <p class="muted">Choose the sources for your question or graph.</p>
+        <div class="button-row">
+          <button class="small-button" type="button" onclick="setDocumentSelection(true)">Select all</button>
+          <button class="small-button" type="button" onclick="setDocumentSelection(false)">Clear selection</button>
+        </div>
+        <div id="documents" class="documents"></div>
 
-    <details>
-      <summary>Advanced Retrieval Settings</summary>
-      <div class="row" style="margin-top: 1rem;">
-        <label>Chunk size <input id="chunk" type="number" value="800" min="100"></label>
-        <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
-        <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
-        <label><input id="dense" type="checkbox" checked> Dense</label>
-        <label><input id="bm25" type="checkbox" checked> BM25</label>
-        <label><input id="graph" type="checkbox"> Concept graph</label>
+        <details class="settings">
+          <summary>Retrieval settings</summary>
+          <div class="setting-fields">
+            <label>Chunk size <input id="chunk" type="number" value="800" min="100" max="5000"></label>
+            <label>Overlap % <input id="overlap" type="number" value="10" min="0" max="80"></label>
+            <label>Top-k <input id="topk" type="number" value="5" min="1" max="20"></label>
+          </div>
+          <div class="toggle-row">
+            <label><input id="dense" type="checkbox" checked> Dense</label>
+            <label><input id="bm25" type="checkbox" checked> BM25</label>
+            <label><input id="graph" type="checkbox"> Concept graph</label>
+          </div>
+          <div class="button-row">
+            <button type="button" id="buildGraphButton" onclick="buildGraph()">Build graph</button>
+            <span id="graphBuildStatus" class="muted" role="status"></span>
+          </div>
+          <p class="muted">Build from a short selection, then enable Concept graph to use it in search.</p>
+        </details>
+      </section>
+
+      <details class="panel">
+        <summary><h2>Add a document</h2></summary>
+        <div class="form-fields">
+          <label>Filename <input id="newName" placeholder="notes.txt"></label>
+          <label>Document text <textarea id="newContent" placeholder="Paste the text to index"></textarea></label>
+        </div>
+        <div class="button-row">
+          <button type="button" onclick="addDocument()">Add document</button>
+          <button type="button" id="indexTraceBtn" class="trace-btn" onclick="showIndexTrace()">Indexing Trace</button>
+        </div>
+        <div id="quarantinePanel" hidden>
+          <p>This document was flagged and has not been indexed.</p>
+          <pre id="quarantineExcerpt"></pre>
+          <div class="button-row">
+            <button type="button" onclick="reviewUpload(true)">Index anyway</button>
+            <button type="button" onclick="reviewUpload(false)">Discard</button>
+          </div>
+        </div>
+      </details>
+    </aside>
+
+    <div class="ask-column stack">
+      <section class="panel" aria-labelledby="askTitle">
+        <h2 id="askTitle">Ask a question</h2>
+        <textarea id="question" aria-labelledby="askTitle" placeholder="What do the selected documents say about…"></textarea>
+        <div class="question-actions">
+          <div class="style-control">
+            <label for="style">Answer style</label>
+            <select id="style">
+              <option value="balanced">Balanced</option>
+              <option value="concise">Concise</option>
+              <option value="detailed">Detailed</option>
+              <option value="bullet points">Bullet points</option>
+            </select>
+          </div>
+          <button type="button" class="primary" onclick="ask()">Ask question</button>
+        </div>
+        <pre id="answer" class="answer" aria-live="polite" style="display: none;"></pre>
+        <div id="suggestions" class="suggestions"></div>
+        <button type="button" id="traceBtn" class="trace-btn small-button" onclick="showTrace()">Trace Details</button>
+        <div id="citations" class="answers-list"></div>
+
+        <section id="graphExplorer" class="graph-explorer" hidden>
+          <div class="panel-heading">
+            <h3>Explore concept graph</h3>
+            <div class="style-control">
+              <label for="conceptView">View</label>
+              <select id="conceptView" onchange="updateConceptView()">
+                <option value="list">List</option>
+                <option value="graph">Graph</option>
+              </select>
+            </div>
+          </div>
+          <div id="conceptList"></div>
+          <div id="conceptGraph" hidden></div>
+          <div id="conceptDetails" aria-live="polite"></div>
+        </section>
+
+        <details class="glossary" ontoggle="if (this.open) loadGlossary()">
+          <summary>Source glossary</summary>
+          <div id="glossary"></div>
+        </details>
+      </section>
+
+      <details class="panel" open>
+        <summary><h2>Evidence notebook</h2></summary>
+        <p class="muted">Save passages from citations, add notes, and export them as Markdown.</p>
+        <div class="button-row">
+          <button type="button" onclick="exportEvidenceToMarkdown()">Export Markdown</button>
+        </div>
+        <div id="notebookContainer" class="notebook-list"></div>
+      </details>
+    </div>
+
+    <details class="tools panel">
+      <summary><h2>Evaluation and tools</h2></summary>
+      <div class="tools-body">
+        <section class="tool-group">
+          <h3>Retrieval evaluation</h3>
+          <div class="button-row">
+            <button type="button" onclick="runEvaluation('kestrel')">Evaluate Kestrel</button>
+            <button type="button" onclick="runEvaluation('own')">Evaluate own corpus</button>
+          </div>
+          <pre id="evaluation"></pre>
+        </section>
+        <section class="tool-group">
+          <h3>Words Explorer</h3>
+          <div class="form-fields">
+            <label>Word <input id="word" placeholder="Example: warranty"></label>
+            <label>Or analyze a question <input id="wordQuestion" placeholder="Example: How long is the warranty?"></label>
+          </div>
+          <button type="button" onclick="words()">Explore</button>
+          <pre id="wordResult"></pre>
+        </section>
       </div>
-      <button type="button" id="buildGraphButton" onclick="buildGraph()">Build graph</button>
-      <p id="graphBuildStatus" role="status"></p>
     </details>
-
-    <section id="graphExplorer" hidden>
-      <h3>Explore concept graph</h3>
-      <label for="conceptView">View</label>
-      <select id="conceptView" onchange="updateConceptView()">
-        <option value="list">List</option>
-        <option value="graph">Graph</option>
-      </select>
-      <div id="conceptList"></div>
-      <div id="conceptGraph" hidden></div>
-      <div id="conceptDetails" aria-live="polite"></div>
-    </section>
-
-    <button onclick="ask()"
-      style="background: #2196f3; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Ask
-      Question</button>
-
-    <pre id="answer" style="display: none;"></pre>
-    <div id="suggestions"></div>
-    <button id="traceBtn" class="trace-btn" onclick="showTrace()">🔍 Trace Details</button>
-    <div id="citations"></div>
-  </section>
-
-  <details class="card" open>
-    <summary><h2>Evidence Notebook</h2></summary>
-    <p>Saved passages from your search citations. You can add notes, remove entries, or export them.</p>
-    <button type="button" onclick="exportEvidenceToMarkdown()" style="background: #4caf50; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Export Notebook as Markdown</button>
-    <div id="notebookContainer" style="margin-top: 1rem;">
-      <p style="color: #666; font-style: italic;">No evidence saved yet. Ask a question and click "Save Evidence" on any citation!</p>
-    </div>
-  </details>
-
-  <details class="card">
-    <summary>
-      <h2>Document Management & Evaluation</h2>
-    </summary>
-    <input id="newName" placeholder="filename.txt">
-    <textarea id="newContent" placeholder="Document content"></textarea>
-    <button type="button" onclick="addDocument()">Add document</button>
-    <div id="quarantinePanel" hidden>
-      <p>This document was flagged and has not been indexed.</p>
-      <pre id="quarantineExcerpt"></pre>
-      <button type="button" onclick="reviewUpload(true)">Index anyway</button>
-      <button type="button" onclick="reviewUpload(false)">Discard</button>
-    </div>
-    <button id="indexTraceBtn" class="trace-btn" style="display: none;" onclick="showIndexTrace()">🔍 Indexing
-      Trace</button>
-    <button onclick="runEvaluation('kestrel')">Evaluate Kestrel</button>
-    <button onclick="runEvaluation('own')">Evaluate own corpus</button>
-    <pre id="evaluation"></pre>
-  </details>
-
-  <details class="card">
-    <summary>
-      <h2>Words Explorer</h2>
-    </summary>
-    <input id="word" placeholder="word (optional)">
-    <input id="wordQuestion" placeholder="or type a question">
-    <button onclick="words()">Explore</button>
-    <pre id="wordResult"></pre>
-  </details>
+  </main>
 
   <script>
     let docs = [];
@@ -178,10 +368,44 @@
 
     function showError(msg) {
       const box = document.getElementById('errorBox');
-      box.textContent = typeof msg === 'string' ? msg : JSON.stringify(msg, null, 2);
+      box.textContent = typeof msg === 'string' ? msg : msg?.message || JSON.stringify(msg, null, 2);
       box.style.display = 'block';
     }
     function hideError() { document.getElementById('errorBox').style.display = 'none'; }
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      const toggle = document.getElementById('themeToggle');
+      toggle.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+
+    function initializeTheme() {
+      let theme = 'dark';
+      try {
+        if (localStorage.getItem('rag_theme') === 'light') theme = 'light';
+      } catch {}
+      applyTheme(theme);
+    }
+
+    function toggleTheme() {
+      const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      applyTheme(theme);
+      try {
+        localStorage.setItem('rag_theme', theme);
+      } catch {}
+    }
+
+    function updateDocumentCount() {
+      document.getElementById('documentCount').textContent =
+        selected().length + ' of ' + docs.length + ' selected';
+    }
+
+    function setDocumentSelection(checked) {
+      for (const checkbox of document.querySelectorAll('#documents input[type="checkbox"]')) {
+        checkbox.checked = checked;
+      }
+      updateDocumentCount();
+    }
 
     async function loadDocs() {
       try {
@@ -190,27 +414,43 @@
         docs = await res.json();
         const rows = document.createDocumentFragment();
 
+        if (!docs.length) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'No documents yet. Add one below to get started.';
+          rows.append(empty);
+        }
+
         for (const doc of docs) {
+          const row = document.createElement('div');
+          row.className = 'document-row';
           const label = document.createElement('label');
+          label.className = 'document-choice';
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           checkbox.value = doc.id;
           checkbox.checked = true;
-          label.append(checkbox, ` ${doc.corpus}/${doc.name}`);
-          rows.append(label);
+          checkbox.addEventListener('change', updateDocumentCount);
+          const name = document.createElement('span');
+          name.textContent = doc.corpus + '/' + doc.name;
+          label.append(checkbox, name);
+          row.append(label);
 
           if (doc.managed) {
             const button = document.createElement('button');
             button.type = 'button';
+            button.className = 'small-button danger-button';
             button.textContent = 'Delete';
+            button.setAttribute('aria-label', 'Delete ' + doc.name);
             button.addEventListener('click', () => deleteDocument(doc.id));
-            rows.append(' ', button);
+            row.append(button);
           }
 
-          rows.append(document.createElement('br'));
+          rows.append(row);
         }
 
         document.getElementById('documents').replaceChildren(rows);
+        updateDocumentCount();
       } catch (err) {
         showError(err.detail || err);
       }
@@ -413,6 +653,17 @@
 
     async function ask() {
       hideError();
+      const question = document.getElementById('question').value.trim();
+      const documentIds = selected();
+      if (!question) {
+        showError('Enter a question first.');
+        return;
+      }
+      if (!documentIds.length) {
+        showError('Select at least one document to search.');
+        return;
+      }
+
       const ansNode = document.getElementById('answer');
       const traceBtnNode = document.getElementById('traceBtn');
       const citationsNode = document.getElementById('citations');
@@ -427,10 +678,10 @@
 
       try {
         const body = {
-          question: document.getElementById('question').value,
+          question,
           style: document.getElementById('style').value,
           history,
-          document_ids: selected(),
+          document_ids: documentIds,
           chunk_size: +chunk.value,
           overlap_percent: +overlap.value,
           top_k: +topk.value,
@@ -481,12 +732,10 @@
 
         for (const citation of data.citations || []) {
           const card = document.createElement('div');
-          card.className = 'card';
+          card.className = 'card citation-card';
 
           const headerDiv = document.createElement('div');
-          headerDiv.style.display = 'flex';
-          headerDiv.style.justifyContent = 'space-between';
-          headerDiv.style.alignItems = 'center';
+          headerDiv.className = 'card-heading';
 
           const source = document.createElement('b');
           source.textContent = citation.source;
@@ -494,7 +743,7 @@
           const saveBtn = document.createElement('button');
           saveBtn.type = 'button';
           saveBtn.textContent = 'Save Evidence';
-          saveBtn.style.cssText = 'background: #2196f3; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;';
+          saveBtn.className = 'small-button';
           saveBtn.addEventListener('click', () => {
             saveEvidence(citation.source, citation.chunk_id, citation.document_id, citation.text);
           });
@@ -504,7 +753,10 @@
           const passage = document.createElement('p');
           passage.textContent = citation.text;
 
-          card.append(headerDiv, `Chunk: ${citation.chunk_id}`, passage);
+          const chunkRef = document.createElement('small');
+          chunkRef.className = 'muted citation-chunk';
+          chunkRef.textContent = 'Chunk: ' + citation.chunk_id;
+          card.append(headerDiv, chunkRef, passage);
           results.append(card);
         }
 
@@ -763,7 +1015,7 @@
 
       if (entries.length === 0) {
         const message = document.createElement('p');
-        message.style.cssText = 'color: #666; font-style: italic;';
+        message.className = 'muted';
         message.textContent = 'No evidence saved yet. Ask a question and click "Save Evidence" on any citation!';
         container.append(message);
         return;
@@ -772,37 +1024,35 @@
       for (const entry of entries) {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.cssText = 'background: #fafafa; border-left: 4px solid #2196f3; margin-bottom: 0.75rem;';
+
 
         const header = document.createElement('div');
-        header.style.cssText = 'display: flex; justify-content: space-between; align-items: center;';
+        header.className = 'card-heading';
         const source = document.createElement('b');
         source.textContent = '📌 ' + entry.source;
         const chunk = document.createElement('span');
-        chunk.style.cssText = 'font-size: 0.85rem; color: #666;';
+        chunk.className = 'muted';
         chunk.textContent = 'Chunk: ' + entry.chunk_id;
         header.append(source, chunk);
 
         const passage = document.createElement('p');
-        passage.style.cssText = 'margin: 0.5rem 0; font-size: 0.95rem; background: #fff; padding: 0.5rem; border: 1px solid #eee;';
+        passage.className = 'evidence-passage';
         passage.textContent = entry.text;
 
         const label = document.createElement('label');
-        label.style.cssText = 'display: block; margin-top: 0.5rem; font-size: 0.85rem; font-weight: bold;';
+        label.className = 'note-label';
         label.textContent = 'Personal Note:';
         const note = document.createElement('textarea');
-        note.style.cssText = 'width: 100%; min-height: 3rem; margin-top: 0.25rem; font-size: 0.9rem; font-weight: normal;';
         note.placeholder = 'Add your notes or analysis here...';
         note.value = entry.note || '';
         note.addEventListener('input', () => updateNote(entry.id, note.value));
         label.append(note);
 
         const actions = document.createElement('div');
-        actions.style.textAlign = 'right';
-        actions.style.marginTop = '0.5rem';
+        actions.className = 'evidence-actions';
         const remove = document.createElement('button');
         remove.type = 'button';
-        remove.style.cssText = 'background: #d32f2f; color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem;';
+        remove.className = 'small-button danger-button';
         remove.textContent = 'Remove';
         remove.addEventListener('click', () => removeEvidence(entry.id));
         actions.append(remove);
@@ -858,6 +1108,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      initializeTheme();
       renderNotebook();
       loadDocs();
     });
