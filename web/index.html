@@ -87,8 +87,10 @@
       <option value="detailed">Detailed</option>
       <option value="bullet points">Bullet points</option>
     </select>
-    <button type="button" onclick="loadGlossary()">Show source glossary</button>
-    <div id="glossary"></div>
+    <details ontoggle="if (this.open) loadGlossary()">
+      <summary>Source glossary</summary>
+      <div id="glossary"></div>
+    </details>
     <div id="documents"></div>
 
     <details>
@@ -101,6 +103,8 @@
         <label><input id="bm25" type="checkbox" checked> BM25</label>
         <label><input id="graph" type="checkbox"> Concept graph</label>
       </div>
+      <button type="button" id="buildGraphButton" onclick="buildGraph()">Build graph</button>
+      <p id="graphBuildStatus" role="status"></p>
     </details>
 
     <button onclick="ask()"
@@ -192,6 +196,46 @@
     }
 
     function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
+
+    async function buildGraph() {
+      hideError();
+      const button = document.getElementById('buildGraphButton');
+      const status = document.getElementById('graphBuildStatus');
+      const documentIds = selected();
+
+      status.textContent = '';
+      if (documentIds.length === 0) {
+        showError('Select at least one document before building a graph.');
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = 'Building graph…';
+
+      try {
+        const response = await fetch('/api/graph/build', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            document_ids: documentIds,
+            chunk_size: Number(document.getElementById('chunk').value),
+            overlap_percent: Number(document.getElementById('overlap').value)
+          })
+        });
+        const data = await response.json().catch(() => null);
+        if (!response.ok || !data) {
+          showError(data?.detail || 'Could not build the graph.');
+          status.textContent = '';
+          return;
+        }
+        status.textContent = `Graph ready: ${data.entities.length} concepts, ${data.relations.length} links.`;
+      } catch (err) {
+        status.textContent = '';
+        showError(err.message || 'Could not build the graph.');
+      } finally {
+        button.disabled = false;
+      }
+    }
 
     async function ask() {
       hideError();
