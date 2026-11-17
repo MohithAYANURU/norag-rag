@@ -157,6 +157,10 @@ class Citation(BaseModel):
     distance: float | None = None
 
 
+class GraphBuildResponse(ConceptGraph):
+    sources: dict[str, Citation]
+
+
 class SearchResponse(BaseModel):
     answer: str
     citations: list[Citation]
@@ -668,14 +672,33 @@ def home() -> str:
     return (WEB_ROOT / "index.html").read_text(encoding="utf-8")
 
 
-@app.post("/api/graph/build", response_model=ConceptGraph)
+def _graph_build_response(
+    graph: ConceptGraph, chunk_map: dict[str, dict[str, Any]]
+) -> GraphBuildResponse:
+    linked_ids = {
+        chunk_id
+        for relation in graph.relations
+        for chunk_id in relation.chunk_ids
+    }
+    return GraphBuildResponse(
+        entities=graph.entities,
+        relations=graph.relations,
+        sources={
+            chunk_id: Citation(**chunk_map[chunk_id])
+            for chunk_id in sorted(linked_ids)
+            if chunk_id in chunk_map
+        },
+    )
+
+
+@app.post("/api/graph/build", response_model=GraphBuildResponse)
 def build_selected_graph(payload: GraphBuildRequest):
-    path, passages, _ = _graph_inputs(
+    path, passages, chunk_map = _graph_inputs(
         payload.document_ids, payload.chunk_size, payload.overlap_percent
     )
 
     if path.is_file():
-        return ConceptGraph.load(path)
+        return _graph_build_response(ConceptGraph.load(path), chunk_map)
 
     if len(passages) > MAX_GRAPH_CHUNKS:
         raise HTTPException(
@@ -696,7 +719,7 @@ def build_selected_graph(payload: GraphBuildRequest):
     finally:
         temporary.unlink(missing_ok=True)
 
-    return graph
+    return _graph_build_response(graph, chunk_map)
 
 
 @app.get("/api/documents")
