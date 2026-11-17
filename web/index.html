@@ -109,7 +109,13 @@
 
     <section id="graphExplorer" hidden>
       <h3>Explore concept graph</h3>
+      <label for="conceptView">View</label>
+      <select id="conceptView" onchange="updateConceptView()">
+        <option value="list">List</option>
+        <option value="graph">Graph</option>
+      </select>
       <div id="conceptList"></div>
+      <div id="conceptGraph" hidden></div>
       <div id="conceptDetails" aria-live="polite"></div>
     </section>
 
@@ -203,7 +209,92 @@
 
     function selected() { return [...document.querySelectorAll('#documents input:checked')].map(x => x.value); }
 
+    let explorerGraph = null;
+    let focusedConceptId = null;
+
+    function selectConcept(id) {
+      focusedConceptId = id;
+      renderConceptDetails(explorerGraph, id);
+      updateConceptView();
+    }
+
+    function updateConceptView() {
+      const showGraph = document.getElementById('conceptView').value === 'graph';
+      document.getElementById('conceptList').hidden = showGraph;
+
+      const panel = document.getElementById('conceptGraph');
+      panel.hidden = !showGraph;
+      panel.replaceChildren();
+      if (showGraph && focusedConceptId !== null) renderConceptGraph(panel);
+    }
+
+    function svgElement(tag, attrs) {
+      const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+      return node;
+    }
+
+    function renderConceptGraph(panel) {
+      const names = new Map(explorerGraph.entities.map(entity => [entity.id, entity.name]));
+      const neighbors = new Set();
+
+      for (const link of explorerGraph.relations) {
+        if (link.subject !== focusedConceptId && link.object !== focusedConceptId) continue;
+        const other = link.subject === focusedConceptId ? link.object : link.subject;
+        if (other !== focusedConceptId && names.has(other)) neighbors.add(other);
+      }
+
+      const visible = [...neighbors].slice(0, 8);
+      const svg = svgElement('svg', {
+        viewBox: '0 0 640 380', width: '100%', style: 'max-width: 640px',
+        role: 'group', 'aria-label': 'Concept graph neighborhood'
+      });
+      const points = [{ id: focusedConceptId, x: 320, y: 190 }];
+
+      visible.forEach((id, index) => {
+        const angle = -Math.PI / 2 + 2 * Math.PI * index / visible.length;
+        const x = 320 + 220 * Math.cos(angle);
+        const y = 190 + 132 * Math.sin(angle);
+
+        points.push({ id, x, y });
+        svg.append(svgElement('line', { x1: 320, y1: 190, x2: x, y2: y, stroke: '#64748b' }));
+      });
+
+      for (const { id, x, y } of points) {
+        const name = names.get(id);
+        const current = id === focusedConceptId;
+        const node = svgElement('g', {
+          role: 'button', tabindex: '0', 'aria-label': name,
+          'aria-current': String(current), cursor: 'pointer'
+        });
+
+        node.append(svgElement('circle', { cx: x, cy: y, r: 16, fill: current ? '#2563eb' : '#64748b' }));
+
+        const label = svgElement('text', { x, y: y + 34, 'text-anchor': 'middle', 'font-size': '13' });
+        label.textContent = name.length > 22 ? name.slice(0, 21) + '…' : name;
+        node.append(label);
+
+        node.addEventListener('click', () => selectConcept(id));
+        node.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          selectConcept(id);
+          panel.querySelector('[aria-current="true"]')?.focus();
+        });
+        svg.append(node);
+      }
+
+      panel.append(svg);
+      if (neighbors.size > visible.length) {
+        const note = document.createElement('p');
+        note.textContent = `Showing ${visible.length} of ${neighbors.size} neighbors. The details below show every link.`;
+        panel.append(note);
+      }
+    }
+
     function renderGraphExplorer(graph) {
+      explorerGraph = graph;
+      focusedConceptId = graph.entities[0]?.id ?? null;
       const panel = document.getElementById('graphExplorer');
       const list = document.getElementById('conceptList');
       const details = document.getElementById('conceptDetails');
@@ -217,11 +308,13 @@
         const button = document.createElement('button');
         button.type = 'button';
         button.textContent = entity.name;
-        button.addEventListener('click', () => renderConceptDetails(graph, entity.id));
+        button.addEventListener('click', () => selectConcept(entity.id));
         list.append(button);
       }
 
       panel.hidden = false;
+      if (focusedConceptId !== null) selectConcept(focusedConceptId);
+      else updateConceptView();
     }
 
     function renderConceptDetails(graph, conceptId) {
