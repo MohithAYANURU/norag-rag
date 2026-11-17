@@ -169,6 +169,7 @@ class SearchResponse(BaseModel):
     suggested_questions: list[str] = Field(default_factory=list)
     configuration: dict[str, Any]
     graph_path: dict[str, Any] | None = None
+    trace_id: str
 
 
 class WordsRequest(BaseModel):
@@ -853,37 +854,39 @@ def search(payload: SearchRequest):
             )
         else:
             safe_history.append(redact_pii(str(turn)))
-    retrieval_question = rewrite_follow_up(safe_question, safe_history)
-    citations, graph_path = retrieve(
-        retrieval_question,
-        payload.document_ids,
-        payload.chunk_size,
-        payload.overlap_percent,
-        payload.top_k,
-        payload.dense,
-        payload.bm25,
-        payload.graph,
-    )
-    if payload.generate:
-        trace = Trace("search_run")
-        try:
+    trace = Trace("search_run")
+    try:
+        with trace.add_span("rewrite_query", {"history_turns": len(safe_history)}):
+            retrieval_question = rewrite_follow_up(safe_question, safe_history)
+
+        with trace.add_span(
+            "retrieval",
+            {"dense": payload.dense, "bm25": payload.bm25, "graph": payload.graph},
+        ) as span:
+            citations, graph_path = retrieve(
+                retrieval_question,
+                payload.document_ids,
+                payload.chunk_size,
+                payload.overlap_percent,
+                payload.top_k,
+                payload.dense,
+                payload.bm25,
+                payload.graph,
+            )
+            span.metadata["chunks_retrieved"] = len(citations)
+            span.metadata["chunk_ids"] = [citation.chunk_id for citation in citations]
+
+        answer = ""
+        if payload.generate:
             with trace.add_span(
                 "generation",
-                {
-                    "style": payload.style,
-                    "history_turns": len(payload.history),
-                },
+                {"style": payload.style, "history_turns": len(safe_history)},
             ):
                 answer = generate_answer(
-                    safe_question,
-                    citations,
-                    payload.style,
-                    safe_history,
+                    safe_question, citations, payload.style, safe_history
                 )
-        finally:
-            trace.finalize()
-    else:
-        answer = ""
+    finally:
+        trace.finalize()
 
     return SearchResponse(
         answer=answer,
@@ -902,6 +905,7 @@ def search(payload: SearchRequest):
             "fusion": "reciprocal_rank_fusion",
         },
         graph_path=graph_path,
+        trace_id=trace.trace_id
     )
 
 
