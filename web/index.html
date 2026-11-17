@@ -573,6 +573,12 @@
       }
     }
 
+    function setIndexTrace(data) {
+      lastIndexTraceId = data.trace_id ?? null;
+      document.getElementById('indexTraceBtn').style.display =
+        lastIndexTraceId ? 'inline-block' : 'none';
+    }
+
     async function addDocument() {
 
       if (pendingReviewId) {
@@ -599,7 +605,7 @@
 
         if (!response.ok) throw data;
 
-        lastIndexTraceId = data.trace_id ?? null;
+        setIndexTrace(data);
         newName.value = '';
         newContent.value = '';
         await loadDocs();
@@ -634,6 +640,7 @@
             ? 'Indexing failed. Upload the document again.'
             : 'Could not discard the upload. Try again.');
         } else if (approve) {
+          setIndexTrace(await response.json());
           newName.value = '';
           newContent.value = '';
           await loadDocs();

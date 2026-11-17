@@ -21,10 +21,10 @@ from fastapi.responses import HTMLResponse
 from openai import OpenAI, OpenAIError
 from pydantic import BaseModel, Field, ValidationError
 from retrieval_v3 import BM25Index, ConceptGraph, reciprocal_rank_fusion
-from tracer import Trace
+from tracer import Trace, read_trace
 from threading import Lock, Timer
 from time import monotonic
-from uuid import uuid4
+from uuid import uuid4, UUID
 from llm_config import get_llm_config
 from build_graph import build_graph_from_chunks
 
@@ -676,9 +676,7 @@ def _graph_build_response(
     graph: ConceptGraph, chunk_map: dict[str, dict[str, Any]]
 ) -> GraphBuildResponse:
     linked_ids = {
-        chunk_id
-        for relation in graph.relations
-        for chunk_id in relation.chunk_ids
+        chunk_id for relation in graph.relations for chunk_id in relation.chunk_ids
     }
     return GraphBuildResponse(
         entities=graph.entities,
@@ -720,6 +718,14 @@ def build_selected_graph(payload: GraphBuildRequest):
         temporary.unlink(missing_ok=True)
 
     return _graph_build_response(graph, chunk_map)
+
+
+@app.get("/api/traces/{trace_id}")
+def get_trace(trace_id: UUID):
+    trace = read_trace(str(trace_id))
+    if trace is None:
+        raise HTTPException(status_code=404, detail="Trace not found.")
+    return trace
 
 
 @app.get("/api/documents")
