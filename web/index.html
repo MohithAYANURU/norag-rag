@@ -321,8 +321,19 @@
       const details = document.getElementById('conceptDetails');
       const names = new Map(graph.entities.map(entity => [entity.id, entity.name]));
       const title = document.createElement('h4');
-      title.textContent = names.get(conceptId) || conceptId;
-      details.replaceChildren(title);
+      const conceptName = names.get(conceptId) || conceptId;
+      title.textContent = conceptName;
+
+      const askButton = document.createElement('button');
+      askButton.type = 'button';
+      askButton.textContent = 'Ask about this concept';
+      askButton.addEventListener('click', () => {
+        const input = document.getElementById('question');
+        input.value = `What do the selected documents say about ${conceptName}?`;
+        input.focus();
+      });
+
+      details.replaceChildren(title, askButton);
 
       const links = graph.relations.filter(link =>
         link.subject === conceptId || link.object === conceptId
